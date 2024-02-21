@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+    <!-- plugins:css -->
+    
+	<link rel="shortcut icon" href="/Public/Imagens/favicon.png">
+    <link rel="stylesheet" href="Public/css/style.css">	
+	<link rel="stylesheet" href="Public/css/main.css">
+	<link rel="stylesheet" href="Public/css/style_a.css">
+
+    
+    <script type="text/javascript">
+    
+    
+    //var host = 'http://127.0.0.1:8000';
+     //Host AWS Desenv
+     var host = 'http://177.71.140.192:8008/';
+
+    
+</script>
+    
+    
+</head>
+
+    <!--
+    localStorage-setItem('Empresa';''Hugues) 
+
+
+
+
+
+   -->
+<body onload="loadWindow()">
+        
+<div>
+    <nav class="nav_top">
+		    <div>
+		  		<a class="logo" href="http://talkd.com.br/">
+	  				<img src="Public/Imagens/logo_original_final_branco.png" alt="logo"  /></a>
+			</div>
+			<div class="topo_center">
+				<p style="text-align: center; font-size: 36px; color: ghostwhite"> Portal SD WAN </p> 
+			</div>
+	</nav>
+    <br><br><br>
+    <div style="align-items: center; align-self: center; margin-left: 400px">
+    <div class="block_col">
+        <form>
+         <h1>Clientes Talkd </h1><hr>
+            <p>Digite seu Login e senha </p>
+            <label for="set_Login">Login</label><br>
+			<input id="set_Login" type="email" value="Login ...." >  
+			
+			<label for="set_pass">Senha</label><br>
+			<input id="set_pass" type="password" Value="Password">  
+            
+            <br><br>           
+        
+            
+            <input class="button button3" type="button" value="Efetuar Login" onclick="post()">
+            <br><br><br>
+            <hr>
+            <p> se você ainda não é um cliente da Talkd, solicite o contato com nosso equipe </p>
+            <br><br>
+            
+            <div style="text-align: center">
+                <br>
+                <a href="contato.html">solicitar contato</a>
+                <br><br>
+            </div>
+
+
+            
+    
+    
+    
+		</form>
+    </div><br><br>
+    </div>
+</div><br>
+</body>
+<footer>
+    <div class="footer" style = "width: 100%; height: 26px ; border: 0px; padding: 1px">
+        <pre style="font-size:14px; padding: 2px" ><b style="font-size:16px" >&nbsp;&nbsp;&nbsp;Talkd</b> | Rua Salvador Simões, 801 sl. 1302 - São Paulo-SP  | TEL.: +55 11 3738-6128 | <b style="font-size:16px" >Evolua</b> de forma positiva a jornada de relacionamento com seus clientes. 
+        </pre>
+    </div>
+</footer>        
+    
+  <!--------                    -->  
+
+<script>
+function loadWindow() {
+    sessionStorage.removeItem('tkd_Empresa');
+    sessionStorage.removeItem('tkd_Login');
+    sessionStorage.removeItem('tkd_Nome');
+    sessionStorage.removeItem('tkd_NomeCompleto');
+    sessionStorage.removeItem('tkd_Sobrenome');
+    sessionStorage.removeItem('tkd_TKN');
+    sessionStorage.removeItem('tkd_email');
+}
+
+    
+function post() {
+        var js_login = document.getElementById('set_Login').value;
+        var js_pass = document.getElementById('set_pass').value;
+
+        var jsdata = {"js_login":js_login,"js_pass":js_pass };
+    
+        var JdataS= JSON.stringify(jsdata)
+        var jdata = JSON.parse(JdataS);
+        console.log(jdata);
+        const header  = document.querySelector('header');
+        const section = document.querySelector('section');
+        //const csrftoken = Cookies.get('csrftoken');
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('Accept', 'application/json');
+        headers.append('Access-Control-Allow-Origin', host);
+        headers.append('Access-Control-Allow-Credentials', 'true');
+        headers.append('GET', 'POST', 'OPTIONS');
+        headers.append('Upgrade-Insecure-Requests', '1');
+        //headers.append('X-CSRFToken', csrftoken);
+
+
+        var requestURL = host + '/userv/1';
+        var request = new XMLHttpRequest();
+        request.open('POST', requestURL, true);
+        request.responseType = 'json';
+        request.send(JSON.stringify(jdata));		
+
+        request.onload = function() { 
+            var resp_post = request.response;
+            console.log("Response :") ;
+            console.log(resp_post) ;
+            
+            if (resp_post.length > 0 ) {
+                //Session Storage
+                //sessionStorage.setItem('name', 'Treinaweb');
+                //localStorage.setItem('name', 'Treinaweb');  // <- prefira esta forma
+                //localStorage['name'] = 'Treinaweb';
+                //var lastname = sessionStorage.getItem("key");
+                
+                if (resp_post[0].Empresa != null) { var value =  resp_post[0].Empresa.trim() ;
+                                                    var Empresa =  resp_post[0].Empresa.trim();
+                                                    sessionStorage.setItem('tkd_Empresa', value); 
+                    } else { sessionStorage.removeItem('tkd_Empresa'); };
+                if (resp_post[0].Login != null) { var value =  resp_post[0].Login.trim(); sessionStorage.setItem('tkd_Login', value); 
+                    } else { sessionStorage.removeItem('tkd_Login'); };                
+                if (resp_post[0].Nome != null) { var value =  resp_post[0].Nome.trim() ; sessionStorage.setItem('tkd_Nome', value); 
+                    } else { sessionStorage.removeItem('tkd_Nome'); };                
+                if (resp_post[0].NomeCompleto != null) { var value =  resp_post[0].NomeCompleto.trim() ; sessionStorage.setItem('tkd_NomeCompleto', value); 
+                    } else { sessionStorage.removeItem('tkd_NomeCompleto'); };
+                if (resp_post[0].Sobrenome != null) { var value =  resp_post[0].Sobrenome.trim() ; sessionStorage.setItem('tkd_Sobrenome', value); 
+                    } else { sessionStorage.removeItem('tkd_Sobrenome'); };   
+                if (resp_post[0].TKN != null) { var value =  resp_post[0].TKN; sessionStorage.setItem('tkd_TKN', value); 
+                    } else { sessionStorage.removeItem('tkd_TKN'); };   
+                if (resp_post[0].email != null) { var value =  resp_post[0].email.trim() ; sessionStorage.setItem('tkd_email', value); 
+                    } else { sessionStorage.removeItem('tkd_email'); };                                  
+                // Open Window
+                //if ( resp_post[0].Empresa = 'TALKD' ) { window.open('portal.html', "_self");
+                //  } else { window.open('ConsoleCliente.html', "_self" ); };
+                window.open('portal.html', "_self" );
+                
+            } else { 
+                sessionStorage.removeItem('tkd_Empresa');
+                sessionStorage.removeItem('tkd_Login');
+                sessionStorage.removeItem('tkd_Nome');
+                sessionStorage.removeItem('tkd_NomeCompleto');
+                sessionStorage.removeItem('tkd_Sobrenome');
+                sessionStorage.removeItem('tkd_TKN');
+                sessionStorage.removeItem('tkd_email');
+                alert ('Usuário ou senha não são validos, tente novamente ou contate administrador ') }
+        }
+ 
+}    
+    
+    
+    
+    
+</script>
+

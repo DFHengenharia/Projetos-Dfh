@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+	<meta charset="utf-8">
+    <!--<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">-->
+    <!-- plugins:css -->
+
+	<link rel="shortcut icon" href="Public/Imagens/favicon.png" />
+    <link rel="stylesheet" href="Public/css/style.css">	
+	<link rel="stylesheet" href="Public/css/main.css">
+	<link rel="stylesheet" href="Public/css/style_a.css">
+    <link rel="stylesheet" href="Public/css/table.css">
+    <script type="text/javascript" src="Public/js/geral.js"></script>
+    
+	    <!-- Bootstrap -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        if(typeof jQuery === 'undefined'){
+              console.log('no jQuery');
+                var head = document.getElementsByTagName('head')[0];
+                var script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.src = '../Public/js/jquery-3.6.0.min.js';
+                script.onload = handler;
+                head.appendChild(script);
+            }else{console.log('jQuery is embedded!');}
+    function handler(){ console.log('jquery added :)'); }
+    </script>
+
+    <script type="text/javascript" src="./local/conf.json"></script>
+    <script type="text/javascript">
+        var host = 'http://127.0.0.1:8000';
+        var sdw_ambiente = "DEV";
+        var sdw_owner = "DFH";
+        if (conf) { var config = JSON.parse(conf); }
+        if (config) {
+            host = config[0].server;
+            sdw_ambiente = config[0].ambiente ;
+            sdw_owner = config[0].HEAD;
+           }
+        console.log("Ambiente : " + sdw_ambiente + " | Owner : " + sdw_owner +  " | Server : "+ host);
+    </script>
+    
+    
+
+</head>
+
+<body onload="loadWindow()">
+<div>
+    <!--    HEADER DO FORM  -->
+    <nav class="nav_dfh" id="nav_dfh">
+        <div>
+            <a class="logo_dfh" href="http://dfhnegocios.com.br/"> <img src="Public/Imagens/DHF_logo.png" alt="logo"  /></a>
+        </div>
+        <div class="topo_center">
+            <p style="text-align: center; font-size: 32px; color: lightskyblue"> Portal SD WAN - Adm</p>
+            <!-- <p style="text-align: center; font-size: 32px; color: Silver"> Portal SD WAN - Adm</p> -->
+        </div>
+	</nav>
+    <nav class="nav_top" id="nav_top" hidden >
+		    <div>
+		  		<a class="logo" href="http://talkd.com.br/"> <img src="Public/Imagens/logo_original_final_branco.png" alt="logo"  /></a>
+			</div>
+			<div class="topo_center">
+				<p style="text-align: center; font-size: 36px; color: ghostwhite"> Portal SD WAN </p> 
+			</div>
+	</nav>
+	<!-- Menu Principal -->
+	<div class="menu_top">
+		<ul>
+			<li><a href="close.html">Sair</a></li>
+			<li><a onclick="fnConsole()" >Console</a></li>
+		</ul>
+	</div>
+    <br>
+    
+        <!--    FORMULARIO  -->    
+    <div style = "width: 100%;  display: flex; flex-direction: row; flex-wrap: wrap">
+    <div>
+    <div class="block_form">
+        <form>
+            <p>Minhas Informações</p>
+        <fieldset>
+            <label style = "width: 120px" for="user_nome">Nome</label><input style = "width: 180px" class="field" id="nome" type="text">
+                <br>
+            <label style = "width: 120px" for="user_sobrenome">Sobrenome</label><input style = "width: 180px" class="field" id="user_sobrenome" type="text">
+                <br>
+            <label style = "width: 120px" for="user_nomecompleto">Nome Completo</label><input style = "width: 320px" class="field" id="user_nomecompleto" type="text">
+                <br>            
+            <label style = "width: 120px" for="user_email">Email</label><input style = "width: 460px" class="field" id="user_email" type="text">
+
+            <input class="button button3" type="button" value="Atualizar" onclick="Atualizar('UPDATE')">
+            <br><br>
+            
+            <label style = "width: 120px" for="user_pass1">Senha</label><input id="user_pass1" type="password"  style = "width: 100px" >
+                <br>
+            <label style = "width: 120px" for="user_pass2">Confirmar Senha</label><input id="user_pass2" type="password" style = "width: 100px" >
+            <input class="button button3" type="button" value="Alterar Senha" onclick="TrocaSenha()">
+                <br>
+            <br>
+                <hr>
+            <label style = "width: 120px; border: 0px" for="user_data">Atualizado em </label>
+                           <input style = "width: 140px" class="field" id="user_data" type="date" readonly>
+
+            
+            
+        </fieldset>
+        </form>    
+        </div>
+        <div class="block_form" hidden  >
+            <form>
+            <fieldset>
+                <p> Dados Internos</p>
+                <label style = "width: 20px" for="user_ID">ID</label><input style = "width: 60px" class="field" id="user_ID" type="text" readonly>
+
+                <label style = "width: 80px" for="Empresa">Empresa</label><input style = "width: 120px" class="field" id="Empresa" type="text">
+                <label style = "width: 80px" for="emb_resultado">Resposta</label><input style = "width: 80px" class="field" id="emb_resultado" type="text">
+                    <br>
+            <label style = "width: 80px" for="sel_Empresa" id = "lab_Empresa">Empresa</label>
+            <select style = "width: 200px"  name = "sel_Empresa" id = "sel_Empresa" >
+                <option value="">Selecione </option>
+                <option value="TALKD">TALKD</option>
+                <option value="HUGHES">HUGHES</option>
+                <option value="ALGAR">ALGAR</option>
+                <option value="EMBRATEL">EMBRATEL</option>
+            </select>
+            <br>
+
+            <label style = "width: 80px" for="user_login">Login</label><input style = "width: 180px" class="field" id="login" type="text">
+
+            <label style = "width: 46px" for="user_status">Status</label>
+                    <select style = "width: 170px"  name = "user_status" id = "user_status">
+                        <option value="">Status</option>
+                        <option value="0">INATIVO</option>
+                        <option value="1">ATIVO</option>
+                    </select>          
+            <br>
+                
+                
+                
+            </fieldset>
+            </form>
+        </div>
+    </div>
+            <div class="block_col">
+               <h1>DFH Engenharia </h1><hr>
+               <p>Usuário</p>
+                <label>Login</label><br> <input class="field" id="user_Login" type="email" readonly>
+                <label>Nome</label><br> <input class="field" id="user_Nome" type="text" readonly>
+                <label>Empresa</label><br> <input class="field" id="user_Empresa" type="text" value="Empresa...." readonly>
+               <hr><br> 
+            </div>           
+    </div>
+        
+        
+</div>
+<br>
+</body>
+<footer>
+    <div class="footer" style = "width: 100%; height: 26px ; border: 0px; padding: 1px" >
+        <pre style="font-size:14px; padding: 2px" ><b style="font-size:16px" >&nbsp;&nbsp;&nbsp;DFH Engenharia</b>
+        </pre>
+    </div>
+</footer>
+    
+    
+<!-- ------------------ JAVA SCRIPT ---------------->    
+<script type="text/javascript">
+  var tkd_Empresa;
+  var tkd_Login;
+  var tkd_TKN;
+function loadWindow(){
+    GetID();
+    loadSession();
+    console.log(tkd_Empresa);
+    var sFieldl = sessionStorage.getItem('tkd_Login');
+    user_Login.setAttribute("Value", sFieldl );
+    var sFieldn = sessionStorage.getItem('tkd_Nome');
+    user_Nome.setAttribute("Value", sFieldn );
+    var sFielde = sessionStorage.getItem('tkd_Empresa');
+    user_Empresa.setAttribute("Value", sFielde.trim() );
+    if (tkd_Empresa != 'DFH') { sel_Empresa.setAttribute("hidden","true");
+                                lab_Empresa.setAttribute("hidden","true");
+    }
+    if (sdw_owner == 'DFH') {
+                                document.getElementById("nav_dfh").hidden = false;
+                                document.getElementById("nav_top").hidden = true;
+                                document.getElementsByClassName("footer")[0].style.visibility = 'hidden';
+    }
+    menuEmpresas("sel_Empresa");
+}
+ 
+function GetID(){
+        var js_logi = sessionStorage.getItem('tkd_Login');    
+    
+        var jsdata ={"js_logi":js_logi};
+
+        var JdataS= JSON.stringify(jsdata)
+        var jdata = JSON.parse(JdataS);
+        //console.log(jdata);
+        const header  = document.querySelector('header');
+        const section = document.querySelector('section');
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('Accept', 'application/json');
+        headers.append('Access-Control-Allow-Origin', '*' );
+        headers.append('Access-Control-Allow-Credentials', 'true');
+        headers.append('Upgrade-Insecure-Requests', '1');
+        headers.append('Access-Control-Allow-Methods','PUT');
+
+        var requestURL = host + '/User/3';
+        //console.log(requestURL);   
+        
+        var request = new XMLHttpRequest();
+        request.open('POST', requestURL, true);
+        request.responseType = 'json';
+        request.send(JSON.stringify(jdata));	
+
+                request.onload = function() { 
+                var resp_post = request.response;
+                //console.log(resp_post) ;
+ 
+                conteudo =  resp_post[0].ID;
+                if (conteudo != null) { user_ID.setAttribute("Value", conteudo )};
+                conteudo =  resp_post[0].Nome;
+                if (conteudo != null) { nome.setAttribute("Value", conteudo.trim() )};
+                conteudo =  resp_post[0].Login;
+                if (conteudo != null) { login.setAttribute("Value", conteudo.trim() )};
+                conteudo =  resp_post[0].Sobrenome;
+                if (conteudo != null) { user_sobrenome.setAttribute("Value", conteudo.trim() )}; 
+                conteudo =  resp_post[0].NomeCompleto;
+                if (conteudo != null) { user_nomecompleto.setAttribute("Value", conteudo.trim() )}; 
+                conteudo =  resp_post[0].email;
+                if (conteudo != null) { user_email.setAttribute("Value", conteudo.trim() )}; 
+                var DataAt = new Date();
+                DataAt = EpochToDate(resp_post[0].Data);
+                if (DataAt != null) { user_data.setAttribute("Value", DataAt )} else { user_data.setAttribute("Value", "" )} ;
+                conteudo =  resp_post[0].Status;
+                if (conteudo != null) { user_status.setAttribute("Value", conteudo );
+                                        document.getElementById("user_status").selectedIndex =  conteudo + 1;
+                                      };
+
+            }        
+  
+}
+    
+     
+    
+ function Atualizar(OP){
+    //console.log(OP);
+    var js_id   = document.getElementById('user_ID').value;
+    if ( js_id == "" && OP != 'INSERT') { alert( "Selecione um Cliente para atualizar" );}
+    else { 
+
+        var js_nome = document.getElementById('nome').value;
+        var js_logi = document.getElementById('login').value;
+        var js_sbno = document.getElementById('user_sobrenome').value;
+        var js_ncom = document.getElementById('user_nomecompleto').value;
+        var js_emai = document.getElementById('user_email').value;
+        var js_empr = document.getElementById('Empresa').value;
+        var js_stat = document.getElementById('user_status').value;
+		var js_data = document.getElementById('user_data').value;
+        var js_uplo = sessionStorage.getItem('tkd_Login');
+        var pass1 = document.getElementById('user_pass1').value;
+        var pass2 = document.getElementById('user_pass2').value;
+
+        if ( js_logi == "" && OP == 'INSERT') { alert( " É obrigatório definir o Login"); return true; }
+        if ( pass1 == "" && OP == 'INSERT' ) { alert("A senha não pode ficar em Branco"); return true; }
+        if ( pass1 != pass2 && OP == 'INSERT' ){ alert(" A confirmação da senha esta diferente da senha"); return true; }
+        
+        var jsdata ={"js_id":js_id,"js_nome":js_nome,"js_logi":js_logi,"js_sbno":js_sbno,"js_ncom":js_ncom,"js_emai":js_emai,"js_empr":js_empr,"js_stat":js_stat,"js_data":js_data,"js_uplo":js_uplo,"pass1":pass1};
+
+        var JdataS= JSON.stringify(jsdata)
+        var jdata = JSON.parse(JdataS);
+        //console.log(jdata);
+        const header  = document.querySelector('header');
+        const section = document.querySelector('section');
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('Accept', 'application/json');
+        headers.append('Access-Control-Allow-Origin', '*' );
+        headers.append('Access-Control-Allow-Credentials', 'true');
+        headers.append('Upgrade-Insecure-Requests', '1');
+        headers.append('Access-Control-Allow-Methods','PUT');
+
+        var requestURL = host
+        if( OP == 'INSERT'){ requestURL = host + '/User/0' ;};  
+        if( OP == 'UPDATE'){ requestURL = host + '/User/1' ;};
+        if( OP == 'DELETE'){ requestURL = host + '/User/9' ;};
+
+        var request = new XMLHttpRequest();
+        request.open('POST', requestURL, true);
+        request.responseType = 'json';
+        request.send(JSON.stringify(jdata));		
+
+        request.onload = function() { var resp_post = request.response;
+                                      var status = request.status;
+                                      var statusText = request.statusText ;
+                                     if ( status == 200 ) { alert( "Contato Atualizado " , resp_post );
+                                                            emb_resultado.setAttribute("Value", resp_post );}
+                                         else { alert( "Erro  (" + status.toString() + ")    " + statusText) };
+                                    }
+    }
+}     
+
+    
+function TrocaSenha(){ 
+    var pass1 = document.getElementById('user_pass1').value;
+    var pass2 = document.getElementById('user_pass2').value;
+    var user_ID = document.getElementById('user_ID').value;
+    var user_login = document.getElementById('user_login').value;
+    if( user_ID == "" ){ alert("Senhecione um usuário antes de trocar a senha");
+                       return true;}
+    if ( pass1 == "" ) { alert("A senha não pode ficar em Branco");
+                      return true; }
+    if ( pass1 != pass2 ){ alert(" A confirmação da senha esta diferente da senha");
+                         return true;}
+    
+    var jsdata ={"pass1":pass1,"user_login":user_login};
+    
+        const header  = document.querySelector('header');
+        const section = document.querySelector('section');
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('Accept', 'application/json');
+        headers.append('Access-Control-Allow-Origin', '*' );
+        headers.append('Access-Control-Allow-Credentials', 'true');
+        headers.append('Upgrade-Insecure-Requests', '1');
+        headers.append('Access-Control-Allow-Methods','PUT');
+
+        var requestURL = host + '/User/8' ;
+        //console.log(requestURL);    
+    
+        var request = new XMLHttpRequest();
+        request.open('POST', requestURL, true);
+        request.responseType = 'json';
+        request.send(JSON.stringify(jsdata));  
+    
+            request.onload = function() { var resp_post = request.response;
+                                          var status = request.status;
+                                     if ( status == 200 ) { alert( "Senha Atualizada" );
+                                                            user_pass1.setAttribute("Value",  "" );
+                                                            user_pass2.setAttribute("Value",  "" );
+                                                          }
+                                         else { alert( "Erro  : " + status.toString() ) };
+                                    }
+                                        
+}
+   
+    
+ function Clear(){
+    user_ID.setAttribute("Value", "" );
+    user_nome.setAttribute("Value",  "" );
+    user_login.setAttribute("Value",  "" );
+    user_sobrenome.setAttribute("Value",  "" );
+    user_nomecompleto.setAttribute("Value",  "" );
+    user_email.setAttribute("Value",  "" );
+    user_data.setAttribute("Value",  "" );
+    user_pass1.setAttribute("Value",  "" );
+    user_pass2.setAttribute("Value",  "" );
+    document.getElementById("user_status").selectedIndex = 0 ;
+    document.getElementById("user_empresa").selectedIndex = 0 ;
+}
+       
+
+    
+
+
+    
+    
+    
+</script>
+</html>

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="pt_br">
+<head>
+    <meta charset="UTF-8">
+    <!-- <meta http-equiv="cache-control" content="no-cache" /> -->
+    <meta http-equiv="cache-control" content="max-age=86400, must-revalidate"/>
+    <title>Portal Administrativo</title>
+    <link rel="shortcut icon" href="Public/Imagens/favicon.png"/>
+    <link rel="stylesheet" href="Public/css/main.css">
+    <link rel="stylesheet" href="Public/css/table.css">
+    <link rel="stylesheet" href="Public/css/style.css">
+    <link rel="stylesheet" href="Public/css/style_a.css">
+    <link rel="stylesheet" href="Public/css/Gbarras.css">
+    <script type="text/javascript" src="Public/js/geral.js"></script>
+    <script type="text/javascript" src="Public/js/GrDiaDia.js"></script>
+    <script type="text/javascript" src="Public/js/anatel.js"></script>
+    <script type="text/javascript" src="Public/js/Portal.js"></script>
+    <script type="text/javascript" src="Public/js/xlsx.full.min.js"></script>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    <script src="https://kit.fontawesome.com/d519b7357c.js" crossorigin="anonymous"></script>
+
+
+    <!-- Bootstrap -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.min.js"
+            integrity="sha512-WW8/jxkELe2CAiE4LvQfwm1rajOS8PHasCCx+knHG0gBHt8EXxS6T6tJRTGuDQVnluuAvMxWF4j8SNFDKceLFg=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css"
+          integrity="sha512-b2QcS5SsA8tZodcDtGRELiGv5SaKSk1vDHDaQRda0htPYWZ6046lr3kJ5bAAQdpV2mmA/4v0wQF9MyU6/pDIAg=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+    <!-- JQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+            integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="text/javascript">
+        if (typeof jQuery === 'undefined') {
+            console.log('no jQuery');
+            let head = document.getElementsByTagName('head')[0];
+            let script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = 'Public/js/jquery-3.6.0.min.js';
+            script.onload = handler;
+            head.appendChild(script);
+        } else {
+            console.log('jQuery is embedded!');
+        }
+
+        function handler() {
+            console.log('jquery added :)');
+        }
+    </script>
+    <!--    Cookies
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js" integrity="sha512-3j3VU6WC5rPQB4Ld1jnLV7Kd5xr+cq9avvhwqzbH/taCRNURoeEpoPBK9pDyeukwSxwRPJ8fDgvYXd6SkaZ2TA==" crossorigin="anonymous"></script>
+    -->
+    <script type="text/javascript" src="Public/js/jquery.cookie.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="local/conf.json"></script>
+    <script type="text/javascript">
+        var host = 'http://127.0.0.1:8000';
+        var sdw_ambiente = "DEV";
+        var sdw_owner = "DFH";
+        if (conf) {
+            var config = JSON.parse(conf);
+        }
+        if (config) {
+            host = config[0].server;
+            sdw_ambiente = config[0].ambiente;
+            sdw_owner = config[0].HEAD;
+        }
+        console.log("Ambiente : " + sdw_ambiente + " | Owner : " + sdw_owner + " | Server : " + host);
+    </script>
+
+
+    <script>
+        (window.jQuery || document.write('<script src="Public/js/jquery-3.6.0.min.js"><\/script>'));
+    </script>
+
+</head>
+
+<body onload="openWindow()">
+<div class="pagina">
+    <nav class="nav_dfh" id="nav_dfh">
+        <div>
+            <a class="logo_dfh" href="http://dfhnegocios.com.br/"> <img src="Public/Imagens/DHF_logo.png"
+                                                                        alt="logo"/></a>
+        </div>
+        <div class="topo_center">
+            <p style="text-align: center; font-size: 32px; color: lightskyblue"> Portal SD WAN - Adm</p>
+            <!-- <p style="text-align: center; font-size: 32px; color: Silver"> Portal SD WAN - Adm</p> -->
+        </div>
+    </nav>
+    <nav class="nav_top" id="nav_top" hidden>
+        <div>
+            <a class="logo" href="http://talkd.com.br/"> <img src="Public/Imagens/logo_original_final_branco.png"
+                                                              alt="logo"/></a>
+        </div>
+        <div class="topo_center">
+            <p style="text-align: center; font-size: 36px; color: ghostwhite"> Portal SD WAN - Adm</p>
+        </div>
+    </nav>
+    <!-- Menu Principal -->
+    <div>
+        <div class="menu_top">
+            <ul>
+                <li><a href="close.html">Sair</a></li>
+                <li><a href="#">Projetos</a>
+                    <ul>
+                        <li><span class="topo"></span><span class="inferior"></span><a
+                                href="provedores/pvhg_quest.html">Quest Hugues</a></li>
+                        <li><a href="provedores/DashGeral.html">DashBoard</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Cadastros</a>
+                    <ul>
+                        <li><span class="topo"></span><span class="inferior"></span><a href="#">Clientes</a></li>
+                        <li><a href="S3Base.html">Arquivos</a></li>
+                        <li><a href="#">Tecnologias</a></li>
+                    </ul>
+                </li>
+                <li><a href="portal.html">Home</a></li>
+            </ul>
+        </div>
+        <br>
+        <!-- Links -->
+    </div>
+    <br>
+    <div style="width: 100%; display: flex; flex-direction: row; flex-wrap: wrap">
+        <div>
+            <div class="block_col">
+                <h1>Administração</h1>
+                <p>Usuário</p>
+                <label>Login</label><br><input class="field" id="user_Login" type="text" readonly>
+                <label>Nome</label><br><input class="field" id="user_Nome" type="text" readonly>
+                <label>Empresa</label><br><input class="field" id="user_Empresa" type="text" value="Empresa...."
+                                                 readonly>
+                <hr>
+                <p>Links</p>
+                <ul>
+                    <li><a href="provedores/provedor_dossie.html">Dossiês Provedores</a></li>
+                    <li><a href="provedores/shopping_dossie.html">Dossiês Shopping Hughes</a></li>
+                    <li><a href="provedores/shopping_dossie_tkd.html">Dossiês Shopping Adm </a></li>
+                </ul>
+                <p>Base de Dados</p>
+                <ul>
+                    <li><a href="clientes.html">Clientes</a></li>
+                    <li><a href="user.html">Usuários</a></li>
+                    <li><a href="userim.html">Minhas Informações</a></li>
+                </ul>
+                <p>Anatel</p>
+                <a id="LinkAnatel" href="#" onclick="load_anatel('Geral')" style="padding-left: 16px; font-size: 12px">
+                    <i class="fas fa-file-excel"><span>&nbsp;&nbsp;</span></i>Baixar Arquivo Anatel</a>
+                <br>
+                <a id="LinkAnatelLinks" href="#" onclick="load_anatel('Links')"
+                   style="padding-left: 16px; font-size: 12px">
+                    <i class="fas fa-file-excel"><span>&nbsp;&nbsp;</span></i>Baixar Arquivo Links Anatel</a>
+                <br>
+                <a id="LinkAnatelTrimestre" href="#" onclick="load_anatel('Trimestre')"
+                   style="padding-left: 16px; font-size: 12px">
+                    <i class="fas fa-file-excel"><span>&nbsp;&nbsp;</span></i>Baixar Arquivo Anatel 1 Semestre 2023 </a>
+                <br><br><br><br><br><br><br><br><br><br>
+            </div>
+        </div>
+        <div>
+            <div class="block_list" hidden>
+                <b> Solicitações de Contatos </b><br>
+                <!-- <p> Tratar as solicitações de informação enviadas atravês do site SDWAN </p> -->
+                <a href="#"> Listar</a>
+                <a href="#"> Historico</a>
+            </div>
+            <div class="block_list">
+                <b> Solicitar Estudo de Viabilidade e Contratação</b><br>
+                <!--<p> Tratar as solicitações de viabilidades enviadas pelo site</p> -->
+                <a href="./provedores/relatorio_geral_tkd.html"> Relatório de Implantação </a>
+                <br>
+                <a href="mapprov.html">Cadastrar Novo Ponto</a>
+                <a href="pontos_carga.html">Importar pontos em lote</a>
+                <!--
+                <a href="pontos_pesquisa.html"> Gerenciar Pontos</a>
+                <a href="#"> Elaboração de Propostas</a>
+                -->
+            </div>
+            <div class="block_list">
+                <b> Gestão de Contratos </b><br>
+                <p> Acompanhar Situação dos Contratos</p>
+                <a href="./contratos/contratos_adm.html"> Consultar Contratos </a>
+                <a href="./contratos/cotapm.html"> Preços Contratados</a>
+                <a href="./contratos/CtDash.html"> DashBoard </a><br>
+                <a href="./contratos/ctFinan.html"> Gestão Pagamentos</a>
+                <!-- <a href="./contratos/contrato_novo.html"> Novo Contrato</a> -->
+            </div>
+            <div class="block_list">
+                <b> Gerenciar Provedores e Coberturas</b><br>
+                <p> Analisar e cadastrar coberturas</p>
+                <a href="./provedores/provedor_Console.html"> Consulta Provedores</a>
+                <a href="./provedores/cobertura_console.html"> Pesquisar Coberturas</a>
+                <a href="./provedores/provedor_novo.html"> Novo Provedor</a>
+                <a href="./provedores/cobertura_nova.html"> Nova Cobertura</a>
+                <br>
+                <a href="./provedores/provedor_painel.html"> Painel Sencinet </a>
+            </div>
+            <div class="block_list">
+                <b> Hughes</b><br>
+                <p> Acompanhamento de Serviços Implantação</p>
+                <a href="./provedores/relatorio_geral.html"> Relatório de Geral Implantação </a>
+                <a href="./provedores/DashGeral.html?Emp=HUGHES">DashBoard</a>
+                <a href="./provedores/provisionamento_painel.html"> Painel Serviços </a>
+
+            </div>
+            <div class="block_list">
+                <b> Sencinet </b><br>
+                <p> Visão da equipe Sencinet dos provedores</p>
+                <a href="./provedores/sprovedor_Console.html"> Consulta Provedores</a>
+                <a href="./provedores/DashGeral.html?Emp=SENCINET">DashBoard</a>
+                <a id="LinkNotas" href="#" onclick="fnBaixaLinks('VALORES')"
+                   style="padding-left: 16px; font-size: 12px"><i
+                   class="fas fa-file-excel"><span>&nbsp;&nbsp;</span></i>Baixar Sofs</a>
+            </div>
+
+            <div class="block_list"  >
+                <b> NOC </b><br>
+                <!-- <a href="nocCreate.html"> Abrir Incidente</a> -->
+                <a href="NocConsole.html"> Incidentes</a>
+                <!-- <a href="NocIncidente.html"> Incidentes Detalhes</a> -->
+            </div>
+
+
+            <div class="block_list" hidden>
+                <b> Testes </b><br>
+                <p> - </p>
+                <a href="./provedores/resultado_painel.html"> teste </a>
+
+            </div>
+            <div class="block_list" hidden>
+
+                <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top"
+                        title="Tooltip na parte superior">
+                    Tooltip na parte superior
+                </button>
+
+
+            </div>
+
+
+        </div>
+        <div class="block_small">
+            <!--
+            <div id="myDiv_MensalEv" style = "display: inline-block; padding-left: 10px; align-self: flex-start; background-color: ghostwhite ;width: 100%">
+                <i style = "font-size: 12px; color: darksalmon; padding-left: 16px">Evolução</i><br>
+                <div id="myDiv_Mensal" style ="background-color: ghostwhite ; align-self: flex-start;"></div>
+            </div> -->
+            <i style="font-size: 12px; color: darksalmon; padding-left: 16px">Ativação dia a dia </i><br>
+            <div id='layout'>
+                <!-- <h2>Bar chart example</h2> -->
+                <div id='container'>
+                    <svg/>
+                </div>
+            </div>
+            <b style="color: #9926b0"> Agenda de Campo </b>
+            <br>
+            <div id="mytableAgenda" class="table table-striped table-bordered table-sm" style="width: 100%;"></div>
+
+
+        </div>
+
+    </div>
+
+    <br>
+</div>
+</body>
+<footer>
+    <div class="footer" style="width: 100%; height: 26px ; border: 0px; padding: 1px">
+        <pre style="font-size:14px; padding: 2px"><b style="font-size:16px">&nbsp;&nbsp;&nbsp;Talkd</b> | Rua Salvador Simões, 801 sl. 1302 - São Paulo-SP  | TEL.: +55 11 3738-6128 | <b
+                style="font-size:16px">Evolua</b> de forma positiva a jornada de relacionamento com seus clientes. </pre>
+    </div>
+</footer>
+
+
+</html>
+
+
+<script type="text/javascript">
+    var tkd_Empresa;
+    var tkd_Login;
+
+    function openWindow() {
+        loadSession();
+        //head(sdw_owner);
+        fnrestrita();
+
+        var c_empresa = user_Empresa
+        fnAgenda();
+        fnServerDiaDia();
+
+
+    }
+
+    function fnAgenda() {
+        // ANALISAR
+        var js_Empresa = "DFH";
+        var jsdata = {"js_Empresa": js_Empresa}
+
+        var JdataS = JSON.stringify(jsdata);
+        var jdata = JSON.parse(JdataS);
+        //console.log(jdata);
+        const header = document.querySelector('header');
+        const section = document.querySelector('section');
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('Accept', 'application/json');
+        headers.append('Access-Control-Allow-Origin', host);
+        headers.append('Access-Control-Allow-Credentials', 'true');
+        headers.append('GET', 'POST', 'PUT', 'OPTIONS');
+        headers.append('Upgrade-Insecure-Requests', '1');
+
+        var requestURL = host + '/painel/REL_AGENDA';
+        //console.log(requestURL);
+        var request = new XMLHttpRequest();
+        request.open('POST', requestURL, true);
+        request.responseType = 'json';
+        request.send(JSON.stringify(jdata));
+
+        request.onload = function () {
+            var resp = request.response;
+            //console.log(resp);
+            var status = request.status;
+            if (status == 200) {
+                fnAgendaLista(resp);
+            }
+        }
+
+    }
+
+
+    function Open_Ponto(w_id) {
+        if (w_id) {
+            var URL = 'ponto_adm.html?ID=' + w_id;
+            window.open(URL, "_blank");
+        }
+    }
+
+
+
+</script>

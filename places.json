@@ -1,0 +1,29 @@
+{
+  "arquivo": "sdwanplaces",
+  "place": [
+	  {
+	  "ID": "1",
+	  "PlaceName": "Metro City",
+	  "formed": 2020,
+	  "geolocation": {"Lat" : -23.5516833, "Long" : -46.6371418},
+	  "Tecnologia" : "sdwan",
+	  "active": true
+	  },
+ 	  {
+	  "ID": "2",
+	  "PlaceName": "Shoping",
+	  "formed": 2020,
+	  "geolocation": {"Lat" : -23.5516833, "Long" : -46.6371418},
+	  "Tecnologia" : "sdwan",
+	  "active": true
+	  }, 
+ 	  {
+	  "ID": "3",
+	  "PlaceName": "Padaria",
+	  "formed": 2020,
+	  "geolocation": {"Lat" : -23.5516833, "Long" : -46.6371418},
+	  "Tecnologia" : "sdwan",
+	  "active": true
+	  }
+  ]
+}

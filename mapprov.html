@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+	<meta charset="utf-8">
+ 	<title>Incluir Novos Pontos</title>
+    <!-- <meta http-equiv="cache-control" content="no-cache" /> -->
+    <meta http-equiv="cache-control" content="max-age=86400, must-revalidate" />
+	<link rel="shortcut icon" href="Public/Imagens/favicon.png" />
+    <link rel="stylesheet"    href="Public/css/style.css">	
+	<link rel="stylesheet"    href="Public/css/main.css">
+	<link rel="stylesheet"    href="Public/css/style_a.css">
+    <link rel="stylesheet"    href="Public/css/table.css">
+    <script src="Public/js/geral.js" type="text/javascript"></script>
+    <script src="Public/js/pontos.js" type="text/javascript"></script>
+
+    <!-- Bootstrap -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.min.js" integrity="sha512-WW8/jxkELe2CAiE4LvQfwm1rajOS8PHasCCx+knHG0gBHt8EXxS6T6tJRTGuDQVnluuAvMxWF4j8SNFDKceLFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" integrity="sha512-b2QcS5SsA8tZodcDtGRELiGv5SaKSk1vDHDaQRda0htPYWZ6046lr3kJ5bAAQdpV2mmA/4v0wQF9MyU6/pDIAg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!--  JQuery
+    antigo:
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous"></script>
+    -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="text/javascript">
+        if(typeof jQuery === 'undefined'){
+              console.log('no jQuery');
+                var head = document.getElementsByTagName('head')[0];
+                var script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.src = 'Public/js/jquery.min.js';
+                script.onload = handler;
+                head.appendChild(script);
+            }else{console.log('jQuery is embedded!');}
+    function handler(){ console.log('jquery added :)'); }
+    </script>
+    <!--  Cookies
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js" integrity="sha512-3j3VU6WC5rPQB4Ld1jnLV7Kd5xr+cq9avvhwqzbH/taCRNURoeEpoPBK9pDyeukwSxwRPJ8fDgvYXd6SkaZ2TA==" crossorigin="anonymous"></script>  -->
+    <script type="text/javascript" src="Public/js/jquery.cookie.min.js" ></script>
+    <script type="text/javascript" src="Public/js/jquery.mask.min.js" ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+
+    <!-- JQuery  Final -->
+
+    
+	
+    <style>
+           /* Set the size of the div element that contains the map */
+          #map {
+            height: 400px;  /* The height is 400 pixels */
+            width: 100%;  /* The width is the width of the web page */
+           }
+    </style>
+	
+    <script type="text/javascript" src="./local/conf.json"></script>
+    <script type="text/javascript">
+        var host = 'http://127.0.0.1:8000';
+        var sdw_ambiente = "DEV";
+        var sdw_owner = "DFH";
+        if (conf) { var config = JSON.parse(conf); }
+        if (config) {
+            host = config[0].server;
+            sdw_ambiente = config[0].ambiente ;
+            sdw_owner = config[0].HEAD;
+           }
+        console.log("Ambiente : " + sdw_ambiente + " | Owner : " + sdw_owner +  " | Server : "+ host);
+    </script>
+
+    <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDyfFIiEZ8FVT0-0nbNOU0qZLO3uCtEBtE&callback=initMap"> </script>
+    
+</head>
+
+<body onload="loadWindow()" >
+<div>
+    <nav class="nav_dfh" id="nav_dfh">
+        <div>
+            <a class="logo_dfh" href="http://dfhnegocios.com.br/"> <img src="Public/Imagens/DHF_logo.png" alt="logo"  /></a>
+        </div>
+        <div class="topo_center">
+            <p style="text-align: center; font-size: 32px; color: lightskyblue"> Portal SDWAN</p>
+            <!-- <p style="text-align: center; font-size: 32px; color: Silver"> Portal SD WAN - Adm</p> -->
+        </div>
+	</nav>
+
+    <nav class="nav_top" id="nav_top" hidden>
+		    <div>
+		  		<a class="logo" href="http://talkd.com.br/">
+	  				<img src="Public/Imagens/logo_original_final_branco.png" alt="logo" /></a>
+			</div>
+			<div class="topo_center">
+				<p style="text-align: center; font-size: 36px; color: ghostwhite"> Portal SD WAN </p> 
+			</div>
+	</nav>
+	<!-- Menu Principal -->
+	<div class="menu_top">
+		<ul>
+			<li><a href="close.html">Sair</a></li>
+			<li><a onclick="fnConsoleR()" >Console</a></li>
+		</ul>
+	</div><br><br>
+		
+    <div style = "width: 100%; display: flex; flex-direction: row; flex-wrap: wrap">
+        <div>
+           <div class="block_form">
+            <!--    FORM  -->
+                <form action="mapprovteste.html" method="GET">                 
+                    <fieldset>
+                    <div style="display: inline-block;  display: flex">
+                        <div style="display: inline-block; display: flex;  width: 900px">
+                             <p> Solicitar Contratação de Link ou Estudo de Viabilidade </p>
+                        </div>
+                        <div id="DivContratoFields" style="display: inline-block">
+                                <input type="checkbox" id="pt_shopping"> <label style = "width: 100px" for="pt_shopping">Shopping Center</label>
+                        </div>         
+                    </div>           
+                    <label style = "width: 100px" for="pt_nome">Nome do Ponto</label>
+                        <input style = "width: 394px" class="field" id="pt_nome" type="text" maxlength="255" required>
+                    <label style = "width: 40px" for="pt_IDLoja">ID Loja</label><input style = "width: 120px" class="field" id="pt_IDLoja" type="text" maxlength="30">
+                    <label style = "width: 40px"for="pt_CNPJ">CNPJ</label><input style = "width: 160px" class="field" id="pt_CNPJ" type="text" maxlength="18">
+                        <script type="text/javascript">$("#pt_CNPJ").mask("00.000.0000/0000-00");</script>
+                    <label style = "width: 26px" for="pt_Links">Links</label>
+                        <input style = "width: 60px " class="field" id="pt_Links" type="number" value="1" min="1" max="3" >
+                    <br>
+                    <label style = "width: 100px" for="Empresa">Empresa</label>
+                        <input style = "width: 154px" class="field" id="Empresa" type="text" readonly required>
+                                <select name = "sel_Empresa" id = "sel_Empresa" style = "width: 20px" ></select>
+                    <label style = "width: 50px" for="ctq_Cliente">Cliente</label>
+                        <select style = "width: 322px" name = "ctq_Cliente" id = "ctq_Cliente"></select> <!-- Function Cria Maneu -->
+                    <label style = "width: 48px" for="Marca">Marca</label>
+                        <input style = "width: 80px" class="field" id="MA_ID" type="number" hidden>
+                        <input style = "width: 160px" class="field" id="Marca" type="text" maxlength="30" readonly>
+                        <select style = "width: 20px" name = "mnMarca" id="mnMarca"></select>
+                    <br>
+                    <label style = "width: 104px" for="ct_Designacao">Desig Empr</label><input style = "width: 180px" class="field" id="ct_Designacao" type="text" maxlength="60">
+                    <label style = "width: 54px" for="Projeto">Projeto</label><input style = "width: 160px" class="field" id="Projeto" type="text" maxlength="60">
+                    <label style = "width: 50px" for="pt_Pedido">Pedido</label><input style = "width: 180px" class="field" id="pt_Pedido" type="text" maxlength="18">
+                    <label style = "width: 52px" for="pt_Regional">Regional</label><input style = "width: 100px" class="field" id="pt_Regional" type="text" maxlength="20">
+                    <br>
+                    <label for="address">Endereço de Origem:</label>
+                    <input style = "width: 680px"  class="field" id="address" type="text" value="São Paulo, SP">
+                    <input class="button buttonS1" type="button" value="Localizar Ponto" onclick="codeAddress()"><br>
+
+                    <!--    Mapa Google  -->
+                    <div id="map"></div><br>
+
+                    <label style = "width: 80px" for="pt_Logradouro">Logradouro</label><input style = "width: 520px" class="field" id="pt_Logradouro" type="text" maxlength="250">
+                    <label style = "width: 38px" for="pt_Numero">Numero</label><input style = "width: 82px" class="field" id="pt_Numero" type="text" maxlength="10">
+                    <label style = "width: 80px" for="pt_Complemento">Complemento</label><input style = "width: 160px" class="field" id="pt_Complemento" type="text" maxlength="250">
+                    <br>
+                    <label style = "width: 76px" for="pt_Estado">Estado</label>
+                        <input style = "width: 60px" class="field" id="pt_Estado" type="text" maxlength="2" readonly>
+                                    <select style = "width: 20px" name = "whe_Estado" id="whe_Estado">
+                                        <option value=""> Selecione</option>
+                                        <option value="AC"> Acre </option>
+                                        <option value="AL"> Alagoas </option>
+                                        <option value="AM"> Amazonas </option>
+                                        <option value="AP"> Amapa </option>
+                                        <option value="BA"> Bahia </option>
+                                        <option value="CE"> Ceara </option>
+                                        <option value="DF"> Distrito Federal </option>
+                                        <option value="ES"> Espirito Santo </option>
+                                        <option value="GO"> Goias </option>
+                                        <option value="MA"> Maranhão </option>
+                                        <option value="MG"> Minas Gerais </option>
+                                        <option value="MS"> Mato Grosso Sul </option>
+                                        <option value="MT"> Mato Grosso </option>
+                                        <option value="PA"> Para </option>
+                                        <option value="PB"> Paraiba </option>
+                                        <option value="PE"> Pernambuco </option>
+                                        <option value="PI"> Piaui </option>
+                                        <option value="PR"> Parana </option>
+                                        <option value="RJ"> Rio de Janeiro </option>
+                                        <option value="RN"> Rio Grande do Norte </option>
+                                        <option value="RO"> Rondonia </option>
+                                        <option value="RR"> Roraima </option>
+                                        <option value="RS"> Rio Grande do Sul </option>
+                                        <option value="SC"> Santa Catarina </option>
+                                        <option value="SE"> Sergipe </option>
+                                        <option value="SP"> São Paulo </option>
+                                        <option value="TO"> Tocantis </option>
+                                    </select>
+                    <label style = "width: 60px" for="pt_Cidade">Cidade</label>
+                        <input style = "width: 304px" class="field" id="pt_Cidade" type="text" maxlength="100" readonly>
+                            <select name = "whe_Cidade" id="whe_Cidade" style = "width: 20px" ></select>
+
+                    <label style = "width: 60px" for="pt_Bairro">Bairro</label><input style = "width: 190px" class="field" id="pt_Bairro" type="text" maxlength="100">
+                    <label style = "width: 60px" for="pt_CEP">CEP</label><input style = "width: 80px" class="field" id="pt_CEP" type="text" maxlength="9">
+                        <br>
+                    <label style = "width: 80px" for="pt_Observacao">Referencia</label><input style = "width: 920px" class="field" id="pt_Referencia" type="text">
+                        <br>        
+                    <label style = "width: 80px" for="pt_pais">Pais</label><input style = "width: 120px" class="field" id="pt_pais" type="text" maxlength="100">
+                    <label style = "width: 80px" for="pt_Latitude">Latitude</label>
+                            <input style = "width: 140px" class="field" id="pt_Latitude" type="text" readonly>
+                    <label style = "width: 60px" for="pt_Longitude">Latitude</label>
+                            <input style = "width: 140px" class="field" id="pt_Longitude" type="text" readonly>
+
+                        <br><hr>
+                    <label style = "width: 140px" for="pt_resultado">Resultado analise teórica</label><input style = "width: 620px" class="field" id="pt_resultado" type="text" readonly>
+                    <input class="button button1" type="button" value="Fazer Analise Teórica" onclick="fnAnaliseTeo()"><br>
+                        <hr>
+                    <div  id="DivCotLocal"  >
+                        <h5>Contato no Local</h5>
+                        <label style = "width: 80px" for="pt_LojaCtNome">Nome</label><input style = "width: 220px" class="field" id="pt_LojaCtNome" type="text" maxlength="60">
+                        <label style = "width: 50px" for="pt_LojaCtTel">Telefone</label><input style = "width: 120px" class="field" id="pt_LojaCtTel" type="text" maxlength="18">
+                            <script type="text/javascript">$("#pt_LojaCtTel").mask("(00) 00000 0000");</script>
+                        <label style = "width: 50px" for="pt_LojaCtEmail">Email</label><input style = "width: 260px" class="field" id="pt_LojaCtEmail" type="text" maxlength="80">
+                            <br>
+                        <label style = "width: 80px" for="pt_LojaCtNome2">Nome</label><input style = "width: 220px" class="field" id="pt_LojaCtNome2" type="text" maxlength="60">
+                        <label style = "width: 50px" for="pt_LojaCtTel2">Telefone</label><input style = "width: 120px" class="field" id="pt_LojaCtTel2" type="text" maxlength="18">
+                            <script type="text/javascript">$("#pt_LojaCtTel2").mask("(00) 00000 0000");</script>
+                        <label style = "width: 50px" for="pt_LojaCtEmail2">Email</label><input style = "width: 260px" class="field" id="pt_LojaCtEmail2" type="text" maxlength="80">
+                        <br>
+                    </div>
+                    <label style = "width: 80px" for="pt_clienteContato">Info. Contato</label><input style = "width: 740px" class="field" id="pt_clienteContato" type="text" maxlength="250" >
+                        <br>
+                    <label style = "width: 80px" for="pt_observacao">Observações</label><input style = "width: 920px" class="field" id="pt_observacao" type="text">
+                        <br>
+                    <input class="button button1" style="float: right;" type="button"  value="Incluir Ponto para Analise" onclick="post()">
+                        <br><br>
+                    <!-- Cotação-->
+                    <div id="DivCob" style="background-color: floralwhite">
+                        <div id="DivCobbt">
+                            <input class="button button2" style="float: right" type="button"  value="Pesquisar Provedores" onclick="cobLatLong()">
+                        </div>
+                        <br><br>
+                        <div class="table table-striped table-bordered table-sm" id="mytableCoberturas" style = "width: 100%"></div>
+                        <br>
+                    </div>
+                    </fieldset>
+                </form> 
+           </div>
+           <div class="block_form" hidden>
+                <form>
+                <fieldset>
+                    <p> Dados Internos </p>
+                    <label style = "width: 120px" for="pt_Tecnologia">Tecnologia</label><input style = "width: 120px" class="field" id="pt_Tecnologia" type="text" value="SDWAN">
+                    <label style = "width: 80px" for="ct_ID">ID Cliente </label><input style = "width: 80px" class="field" id="ct_ID" type="text" readonly>
+                    <label style = "width: 80px" for="pt_cliente">Cliente</label><input style = "width: 180px" class="field" id="pt_cliente" type="text" readonly>
+                    <label for="pt_Velocidade" hidden >Velocidade</label><input class="field" id="pt_Velocidade" type="number" hidden ><i hidden>&nbsp;&nbsp;&nbsp;Mbps</i>
+                    <br>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+        <div>
+            <div class="block_col">
+               <h1>DFH Engenharia </h1><hr>
+               <p>Usuário</p>
+               <label>Login</label><br> <input class="field" id="user_Login" type="email" readonly>
+               <label>Nome</label><br> <input class="field" id="user_Nome" type="email" readonly>  
+               <label>Empresa</label><br> <input class="field" id="user_Empresa" type="text" value="Empresa...." readonly>
+               <hr><br>
+            </div>   
+        </div>     
+    </div>
+
+
+
+</div><br>
+
+
+
+</body>
+<footer>
+    <div class="footer" style = "width: 100%; height: 26px ; border: 0px; padding: 1px">
+        <pre style="font-size:14px; padding: 2px" ><b style="font-size:16px" >&nbsp;&nbsp;&nbsp;Talkd</b> | Rua Salvador Simões, 801 sl. 1302 - São Paulo-SP  | TEL.: +55 11 3738-6128 | <b style="font-size:16px" >Evolua</b> de forma positiva a jornada de relacionamento com seus clientes. 
+        </pre>
+    </div>
+</footer>        
+        
+
+<!-- ------------------ JAVA SCRIPT ---------------->
+<script type="text/javascript">
+  var geocoder;
+  var map;
+  var tkd_Empresa;
+  var tkd_Login;
+
+document.getElementById("ctq_Cliente").addEventListener("change", function(){ 
+        var c_id = document.getElementById('ctq_Cliente').value;
+        if (c_id != null) { ct_ID.setAttribute("Value", c_id )};
+        var elemento = document.getElementById('ctq_Cliente');
+        var c_nome = elemento.options[elemento.selectedIndex].innerHTML;
+        if (c_nome != null) { pt_cliente.setAttribute("Value", c_nome )}
+        fnMenuMarcas(c_id);
+});
+document.getElementById("sel_Empresa").addEventListener("change", function(){ 
+        var elemento = document.getElementById('sel_Empresa');
+        var c_nome = elemento.options[elemento.selectedIndex].innerHTML;
+        document.getElementById('Empresa').value = c_nome ;
+        menu_Clientes();
+});
+document.getElementById("mnMarca").addEventListener("change", function(){
+        var c_id = document.getElementById('mnMarca').value;
+        if ( c_id != null) { document.getElementById('MA_ID').value = c_id }
+        var elemento = document.getElementById('mnMarca');
+        var c_nome = elemento.options[elemento.selectedIndex].innerHTML;
+        if ( c_nome != null) { document.getElementById('Marca').value = c_nome }
+});
+document.getElementById("whe_Estado").addEventListener("change", function(){
+        var c_id = document.getElementById("whe_Estado").value;
+        if ( c_id != null ) { pt_Estado.setAttribute("Value", c_id )
+        menu_CidadeGeral("whe_Cidade",c_id);
+        }
+});
+document.getElementById("whe_Cidade").addEventListener("change", function(){
+    var cidade = document.getElementById("whe_Cidade").value ;
+    document.getElementById('pt_Cidade').value = cidade ;
+});
+
+function loadWindow(){
+	loadSession();
+    // if ( tkd_Empresa == undefined ) { window.open( '404.html' , "_blank"); };
+    var c_empresa = sField = sessionStorage.getItem('tkd_Empresa'); 
+    if ( sField != null ) { var tkd_Empresa = sessionStorage.getItem('tkd_Empresa').trim(); } 
+    if ( tkd_Empresa != "DFH"){
+            document.getElementById("sel_Empresa").hidden = true;
+            document.getElementById('Empresa').value = tkd_Empresa ;
+            document.getElementById("DivCob").hidden = true;
+            Empresa.setAttribute("style", "width: 180px");
+            menu_Clientes();
+        }
+    initialize();
+    menuEmpresas("sel_Empresa");
+    console.log(tkd_Empresa);
+
+    
+// ----Listener Geolocalização -------------------------------------------------------------------------------
+	google.maps.event.addListener(marker, 'drag', function () {
+		geocoder.geocode({ 'latLng': marker.getPosition() }, function (results, status) {
+			if (status == google.maps.GeocoderStatus.OK) {
+				if (results[0]) { 
+					results[0].address_components.forEach(getElementsType);
+					//$('#latitude').val(marker.getPosition().lat());
+                    latitude = (marker.getPosition().lat());
+					longitude = (marker.getPosition().lng());
+                    if (conteudo != null) { pt_Latitude.setAttribute("Value", latitude )}
+                    if (conteudo != null) { pt_Longitude.setAttribute("Value", longitude )}
+				}
+			}
+		});
+     pt_resultado.setAttribute("Value", "Fazer Analise");    
+	});
+
+}
+    
+function getElementsType(element, index, array) {
+	switch(element.types[0]) {
+		case 'street_number':
+			// Número
+			//$('#numero').val(element.long_name);
+            conteudo =  (element.long_name);
+            if (conteudo != null) { pt_Numero.setAttribute("Value", conteudo )}
+			break;
+		case 'route':
+		case 'street_address':
+			// Logradouro
+			//$('#logradouro').val(element.long_name);
+            conteudo =  (element.long_name);
+            if (conteudo != null) { pt_Logradouro.setAttribute("Value", conteudo )}
+			break;
+		case 'political':
+		case 'sublocality_level_1':
+		case 'neighborhood':
+			// Bairro
+			//$('#bairro').val(element.long_name);
+            conteudo =  (element.long_name);
+            if (conteudo != null) { pt_Bairro.setAttribute("Value", conteudo )}
+			break;
+		case 'locality':
+		case 'administrative_area_level_2':
+			// Cidade incorporada
+			// Município
+			//$('#cidade').val(element.long_name);
+            conteudo =  (element.long_name);
+            if (conteudo != null) { pt_Cidade.setAttribute("Value", conteudo )}
+			break;
+		case 'administrative_area_level_1':
+			// Estado
+			//$('#estado').val(element.short_name);
+            conteudo =  (element.short_name);
+            if (conteudo != null) { pt_Estado.setAttribute("Value", conteudo )}
+			break;
+		case 'country':
+			// País
+			//$('#pais').val(element.long_name);
+            conteudo =  (element.long_name);
+            if (conteudo != null) { pt_pais.setAttribute("Value", conteudo )}
+			break;
+		case 'postal_code':
+			// CEP
+			//$('#cep').val(element.long_name);
+            conteudo =  (element.long_name);
+            if (conteudo != null) { pt_CEP.setAttribute("Value", conteudo )}
+			break;
+	   }
+}
+    
+                                 
+
+// -----------------------------------------------------------------------------         
+    
+function initialize() {
+    var latlng = new google.maps.LatLng(-23.5516833, -46.6371418);
+    var mapOptions = { zoom: 12, center: latlng , mapTypeId: google.maps.MapTypeId.ROADMAP }
+    map = new google.maps.Map(document.getElementById('map'), mapOptions);
+    geocoder = new google.maps.Geocoder();
+    //const marker  = new google.maps.Marker({ position: { lat: -23.5516833 , lng: -46.6371418 } map: map, draggable: true, });
+    marker = new google.maps.Marker({ map: map, draggable: true, });
+    marker.setPosition(latlng);
+}
+function clear(){
+    document.getElementById('pt_nome').value = "";
+    document.getElementById('pt_Latitude').value = "";
+    document.getElementById('pt_Longitude').value = "";
+    document.getElementById('pt_resultado').value = "";
+    //document.getElementById('Empresa').value = "";
+    //document.getElementById('sel_Empresa').value = "";
+    //document.getElementById("sel_Empresa").selectedIndex = 0 ;
+                         
+                                
+}    
+
+function codeAddress() {
+    var address = document.getElementById('address').value;
+    geocoder.geocode( { 'address': address}, function(results, status) {
+      if (status == 'OK') {
+        map.setCenter(results[0].geometry.location);
+        marker.setPosition(results[0].geometry.location);
+					results[0].address_components.forEach(getElementsType);
+                    latitude = (marker.getPosition().lat());
+					longitude = (marker.getPosition().lng());
+            if (conteudo != null) { pt_Latitude.setAttribute("Value", latitude )};                     
+            if (conteudo != null) { pt_Longitude.setAttribute("Value", longitude )};                      
+      } else {
+        alert('Não foi possivel localizar este endereço: ' + status);
+      }
+    });
+}
+    
+
+function post() {
+        var jpt_nome    = document.getElementById('pt_nome').value;
+        var jpt_address = document.getElementById('address').value;
+        var jpt_empresa = document.getElementById('Empresa').value;
+        var jpt_vel     = document.getElementById('pt_Velocidade').value;
+        var jpt_tec     = document.getElementById('pt_Tecnologia').value;
+        var jpt_log     = document.getElementById('pt_Logradouro').value;
+        var jpt_num     = document.getElementById('pt_Numero').value;
+        var jpt_com     = document.getElementById('pt_Complemento').value;
+        var jpt_bar     = document.getElementById('pt_Bairro').value;
+        var jpt_cid     = document.getElementById('pt_Cidade').value;
+        var jpt_est     = document.getElementById('pt_Estado').value;
+        var jpt_pais    = document.getElementById('pt_pais').value;
+        var jpt_cep     = document.getElementById('pt_CEP').value;
+        var jpt_ref     = document.getElementById('pt_Referencia').value;
+        var jpt_lat     = document.getElementById('pt_Latitude').value;
+        var jpt_long    = document.getElementById('pt_Longitude').value;
+        var jpt_obs     = document.getElementById('pt_observacao').value;
+        var jpt_cli     = document.getElementById('pt_cliente').value;
+        var jpt_clc     = document.getElementById('pt_clienteContato').value;
+        var jpt_idlj    = document.getElementById('pt_IDLoja').value;
+        var jpt_cnpj    = document.getElementById('pt_CNPJ').value;
+        var jpt_regi    = document.getElementById('pt_Regional').value;
+        var jpt_proj    = document.getElementById('Projeto').value;
+        var jpt_ateo    = document.getElementById('pt_resultado').value;
+        var jpt_link    = document.getElementById('pt_Links').value;
+        var jpt_pedi    = document.getElementById('pt_Pedido').value;
+        var jpt_desg    = document.getElementById('ct_Designacao').value;
+        var jpt_MA_ID   = Number(document.getElementById('MA_ID').value);
+        if ( document.getElementById('pt_shopping').checked == true ) { jpt_shop = 1 ; } else { jpt_shop = 0 }
+        var jpt_clid = Number(document.getElementById('ct_ID').value);
+		var jpt_sts = 10 ;
+        var jpt_viab = "Pendente";
+        var jpt_lcn     = document.getElementById('pt_LojaCtNome').value;
+        var jpt_lcn2    = document.getElementById('pt_LojaCtNome2').value;
+        var jpt_lct     = document.getElementById('pt_LojaCtTel').value;
+        var jpt_lct2    = document.getElementById('pt_LojaCtTel2').value;
+        var jpt_lce     = document.getElementById('pt_LojaCtEmail').value;
+        var jpt_lce2    = document.getElementById('pt_LojaCtEmail2').value;
+
+        //if ( tkd_Empresa === 'HUGHES' ){}
+        // jpt_link1,jpt_link2,jpt_link3
+
+        
+        var jsdata = {"jpt_nome":jpt_nome,"jpt_vel":jpt_vel, "jpt_address":jpt_address,"jpt_empresa":jpt_empresa, "jpt_tec":jpt_tec, "jpt_log":jpt_log, "jpt_num":jpt_num, "jpt_com":jpt_com, "jpt_bar":jpt_bar, "jpt_cid":jpt_cid, "jpt_est":jpt_est, "jpt_pais":jpt_pais, "jpt_cep":jpt_cep, "jpt_ref":jpt_ref, "jpt_lat":jpt_lat, "jpt_long":jpt_long, "jpt_obs":jpt_obs, "jpt_viab":jpt_viab, "jpt_sts":jpt_sts, "jpt_cli": jpt_cli, "jpt_clc":jpt_clc,"jpt_idlj":jpt_idlj,"jpt_cnpj":jpt_cnpj,"jpt_regi":jpt_regi,"jpt_proj":jpt_proj,"jpt_ateo":jpt_ateo,"jpt_shop":jpt_shop,"jpt_clid":jpt_clid,"jpt_link":jpt_link,"jpt_MA_ID":jpt_MA_ID,"jpt_pedi":jpt_pedi,"jpt_desg":jpt_desg,"jpt_lcn":jpt_lcn,"jpt_lcn2":jpt_lcn2,"jpt_lct":jpt_lct,"jpt_lct2":jpt_lct2,"jpt_lce":jpt_lce,"jpt_lce2":jpt_lce2};
+    
+        // console.log(jsdata);
+        if ( jpt_empresa === '' ) { alert("Precisa Selecionar Uma Empresa"); return }
+        if ( jpt_long === '' ) { alert("Preencha o endereço corretamente e localize o ponto no mapa"); return }
+
+        if ( tkd_Empresa === 'HUGHES' && (jpt_lcn === '' || jpt_lcn2  === '' || jpt_lct === '' || jpt_lct2 === '' ) ){
+            alert("Preencha Nome e telefone os dados de pelo menos 2 contatos do Local"); return
+        }
+
+    
+        var JdataS= JSON.stringify(jsdata);
+        var jdata = JSON.parse(JdataS);
+        const header  = document.querySelector('header');
+        const section = document.querySelector('section');
+        //const csrftoken = Cookies.get('csrftoken');
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('Accept', 'application/json');
+        headers.append('Access-Control-Allow-Origin', host);
+        headers.append('Access-Control-Allow-Credentials', 'true');
+        headers.append('GET', 'POST', 'OPTIONS');
+        headers.append('Upgrade-Insecure-Requests', '1');
+        //headers.append('X-CSRFToken', csrftoken);
+
+        var requestURL = host + '/pontos?1';
+        var request = new XMLHttpRequest();
+        request.open('POST', requestURL, true);
+        request.responseType = 'json';
+        request.send(JSON.stringify(jdata));		
+
+        request.onload = function() { var resp_post = request.response;
+                                      var status = request.status;
+                                    if ( status == 200 ) { alert( " Registro Criado com Sucesso" );
+                                            pt_resultado.setAttribute("Value", resp_post );
+                                            setCookie("LastPoint",resp_post,0.25);
+                                            window.open( 'mapprov.html' , "_self");   
+                                                         }
+                                    else { alert( "Erro  : " + status.toString() ) }
+                                    }
+
+}
+  
+function fnAnaliseTeo() {
+    var q_lat = document.getElementById('pt_Latitude').value;   
+    var q_long = document.getElementById('pt_Longitude').value;     
+    if ( q_lat == "" || q_long == "" ) { alert( " Verifique se o endereço tem uma geolocalização ");}
+    else {
+            const header  = document.querySelector('header');
+            const section = document.querySelector('section');
+            let headers = new Headers();
+            headers.append('Content-Type', 'application/json');
+            headers.append('Accept', 'application/json');
+            headers.append('Access-Control-Allow-Origin', '*' );
+            headers.append('Access-Control-Allow-Credentials', 'true');
+            headers.append('GET', 'POST', 'OPTIONS');
+            headers.append('Upgrade-Insecure-Requests', '1');
+            headers.append('Content-Security-Policy', 'upgrade-insecure-requests');
+
+            // ---  Chause Where
+            var requestURL = host + '/cobLatLong?Lat='+q_lat+'&Long='+q_long;
+            //console.log(requestURL);       
+
+            var request = new XMLHttpRequest();
+            request.open('GET', requestURL);
+            request.responseType = 'json';
+            request.send();	
+                request.onload = function() {
+                    var coberturas = request.response;
+                    //console.log(coberturas);   
+                    var cb_quantidade = coberturas.length;
+                    //console.log(cb_quantidade);
+                    var cg_mem = ""
+                if ( cb_quantidade > 0 ) { cg_mem = " existe em torno de " + cb_quantidade + " coberturas que podem atender este endereço." ;
+                                            pt_resultado.setAttribute("Value", cg_mem );
+                                            }
+                    else { cg_mem = "Não existe coberturas próximas para atede a este endereço."}
+
+                pt_resultado.setAttribute("Value", cg_mem );
+
+                }
+    }
+}     
+
+    
+</script>
+</html>

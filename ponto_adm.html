@@ -1,0 +1,1700 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+	<meta charset="utf-8">
+    <!-- <meta http-equiv="cache-control" content="no-cache" /> -->
+    <meta http-equiv="cache-control" content="max-age=86400, must-revalidate" />
+    <!-- Cache-Control: max-age=86400, must-revalidate -->
+ 	<title>Detalhamento Ponto de Atendimento</title>
+
+	<link rel="shortcut icon" href="Public/Imagens/favicon.ico" />
+    <link rel="stylesheet"    href="Public/css/style.css">
+	<link rel="stylesheet"    href="Public/css/main.css">
+	<link rel="stylesheet"    href="Public/css/style_a.css">
+    <link rel="stylesheet"    href="Public/css/table.css">
+    <script src="Public/js/geral.js"  type="text/javascript"></script>
+    <script src="Public/js/pontos.js" type="text/javascript"></script>
+    <script type="text/javascript" src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://kit.fontawesome.com/d519b7357c.js" crossorigin="anonymous"></script>
+
+    <!--  JQuery
+    antigo:
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous"></script>
+    -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+            integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"></script>
+    <script type="text/javascript">
+        if(typeof jQuery === 'undefined'){
+              console.log('no jQuery');
+                var head = document.getElementsByTagName('head')[0];
+                var script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.src = 'Public/js/jquery.min.js';
+                script.onload = handler;
+                head.appendChild(script);
+            }else{console.log('jQuery is embedded!');}
+    function handler(){ console.log('jquery added :)'); }
+    </script>
+    <!--  Cookies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"
+            integrity="sha512-3j3VU6WC5rPQB4Ld1jnLV7Kd5xr+cq9avvhwqzbH/taCRNURoeEpoPBK9pDyeukwSxwRPJ8fDgvYXd6SkaZ2TA=="
+            crossorigin="anonymous"></script>
+    <script type="text/javascript" src="Public/js/jquery.cookie.min.js" ></script>
+    <script type="text/javascript" src="Public/js/jquery.mask.min.js" ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"></script>
+    <!-- Bootstrap -->
+    <script type="text/javascript" src="Public/js/bootstrap.min.js" ></script>
+    <link rel="stylesheet"    href="Public/css/bootstrap.min.css">
+    <!-- Bootstrap
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.min.js" integrity="sha512-WW8/jxkELe2CAiE4LvQfwm1rajOS8PHasCCx+knHG0gBHt8EXxS6T6tJRTGuDQVnluuAvMxWF4j8SNFDKceLFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" integrity="sha512-b2QcS5SsA8tZodcDtGRELiGv5SaKSk1vDHDaQRda0htPYWZ6046lr3kJ5bAAQdpV2mmA/4v0wQF9MyU6/pDIAg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    Versao Antiga:
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    -->
+    <!--
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/0.9.0/jquery.mask.min.js" integrity="sha512-oJCa6FS2+zO3EitUSj+xeiEN9UTr+AjqlBZO58OPadb2RfqwxHpjTU8ckIC8F4nKvom7iru2s8Jwdo+Z8zm0Vg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    -->
+    <!-- JQuery  Final -->
+
+    <style>
+       /* Set the size of the div element that contains the map */
+      #map {
+        height: 400px;  /* The height is 400 pixels */
+        width: 100%;  /* The width is the width of the web page */
+       }
+    </style>
+
+    <!-- <script type="text/javascript" src="../local/conf.json"></script> -->
+    <script type="text/javascript" src="local/conf.json"></script>
+    <script type="text/javascript">
+        var host = 'http://127.0.0.1:8000';
+        var sdw_ambiente = "DEV";
+        var sdw_owner = "DFH";
+        if (conf) { var config = JSON.parse(conf); }
+        if (config) {
+            host = config[0].server;
+            sdw_ambiente = config[0].ambiente ;
+            sdw_owner = config[0].HEAD;
+           }
+        console.log("Ambiente : " + sdw_ambiente + " | Owner : " + sdw_owner +  " | Server : "+ host);
+    </script>
+
+    <!--<script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDyfFIiEZ8FVT0-0nbNOU0qZLO3uCtEBtE&callback=initMap"> </script>-->
+    <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgffxsyaBHuqoVSjs9ZlxPB-NhMydhsKQ&callback=initMap"> </script>
+
+
+
+</head>
+<body onload="loadWindow()">
+<div>
+    <nav class="nav_dfh" id="nav_dfh" hidden >
+        <div>
+            <a class="logo_dfh" href="http://dfhnegocios.com.br/"> <img src="Public/Imagens/DHF_logo.png" alt="logo"  /></a>
+        </div>
+        <div class="topo_center">
+            <p style="text-align: center; font-size: 32px; color: lightskyblue"> Portal SD WAN - Provisionamento </p>
+            <!-- <p style="text-align: center; font-size: 32px; color: Silver"> Portal SD WAN - Adm</p> -->
+        </div>
+	</nav>
+    <nav class="nav_top" id="nav_top">
+        <div>
+            <a class="logo_dfh" href="http://dfhnegocios.com.br/"> <img src="Public/Imagens/DHF_logo.png" alt="logo"  /></a>
+        </div>
+        <div class="topo_center">
+            <p style="text-align: center; font-size: 32px; color: lightskyblue"> Portal SD WAN - Provisionamento </p>
+            <!-- <p style="text-align: center; font-size: 32px; color: Silver"> Portal SD WAN - Adm</p> -->
+        </div>
+	</nav>
+	<!-- Menu Principal -->
+	<div class="menu_top">
+		<ul>
+			<li><a href="close.html">Sair</a></li>
+            <li><a onclick="fnConsoleR()" >Console</a></li>
+		</ul>
+	</div><br>
+	<div class="block_line">
+        <div>&nbsp;&nbsp;</div>
+        <div><label style = "width: 40px" for="user_Login">Login</label></div>
+        <div><input style = "width: 80px"  class="field" id="user_Login" type="text" readonly></div>
+        <div><label style = "width: 40px" for="user_Nome" >Nome</label></div>
+        <div><input style = "width: 220px" class="field" id="user_Nome" type="text" readonly> </div>
+        <div><label style = "width: 60px" for="user_Empresa">Empresa</label></div>
+        <div><input style = "width: 120px" class="field" id="user_Empresa" type="text" readonly></div>
+    </div>
+	<div class="block_big">
+        <!--    FORM  -->
+		<form >
+            <p> Provisionamento Ponto/Links , Estudo de Viabilidade, Cobertura e Elaboração do Contrato </p>
+            <fildset>
+            <label style = "width: 80px" for="pt_ID">ID</label><input style = "width: 70px" class="field" id="pt_ID" type="text" readonly>
+            <label style = "width: 102px" for="pt_nome">Nome do Ponto</label><input style = "width: 344px" class="field" id="pt_nome" type="text" maxlength="255">
+            <label style = "width: 46px" for="pt_IDLoja">ID Loja</label><input style = "width: 200px" class="field" id="pt_IDLoja" type="text" maxlength="30">
+                <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+
+            <label style = "width: 92px" for="pt_Viabilidade">Status</label><input style = "width: 180px" class="field" id="pt_Viabilidade" type="text" readonly>
+                <select name = "sel_Viabilidade" id="sel_Viabilidade" style = "width: 20px">
+                    <option value=""> Selecionar </option>
+                    <option value="Pendente">  Pendente </option>
+                    <option value="Ativado Parcial"> Parcialmente Ativo </option>
+                    <option value="Cancelado"> Cancelado </option>
+                    <option value="Ativo"> Ativo </option>
+                </select>
+                <br>
+            <label style = "width: 80px" for="Empresa">Empresa</label><input style = "width: 128px" class="field" id="Empresa" type="text" readonly>
+            <label style = "width: 40px" for="pt_cliente">Cliente</label>
+              <input style = "width: 320px" class="field" id="pt_cliente" type="text" readonly>
+                    <select style = "width: 20px" name = "ctq_Cliente" id = "ctq_Cliente"></select> <!-- Function Cria Maneu -->
+            <label style = "width: 40px" for="Marca">Marca</label>
+                        <input style = "width: 80px" class="field" id="MA_ID" type="number" hidden  >
+                        <input style = "width: 220px" class="field" id="Marca" type="text" maxlength="30" readonly>
+                        <select style = "width: 20px" name = "mnMarca" id="mnMarca"></select>
+
+            <label style = "width: 90px" for="pt_Data_Inicio">Data Solicitação</label><input style = "width: 140px " class="field" id="pt_Data_Inicio" type="date" required>
+            <label style = "width: 26px" for="pt_Links">Links</label><input style = "width: 60px " class="field" id="pt_Links" type="number" >
+            <br>
+                <label style = "width: 80px" for="ct_Designacao">Desig Empr</label><input style = "width: 130px" class="field" id="ct_Designacao" type="text">
+                <label style = "width: 40px" for="Projeto">Projeto</label><input style = "width: 200px" class="field" id="Projeto" type="text" >
+                <label style = "width: 40px" for="pt_Pedido">Pedido</label><input style = "width: 112px" class="field" id="pt_Pedido" type="text" maxlength="18">
+                <input type="checkbox" id="pt_shopping"> <label style = "width: 100px" for="pt_shopping" id="pt_shopping_lb">Shopping Center</label>
+            <div >
+            <div style = "padding-top: 2px; margin-top: 4px">
+                <div style = "display: inline-block; padding-left: 8px ; font-size: 14px; width: 620px">
+                        <!--    Mapa Google  -->
+                        <div id="map"></div>
+                    <br>
+                </div>
+                <div style = "display: inline-block; padding-left: 8px ; width: 660px; vertical-align: top;">
+
+                    <label style = "width: 80px" for="pt_Logradouro">Logradouro</label><input style = "width: 400px" class="field" id="pt_Logradouro" type="text" maxlength="250">
+                    <label style = "width: 60px" for="pt_Numero">Numero</label><input style = "width: 60px" class="field" id="pt_Numero" type="text" maxlength="10">
+                        <br>
+                    <label style = "width: 80px" for="pt_Complemento">Complemento</label><input style = "width: 114px" class="field" id="pt_Complemento" type="text">
+                    <label style = "width: 50px" for="pt_Estado">Estado</label><input style = "width: 40px" class="field" id="pt_Estado" type="text" readonly>
+                        <select style = "width: 20px" name = "whe_Estado" id="whe_Estado">
+                                        <option value=""> Selecione</option>
+                                        <option value="AC"> Acre </option>
+                                        <option value="AL"> Alagoas </option>
+                                        <option value="AM"> Amazonas </option>
+                                        <option value="AP"> Amapa </option>
+                                        <option value="BA"> Bahia </option>
+                                        <option value="CE"> Ceara </option>
+                                        <option value="DF"> Distrito Federal </option>
+                                        <option value="ES"> Espirito Santo </option>
+                                        <option value="GO"> Goias </option>
+                                        <option value="MA"> Maranhão </option>
+                                        <option value="MG"> Minas Gerais </option>
+                                        <option value="MS"> Mato Grosso Sul </option>
+                                        <option value="MT"> Mato Grosso </option>
+                                        <option value="PA"> Para </option>
+                                        <option value="PB"> Paraiba </option>
+                                        <option value="PE"> Pernambuco </option>
+                                        <option value="PI"> Piaui </option>
+                                        <option value="PR"> Parana </option>
+                                        <option value="RJ"> Rio de Janeiro </option>
+                                        <option value="RN"> Rio Grande do Norte </option>
+                                        <option value="RO"> Rondonia </option>
+                                        <option value="RR"> Roraima </option>
+                                        <option value="RS"> Rio Grande do Sul </option>
+                                        <option value="SC"> Santa Catarina </option>
+                                        <option value="SE"> Sergipe </option>
+                                        <option value="SP"> São Paulo </option>
+                                        <option value="TO"> Tocantis </option>
+                        </select>
+                    <label style = "width: 40px" for="pt_Cidade">Cidade</label><input style = "width: 210px" class="field" id="pt_Cidade" type="text" readonly>
+                        <select name = "whe_Cidade" id="whe_Cidade" style = "width: 20px" ></select>
+                        <br>
+                    <label style = "width: 80px" for="pt_Bairro">Bairro</label><input style = "width: 260px" class="field" id="pt_Bairro" type="text">
+                    <label style = "width: 40px" for="pt_pais">Pais</label><input style = "width: 80px" class="field" id="pt_pais" type="text">
+                    <label style = "width: 30px" for="pt_CEP">CEP</label><input style = "width: 92px" class="field" id="pt_CEP" type="text">
+                        <br>
+                    <label style = "width: 80px" for="pt_Referencia">Referência</label><input style = "width: 540px" class="field" id="pt_Referencia" type="text">
+                        <br>
+                    <label style = "width: 80px" for="pt_Latitude">Latitude</label><input style = "width: 120px" class="field" id="pt_Latitude" type="text" readonly>
+                    <label style = "width: 55px" for="pt_Longitude">Longitude</label><input style = "width: 120px" class="field" id="pt_Longitude" type="text" readonly>
+                        <input class="button button3" type="button" id = "btgeo" value="Geolocalizar Novamente" onclick="codeAddress()">
+                        <br>
+                    <label style = "width: 80px" for="pt_observacao">Observações</label><input style = "width: 540px" class="field" id="pt_observacao" type="text">
+                        <br>
+                    <label style = "width: 80px" for="pt_CNPJ">CNPJ</label><input style = "width: 142px" class="field" id="pt_CNPJ" type="text" maxlength="18">
+                        <script type="text/javascript">$("#pt_CNPJ").mask("00.000.0000/0000-00");</script>
+                    <label for="pt_Data_Inauguracao">Data Inauguração</label><input style = "width: 120px " class="field" id="pt_Data_Inauguracao" type="date" >
+                    <label for="pt_Regional">Regional</label><input style = "width: 106px" class="field" id="pt_Regional" type="text" maxlength="20" >
+                        <br>
+                    <div  id="DivCotLocal"  >
+                        <h5>Contato no Local</h5>
+                        <label style = "width: 40px" for="pt_LojaCtNome">Nome</label><input style = "width: 200px" class="field" id="pt_LojaCtNome" type="text" maxlength="60">
+                        <label  for="pt_LojaCtTel">Telefone</label><input style = "width: 120px" class="field" id="pt_LojaCtTel" type="text" maxlength="18">
+                            <script type="text/javascript">$("#pt_LojaCtTel").mask("(00) 00000 0000");</script>
+                        <label  for="pt_LojaCtEmail">Email</label><input style = "width: 160px;" class="field" id="pt_LojaCtEmail" type="text" maxlength="80">
+                            <br>
+                        <label style = "width: 40px" for="pt_LojaCtNome2">Nome</label><input style = "width: 200px" class="field" id="pt_LojaCtNome2" type="text" maxlength="60">
+                        <label  for="pt_LojaCtTel2">Telefone</label><input style = "width: 120px" class="field" id="pt_LojaCtTel2" type="text" maxlength="18">
+                            <script type="text/javascript">$("#pt_LojaCtTel2").mask("(00) 00000 0000");</script>
+                        <label  for="pt_LojaCtEmail2">Email</label><input style = "width: 160px" class="field" id="pt_LojaCtEmail2" type="text" maxlength="80">
+                        <br>
+                        <label style = "width: 36px" for="pt_clienteContato">Outros</label>
+                            <input style = "width: 590px" class="field" id="pt_clienteContato" type="text">
+                    </div>
+
+
+                    <div style = "padding-left: 6px;   background-color:blanchedalmond;" hidden  >
+                            <p style = "font-size: 12px; color: black" >Contatos da Loja</p>
+                            <div id="mytableContato" style = "overflow-y: scroll; width: 100%; word-wrap: break-word ; table-layout:fixed "></div>
+                            <!-- <div id="mytableContato" style = "overflow-y: scroll; height:260px; width: 100%; word-wrap: break-word ; table-layout:fixed "></div> -->
+                        -- Lista -- <br>
+                        <label style = "width: 40px; font-size: 12px;" for="pvc_Nome">Nome</label>
+                            <input style = "width: 120px; font-size: 10px;" class="field" id="pvc_Nome" type="text" maxlength="120">
+                        <label style = "font-size: 12px;" for="pvc_Contato">Contato</label>
+                            <input style = "width: 90px; font-size: 10px;" class="field" id="pvc_Contato" type="text" maxlength="255">
+                        <label style = "font-size: 12px;" for="pvc_email">Email</label>
+                            <input style = "width: 220px; font-size: 10px;" class="field" id="pvc_email" type="email" maxlength="120">
+                        <a id="LinkAgenda" href="#" onclick="BaixaAgenda()" style="padding-left: 6px; font-size: 14px"><i class="fas fa-plus"><span>&nbsp;</span></i></a>
+                    </div>
+                    <label style = "width: 140px" for="pt_resultado" hidden>Resultado Analise Teórica</label><input style = "width: 484px" class="field" id="pt_resultado" type="text" readonly hidden>
+                        <br>
+                    <!-- RETIRAR DAQUI-->
+
+                    <div hidden>
+
+                    <label style = "width: 100px" for="pt_Data_Inauguracao" hidden >Data Prevista Instalação</label><input style = "width: 140px " class="field" id="pt_Data_Instala" type="date" hidden>
+                    <label style = "width: 100px" for="pt_ACResp">Resp Empresa</label>
+                         <input style = "width: 160px" class="field" id="pt_ACResp" type="text">
+                              <select name = "sel_Responsavel" id="sel_Responsavel" style = "width: 20px" hidden >
+                                  <option value=""> Selecionar </option>
+                                  <option value="DFH"> DFH </option>
+                                  <option value="HUGHES"> HUGHES </option>
+                                  <option value="DFH+HUGHES"> DFH+HUGHES </option>
+                                  <option value="FINALIZADO"> FINALIZADO </option>
+                              </select>
+
+                    <label style = "width: 90px" for="pt_HoraInstal">Horário Previsto</label><input style = "width: 200px" class="field" id="pt_HoraInstal" type="text" >
+                    <br>
+                    <label style = "width: 100px" for="pt_Designado">Designado para: </label>
+                        <input style = "width: 210px" class="field" id="pt_Designado" type="text" >
+                            <select name = "sel_Operadores" id="sel_Operadores" style = "width: 20px"></select>
+
+                    <br>
+
+
+
+
+
+                    </div>
+
+                        <input class="button button1"  style="float: right;" type="button" id="btAtualizar" value="Atualizar Registro" onclick="GravaPonto()"><br>
+                    </div>
+            </div>
+            </div>
+
+            <!--  FASES DE TRABALHO **********************************************************  -->
+
+            <div style = "background-color:blanchedalmond; padding-top: 2px; margin-top: 4px " hidden>
+                    <div style = "display: inline-block; padding-left: 8px ; font-size: 14px; width: 140px">
+                        FASE 1 | Analisar
+                    </div>
+                    <div style = "display: inline-block; padding-left: 8px ; font-size: 14px; width: 330px ">
+                        <label style = "width: 80px" for="pt_RespAnalisar">Responsável</label><input style = "width: 200px" class="field" id="pt_RespAnalisar" type="text" >
+                        <select name = "sel_Operadores" id="sel_Oper_f1" style = "width: 20px"></select>
+                    </div>
+                    <div style = "display: inline-block; font-size: 14px; width: 430px; ">
+                        <label style = "width: 56px" for="pt_resultado_F1">Resultado:</label>
+                        <input style = "width: 160px; border: 0; background-color:blanchedalmond;" class="field" id="pt_resultado_F1" type="text" readonly >
+                        <label style = "width: 2px" for="pt_Data_F1"></label>
+                        <input style = "width: 170px; border: 0; background-color:blanchedalmond;" class="field" id="pt_Data_F1" type="datetime-local">
+                    </div>
+                    <div style = "display: inline-block; font-size: 14px; width: 310px ">
+                        <label style = "width: 136px" for="pt_data_IniPesquisa">Inicio Pesquisa</label>
+                        <input style = "width: 140px" class="field" id="pt_data_IniPesquisa" type="date" >
+                    </div>
+                    <div style = "display: inline-block; width: 60px;  background-color: yellow">
+                        <input style = "width: 50px; border: none; color: red ; font-size: 16px; background-color: yellow" class="field" type="number" id="SlaFase1">
+                    </div>
+
+            </div>
+            <div style = "background-color:blanchedalmond; padding-top: 2px; margin-top: 4px " hidden>
+                    <div style = "display: inline-block; padding-left: 8px ; font-size: 14px; width: 140px ">
+                        FASE 2 | Aprovar
+                    </div>
+                    <div style = "display: inline-block; padding-left: 8px ; font-size: 14px; width: 330px ">
+                        <label style = "width: 80px" for="pt_Aprovador">Aprovado por </label><input style = "width: 220px" class="field" id="pt_Aprovador" type="text" >
+                    </div>
+                    <div style = "display: inline-block; font-size: 14px; width: 430px; ">
+                        <label style = "width: 56px" for="pt_resultado_F2">Resultado:</label>
+                        <input style = "width: 160px; border: 0; background-color:blanchedalmond;" class="field" id="pt_resultado_F2" type="text" readonly >
+                        <label style = "width: 2px" for="pt_Data_F2"></label>
+                        <input style = "width: 170px; border: 0; background-color:blanchedalmond;" class="field" id="pt_Data_F2" type="datetime-local" readonly>
+                    </div>
+                    <div style = "display: inline-block; font-size: 14px; width: 310px ">
+                        <label style = "width: 136px" for="pt_data_SolAprova">Solicitação Aprovação</label><input style = "width: 140px" class="field" id="pt_data_SolAprova" type="date" >
+                        <label style = "width: 136px" for="pt_data_aprova">Resposta</label><input style = "width: 140px" class="field" id="pt_data_aprova" type="date" >
+                    </div>
+                    <div style = "display: inline-block; width: 60px;  background-color: yellow">
+                        <input style = "width: 50px; border: none; color: red ; font-size: 16px; background-color: yellow" class="field" type="number" id="SlaFase2">
+                    </div>
+
+            </div>
+            <div style = "background-color:blanchedalmond; padding-top: 2px; margin-top: 4px" hidden  >
+                    <div style = "display: inline-block; padding-left: 8px ; font-size: 14px; width: 140px">
+                        FASE 3 | Contratar
+                    </div>
+                    <div style = "display: inline-block; padding-left: 8px ; font-size: 14px; width: 330px ">
+                        <label style = "width: 80px" for="pt_RespContratar">Responsável</label><input style = "width: 200px" class="field" id="pt_RespContratar" type="text" >
+                        <select name = "sel_Operadores" id="sel_Oper_f3" style = "width: 20px"></select>
+                    </div>
+                    <div style = "display: inline-block; font-size: 14px; width: 430px; ">
+                        <label style = "width: 56px" for="pt_resultado_F3">Resultado:</label>
+                        <input style = "width: 160px; border: 0; background-color:blanchedalmond;" class="field" id="pt_resultado_F3" type="text" readonly>
+                        <label style = "width: 2px" for="pt_Data_F3"></label>
+                        <input style = "width: 170px; border: 0; background-color:blanchedalmond;" class="field" id="pt_Data_F3" type="datetime-local" readonly>
+                    </div>
+                    <div style = "display: inline-block; font-size: 14px; width: 310px ">
+                        <label style = "width: 136px" for="pt_data_Contrato">Data Contratação</label><input style = "width: 140px" class="field" id="pt_data_Contrato" type="date" >
+                    </div>
+                    <div style = "display: inline-block; width: 60px;  background-color: yellow">
+                        <input style = "width: 50px; border: none; color: red ; font-size: 16px; background-color: yellow" class="field" type="number" id="SlaFase3" >
+                    </div>
+            </div>
+            <div style = "background-color:blanchedalmond; padding-top: 2px; margin-top: 4px" hidden>
+                <div style = "display: inline-block; padding-left: 8px ; font-size: 14px; width: 140px">
+                        FASE 4 | Ativar
+                    </div>
+                    <div style = "display: inline-block; padding-left: 8px ; font-size: 14px; width: 330px ">
+                        <label style = "width: 80px" for="pt_Resp4">Responsável</label><input style = "width: 200px" class="field" id="pt_Resp4" type="text" >
+                        <select name = "sel_Operadores" id="sel_Oper_f4" style = "width: 20px"></select>
+                    </div>
+                    <div style = "display: inline-block; font-size: 14px; width: 430px; ">
+                        <label style = "width: 56px" for="pt_resultado_F4">Resultado:</label>
+                        <input style = "width: 160px; border: 0; background-color:blanchedalmond;" class="field" id="pt_resultado_F4" type="text" readonly>
+                        <label style = "width: 2px" for="pt_Data_F4"></label>
+                        <input style = "width: 170px; border: 0; background-color:blanchedalmond;" class="field" id="pt_Data_F4" type="datetime-local" readonly>
+                    </div>
+                    <div style = "display: inline-block; font-size: 14px; width: 310px ">
+                        <label style = "width: 136px" for="ct_data_ativacao">Data Ativação</label><input style = "width: 140px" class="field" id="ct_data_ativacao" type="date" >
+                    </div>
+                    <div style = "display: inline-block; width: 60px;  background-color: yellow">
+                        <input style = "width: 50px; border: none; color: red ; font-size: 16px; background-color: yellow" class="field" type="number" id="SlaFase4" >
+                    </div>
+            </div>
+            <div style = "background-color:blanchedalmond; padding-top: 2px; margin-top: 4px" hidden>
+                    <div style = "display: inline-block; padding-left: 8px ; font-size: 14px; width: 140px">
+                        FASE 5 | NOC
+                    </div>
+                    <div style = "display: inline-block; padding-left: 8px ; font-size: 14px; width: 330px ">
+                        <label style = "width: 80px" for="pt_Resp5">Responsável</label><input style = "width: 200px" class="field" id="pt_Resp5" type="text" >
+                        <select name = "sel_Operadores" id="sel_Oper_f5" style = "width: 20px"></select>
+                     </div>
+                    <div style = "display: inline-block; font-size: 14px; width: 430px; ">
+                        <label style = "width: 56px" for="pt_resultado_F5">Resultado:</label>
+                        <input style = "width: 160px; border: 0; background-color:blanchedalmond;" class="field" id="pt_resultado_F5" type="text" readonly>
+                        <label style = "width: 2px" for="pt_Data_F5"></label>
+                        <input style = "width: 170px; border: 0; background-color:blanchedalmond;" class="field" id="pt_Data_F5" type="datetime-local" readonly>
+                    </div>
+                    <div style = "display: inline-block; font-size: 14px; width: 310px ">
+                        <label style = "width: 136px" for="pt_data_validacao">Data Validação Empresa</label><input style = "width: 140px" class="field" id="pt_data_validacao" type="date" >
+                        <label style = "width: 136px" for="pt_data_noc">Data Ativação Noc</label><input style = "width: 140px" class="field" id="pt_data_noc" type="date" >
+                    </div>
+                    <div style = "display: inline-block; width: 60px;  background-color: yellow">
+                        <input style = "width: 50px; border: none; color: red ; font-size: 16px; background-color: yellow" class="field" type="number" id="SlaFase5" >
+                    </div>
+            </div>
+            <div style = "background-color:blanchedalmond; padding-top: 2px; margin-top: 4px" hidden >
+                    <div style = "display: inline-block; padding-left: 8px ; font-size: 14px; width: 140px">
+                        FASE 6 | FINAN
+                    </div>
+                    <div style = "display: inline-block; padding-left: 8px ; font-size: 14px; width: 330px ">
+                        <label style = "width: 80px" for="pt_Resp6">Responsável</label><input style = "width: 200px" class="field" id="pt_Resp6" type="text" >
+                        <select name = "sel_Operadores" id="sel_Oper_f6" style = "width: 20px"></select>
+                    </div>
+                    <div style = "display: inline-block; font-size: 14px; width: 430px; ">
+                        <label style = "width: 56px" for="pt_resultado_F6">Resultado:</label>
+                        <input style = "width: 160px; border: 0; background-color:blanchedalmond;" class="field" id="pt_resultado_F6" type="text" readonly>
+                        <label style = "width: 2px" for="pt_Data_F6"></label>
+                        <input style = "width: 170px; border: 0; background-color:blanchedalmond;" class="field" id="pt_Data_F6" type="datetime-local" readonly>
+                    </div>
+                    <div style = "display: inline-block; font-size: 14px; width: 310px ">
+                        <label style = "width: 136px" for="pt_data_pagamento">Primeiro Pagamento</label><input style = "width: 140px" class="field" id="pt_data_pagamento" type="date" >
+                    </div>
+                    <!--
+                    <div style = "display: inline-block; width: 60px;  background-color: yellow">
+                        <input style = "width: 50px; border: none; color: red ; font-size: 16px; background-color: yellow" class="field" type="number" id="SlaFase5" >
+                    </div>
+                    -->
+            </div>
+            <div style = "padding-top: 2px; margin-top: 4px" hidden>
+                    <div style = "display: inline-block; padding-left: 8px ; font-size: 14px; width: 160px">
+
+                    </div>
+                    <div style = "display: inline-block; padding-left: 8px ; font-size: 14px; width: 560px">
+
+                    </div>
+                    <div style = "display: inline-block; padding-left: 8px ; font-size: 14px; width: 360px ">
+                    <!--   *****************   DATA ALTERAÇÂO-->
+                            <label style = "width: 136px" for="pt_Data_Viab">Ultima Alteração Status</label>
+                            <input style = "width: 170px; border: 0" class="field" id="pt_Data_Viab" type="datetime-local" readonly>
+                    </div>
+                    <div style = "display: inline-block; padding-left: 8px ; font-size: 14px; width: 200px">
+
+                    </div>
+            </div>
+            </fildset>
+        </form>
+    </div>
+    <!--  HISTORICO  *********************************************************************   -->
+    <div class="block_big">
+        <form>
+            <fieldset>
+                <div id="mytableHist"  style = "overflow-y: scroll; height:252px; width: 100%; word-wrap: break-word ; table-layout:fixed "></div>
+                <!-- <div id="mytableHist" class="table table-striped" style = "overflow-y: scroll; height:252px; width: 100%; word-wrap: break-word ; table-layout:fixed "></div>
+                -->
+            </fieldset>
+        </form>
+    </div>
+    <!--  LINKS EM ANALISE *********************************************************************   -->
+    <div class="block_big">
+        <form>
+        <fieldset>
+        <p> Links em Analise </p>
+
+        <div  id="mytableCobAnalise"  style = "width: 100%; word-wrap: break-word ; table-layout:fixed"></div>
+
+        <!--
+
+        <div  id="mytableCobAnalise"  class="table table-striped" style = "width: 100%; word-wrap: break-word ; table-layout:fixed"></div>
+        -->
+
+            <div style="display: inline-block; display: flex; padding-top: 4px;">
+                <div style="display: inline-block; width: 1160px">
+                    <label style = "width: 80px" for="pt_resultado_F6">Designação</label>
+                        <input style = "width: 100px; " class="field" id="cb_Designacao" type="text" required maxlength="20">
+                 
+                    <label style = "width: 75px " for="cba_Viabilidade">Viabilidade</label>
+                            <input style = "width: 125px" class="field" id="cba_Viabilidade" type="text" readonly>
+                            <select name = "sel_cba_Viabilidade" id="sel_cba_Viabilidade" style = "width: 20px">
+                                <option value=""> Selecionar </option>
+                                <option value="Em Analise"> Em Analise </option>
+                                <option value="Agendado"> Agendado </option>
+                                <option value="Viavel"> Viável </option>
+                            </select>
+                    <label style = "width: 45px " for="cba_Data_Analise">Analise</label>
+                        <input style = "width: 140px" class="field" id="cba_Data_Analise" type="date">
+                    <label style = "width: 45px " for="cba_Contrato">Status</label>
+                            <input style = "width: 140px" class="field" id="cba_Contrato" type="text" readonly required>
+                            <select name = "sel_cba_Contrato" id="sel_cba_Contrato" style = "width: 20px">
+                                <option value=""> Selecionar </option>
+                                <option value="Pesquisa">Pesquisa</option>
+                                <option value="Em Validação"> Em Validação </option>
+                                <option value="Em Contratação"> Em Contratação </option>
+                                <option value="Assinatura Contrato"> Assinatura Contrato </option>
+                                <option value="Em Aprovação"> Em Aprovação </option>
+                                <option value="Agendar"> Agendar </option>
+                                <option value="Agendar Vistoria"> Agendar Vistoria</option>
+                                <option value="Agendar Instalação"> Agendar Instalação</option>
+                                <option value="Agendar Suspenso"> Agendar Suspenso </option>
+                                <option value="Agendado Retirada"> Agendado Retirada </option>
+                                <option value="Programado Retirada"> Programado Retirada </option>
+                                <option value="Reprovado"> Reprovado </option>
+                                <option value="Cancelado"> Cancelado </option>
+                                <option value="Ativado"> Ativado </option>
+                            </select>
+                    <label style = "width: 80px " for="cba_Data_Agenda">Data Prevista</label>
+                        <input style = "width: 140px" class="field" id="cba_Data_Agenda" type="date">
+                        <br>
+                    <div style="background-color: floralwhite">
+                    <label style = "width: 80px" for="ct_G1" hidden >Grupo 1</label>
+                        <input style = "width: 220px" class="field" id="ct_G1" type="text" readonly hidden >
+                            <select name = "sel_ct_G1" id="sel_ct_G1" style = "width: 20px" hidden>
+                                <option value=""> Selecionar </option>
+                                <option value="Identificação de provedores de links">Identificação de provedores de links </option>
+                                <option value="Qualificação dos provedores/link">Qualificação dos provedores/link </option>
+                                <option value="Busca de soluções alternativas">Busca de soluções alternativas</option>
+                                <option value="Oferta de soluções alternativas">Oferta de soluções alternativas</option>
+                                <option value="Substituição de links">Substituição de links</option>
+                                <option value="Contratação de links">Contratação de links</option>
+                            </select>
+                    
+                    <label style = "width: 80px" for="ct_Resp">Responsável</label>
+                        <input style = "width: 160px" class="field" id="ct_Resp" type="text" readonly required>
+                            <select name = "sel_ct_Resp" id="sel_ct_Resp" style = "width: 20px">
+								<option value=""> Selecionar </option>
+								<option value="DFH"> DFH </option>
+								<option value="HUGHES"> HUGHES </option>
+								<option value="CLIENTE"> CLIENTE </option>
+								<option value="DFH+HUGHES"> DFH+HUGHES </option>
+								<option value="CONCLUÍDO"> CONCLUÍDO </option>
+                            </select>
+                    <label style = "width: 100px" for="ct_RespTalkdEquipe">Equipe DFH Resp</label>
+                        <input style = "width: 180px" class="field" id="ct_RespTalkdEquipe" type="text" readonly>
+                            <select name = "sel_RespTalkdEquipe" id="sel_RespTalkdEquipe" style = "width: 20px">
+                                <option value=""> Selecionar </option>
+                                <option value="1 Pesquisa e Contratação"> 1 Pesquisa e Contratação </option>
+                                <option value="2 Implantação e Ativação"> 2 Implantação e Ativação </option>
+                                <option value="3 NOC/Help Desk"> 3 NOC/Help Desk </option>
+								<option value="4 Recurso Cancelado"> 4 Recurso Cancelado </option>
+                            </select>
+                    <label style = "width: 20px; font-size: 10px;" for="Dtti_TalkdEquipe">Implan.</label>
+                        <input style = "background-color:floralwhite;" id="Dtti_TalkdEquipe" class="field" type="datetime-local">
+                        
+                    <label style = "width: 60px" for="ct_RespTalkd">Resp DFH</label>
+                        <input style = "width: 180px" class="field" id="ct_RespTalkd" type="text" readonly required>
+                            <select name = "sel_RespTalkd" id="sel_RespTalkd" style = "width: 20px"></select>
+
+
+                    </div>    
+                    <label style = "width: 80px" for="cb_Tecnologia">Tecnologia</label>
+                            <input style = "width: 260px"  class="field" id="cb_Tecnologia" type="text" readonly>
+                            <select style = "width: 18px" name = "sel_Tecnologia" id="sel_Tecnologia"></select>
+                    <label style = "width: 80px" for="ct_Vel_Dow">Vel Download</label>
+                            <input style = "width: 80px" class="field" id="ct_Vel_Dow" type="number" >
+                    <label style = "width: 70px" for="ct_Vel_Up">Vel Upload</label>
+                            <input style = "width: 80px" class="field" id="ct_Vel_Up" type="number" >
+                    <label style = "width: 80px" for="ct_taxa">Mensalidade</label>
+                            <input style = "width: 80px" class="field" id="ct_taxa" type="number">
+                    <label style = "width: 90px" for="ct_taxa_instal">Taxa Instalação</label>
+                            <input style = "width: 80px" class="field" id="ct_taxa_instal" type="number">
+                    <br>
+                    <label style = "width: 80px " for="cba_Notas">Detalhe Plano</label>
+                        <input style = "width: 820px" class="field" id="cba_Notas" type="text" >
+	                <label style = "font-size: 12px" for="ct_cpd">CPD</label>
+                    <select style = "font-size: 12px ; width: 80px" name="ct_cpd" id="ct_cpd">
+                        <option value="">Selecione</option>
+                        <option value="CPD"  >CPD</option>
+                        <option value="STAND">STAND</option>
+                    </select>
+                        <br>
+                    <!--  ***********************  NOTAS    *********************************************************  -->
+                    <div id="DivNotas" style="background-color: powderblue">
+                        <label style = "width: 80px" for="pt_Nota">Notas</label>
+                            <input style = "width: 880px" class="field" id="pt_Nota" type="text">
+                        <br>
+                        <label style = "width: 80px" for="ph_visita">Visita</label>
+                                <select name = "ph_visita" id="ph_visita" style = "width: 120px">
+                                    <option value=""> Selecionar </option>
+                                    <option value="OK"> OK </option>
+                                    <option value="Improdutiva">Improdutiva</option>
+                                    <option value="Cancelada">Cancelada </option>
+                                    <option value="Reagendada">Reagendada </option>
+                                    <option value="Remanejamento">Remanejamento </option>
+                                </select>
+                       <label style = "width: 80px" for="ph_resp">Responsável</label>
+                                <select name = "ph_visita" id="ph_resp" style = "width: 120px">
+                                    <option value=""> Selecionar </option>
+                                    <option value="DFH"> DFH </option>
+                                    <option value="Provedor"> Provedor </option>
+                                    <option value="Shopping"> Shopping </option>
+                                    <option value="Hughes"> Hughes </option>
+                                    <option value="Contratante"> Contratante </option>
+                                    <option value="Cliente Final"> Cliente Final </option>
+                                </select>
+                        <label style = "width: 52px" for="ph_motivo">Detalhe</label>
+                            <input style = "width: 240px" class="field" id="ph_motivo" type="text" maxlength="40">
+                        <label style = "width: 60px " for="ph_data">Data Visita</label>
+                            <input style = "width: 140px" class="field" id="ph_data" type="date">
+
+                        <input class="button button3" style="float: right" type="button" id="btCreateHist" value="Adicionar" onclick="Create_Hist('INSERT')">
+                       <br>
+                    </div>
+                    <!--  ***********************  PROVEDOR  *********************************************************  -->
+                    <div style="background-color: floralwhite">
+                        <label style = "width: 80px" for="cb_ProvedorID">Provedor ID</label>
+                            <input style = "width: 80px" class="field" id="cb_ProvedorID" type="text" readonly>
+                        <label style = "width: 100px" for="cb_ProvDesig">Designação Prov </label>
+                            <input style = "width: 140px; " class="field" id="cb_ProvDesig" type="text" required maxlength="30">
+                        <label for="cb_Provedor_Nome">Provedor</label>
+                            <input style = "width: 400px" class="field" id="cb_Provedor_Nome" type="text" readonly>
+                                <select style = "width: 18px" name = "sel_Provedor" id="sel_Provedor" ></select>                   
+                        <input class="button button1" style = "padding: 0 " type="button" id="btClearProv" value="Trocar provedor" onclick="ClearProv()">
+                     
+                        <br>
+                    <label style = "width: 80px" for="ct_ContratoProvedor">Contr. Prov</label>
+						    <input style = "width: 120px" class="field" id="ct_ContratoProvedor" type="text">
+                    <label style = "width: 80px" for="ct_data_Contrato">Assinatura CT</label>
+                        <input style = "width: 140px" class="field" id="ct_data_Contrato" type="date" >
+                    <label style = "width: 120px" for="pv_Prazo">Prazo do Provedor</label>
+                            <input style = "width: 80px" class="field" id="pv_Prazo" type="number" >
+
+
+                    </div>
+                         
+            <div style="background-color: floralwhite">
+                
+                <label style = "width: 78px" for="fin_CNPJ">CNPJ <span style="font-size: 10px">&nbsp;Cobrança&nbsp;</span></label>
+                    <input style = "width: 146px"  class="field" id="fin_CNPJ" type="text" maxlength="18">  
+                <label style = "width: 80px" for="fin_razao">Razão Social <span style="font-size: 10px">&nbsp;Cobrança&nbsp;</span></label>
+                    <input style = "width: 320px" class="field" id="fin_razao" type="text" maxlength="180" >
+                <label style = "width: 110px" for="fin_vencimento">Vencimento <span style="font-size: 10px">&nbsp;(Dias)&nbsp;</span></label>
+                    <input style = "width: 70px" class="field" id="fin_vencimento" type="number" min="1" max="31" >
+				<label for="fin_prazo">Prazo Fidelidade <span style="font-size: 10px">&nbsp;(Meses)&nbsp;</span></label>
+                    <input style = "width: 80px" class="field" id="fin_prazo" type="number" min="1" max="99" >
+				<br>
+                <span style="font-size: 12px">Modalidade Link</span><span>&nbsp;</span>
+                <input type="radio" id="link_modalidade_PRE" name="link_modalidade" value="Pré-pago">
+                      <label for="link_modalidade_PRE">Pré-pago</label>
+                <input type="radio" id="link_modalidade_POS" name="link_modalidade" value="Pós-pago">
+                      <label for="link_modalidade_POS">Pós-pago</label>			
+				
+	                <label style = "font-size: 12px" for="fin_pag">Forma de pagamento</label>
+                    <select style = "font-size: 12px" name="fin_pag" id="fin_pag">
+                        <option value="">Selecione</option>
+                        <option value="Boleto">Boleto</option>
+                        <option value="Crédito em conta">Crédito em conta</option>
+                    </select> 			
+				
+			    <label style = "font-size: 12px" for="ct_Ass_Resp">Responsável Contrato</label>
+                    <select style = "font-size: 12px" name="ct_Ass_Resp" id="ct_Ass_Resp">
+                        <option value="">Selecione</option>
+                        <option value="DFH">DFH</option>
+                        <option value="HUGHES">HUGHES</option>
+                        <option value="SENCINET">SENCINET</option>
+                        <option value="TALKD">TALKD</option>
+                    </select>
+				<!--<label for="ct_filial_ID">Filial ID></label>-->  
+				<input style = "width: 60px" class="field" id="ct_filial_ID" type="number" readonly hidden >
+			    <label for="ct_filial_Nome">Filial</label><input style = "width: 280px" class="field" id="ct_filial_Nome" type="text" readonly>
+			        <select style = "width: 20px" name="ct_filial_Menu" id="ct_filial_Menu"></select> 
+				 
+				<br>
+                
+                <label style = "width: 74px" for="fin_ctnome">Contato</label>
+                    <input style = "width: 200px" class="field" id="fin_ctnome" type="text" maxlength="90" >
+                <label style = "width: 50px" for="fin_cttel">Telefone</label>
+                    <input style = "width: 120px" class="field" id="fin_cttel" type="text" maxlength="16">
+                <label style = "width: 44px" for="fin_ctemail">Email</label>
+                    <input style = "width: 260px; font-size: 10px" class="field" id="fin_ctemail" type="email" maxlength="160">
+                 <br>       
+                <label style = "width: 74px" for="portal_end">Site<span style="font-size: 10px">&nbsp;Financeiro&nbsp;</span></label>
+                    <input style = "width: 320px" class="field" id="portal_end" type="text" maxlength="120">
+                <label style = "width: 40px" for="portal_user">Login</label>
+                    <input style = "width: 140px" class="field" id="portal_user" type="text" maxlength="90" >                          
+                <label style = "width: 40px" for="portal_senha">Senha</label>
+                    <input style = "width: 140px" class="field" id="portal_senha" type="text" maxlength="90" >
+                <label style = "width: 80px" for="cba_Tkt_OTRS" hidden >Tiket OTRS</label>
+                            <input style = "width: 100px" class="field" id="cba_Tkt_OTRS" type="text" hidden >
+            </div>
+			            <!-- BROKER             -->
+            <div id="DivBroker" style="background-color: antiquewhite">
+				<div style = "display: inline-block; padding: 0px 6px 0px 10px ;  width:94px; border-right: double ">
+					<input type="checkbox" id="Brk_Flag"> <label  for="Brk_Flag">Broker</label>
+				</div>	
+                <label style = "width: 72px" for="Brk_Mensalidade">Mensalidade</label>
+                    <input style = "width: 80px" class="field" id="Brk_Mensalidade" type="number" >
+
+                <label style = "width: 70px" for="Brk_Instal">Instalação</label>
+                    <input style = "width: 90px" class="field" id="Brk_Instal" type="number" >         
+            </div>  		
+
+
+                    <div hidden>
+                        <hr>
+                        <label style = "width: 80px" for="cb_CoberturaID" id="cb_CoberturaIDlb">ID Cobertura</label>
+                            <input style="width: 80px" class="field" id="cb_CoberturaID" type="text" readonly >
+                        <label style = "width: 90px" for="cb_nome" id="cb_nomelb">Nome Cobertura</label>
+                            <input style = "width: 280px" class="field" id="cb_nome" type="text" readonly>
+                        <label style = "width: 80px" for="cb_Disponibilidade" id="cb_Disponibilidadelb">Disponibilidade</label>
+                            <input style = "width: 80px" class="field" id="cb_Disponibilidade" readonly>
+                        <label style = "width: 76px" for="cb_Tecnologia" id="cb_TecnologiaCoblb" >Tecnologia</label>
+                            <input style = "width: 180px"  class="field" id="cb_TecnologiaCob" type="text" readonly>
+                            <br>                     
+                    </div>
+
+                </div>
+                <div id="DivBtnColuna" style="display: inline-block; border: 1px ridge aquamarine; border-radius: 4px;  border-style: solid;">
+                    <input class="button button1" style = "width: 130px; padding: 5px 12px;" type="button" id="btAtt" value="Atualizar" onclick="CobAnalise('UPDATE')"><br>
+                    <input class="button button3" style = "width: 130px; padding: 5px 12px;" type="button" id="btLimpar" value="Limpar" onclick="ClearCobAnalise()"><br>
+                    <input class="button button4" style = "width: 130px; padding: 5px 12px;" type="button" id="btExcluir" value="Excluir" onclick="CobAnalise('DELETE')"><br>
+                    <input class="button button1" style = "width: 130px; padding: 5px 12px;" type="button" id ="btCobInsert"  value="Incluir ( A DEFINIR )" onclick="CobAnalise('DEFINIR')"><br>
+                    <input class="button button1" style = "width: 130px; padding: 5px 12px;" type="button" id ="btCobDefinir"  value="Incluir para Analise" onclick="CobAnalise('INSERT')">
+                        <hr>
+                    <input class="button button3" style = "width: 130px; padding: 5px 12px;" type="button" id="btProv" value="Provedor " onclick="Open_Provedor()"><br>
+                    <input class="button button3" style = "width: 130px; padding: 5px 12px;" type="button" id="btNovoProv" value="Novo Provedor" onclick="Novo_Provedor()"><br>
+                    <input class="button button3" style = "width: 130px; padding: 5px 12px;" type="button" id="btCobertura" value="Cobertura" onclick="Open_CoberturaBt()"><br>
+                    <!--
+                    <input class="button button3" style = "width: 130px; padding: 5px 12px;" type="button" id="btNovaCobertura" value="Nova Cobertura" onclick="Nova_Cobertura()"><br>
+                    -->
+                </div>
+            </div>
+                <label style = "width: 80px" for="cb_taxa" hidden >Taxa</label>
+                    <input style = "width: 80px" class="field" id="cb_taxa" type="number" readonly hidden >
+                <label style = "width: 40px" for="cb_valor" hidden >Valor</label>
+                    <input style = "width: 90px" class="field" id="cb_valor" type="number" readonly hidden >
+                <label style = "width: 110px" for="cb_taxa_instal" hidden >Taxa de Instalação</label>
+                    <input style = "width: 90px" class="field" id="cb_taxa_instal" type="number" readonly hidden >
+                <div style="display: inline-block;  display: flex">
+                    <div style="display: inline-block; display: flex;  width: 1240px"></div>
+                    <div id="DivbtPC" style="display: inline-block">
+                        <input class="button button1" type="button" id = "btPC" value="Procurar Cobertura" onclick="cobLatLong()">
+                    </div>
+                </div>
+                </fieldset>
+            </form>
+
+                <div class="table table-striped table-bordered table-sm" id="mytableCoberturas"  style = "width: 100%"></div>
+
+        </div>
+        <div class="block_big">
+            <form>
+            <fieldset>
+                <div style="display: inline-block;  display: flex">
+                    <div style="display: inline-block; display: flex;  width: 1100px">
+                         <p> Links Contratados </p>
+                    </div>
+                    <div id="DivContratoFields" style="display: inline-block">
+                        <input class="button button1" type="button" id="btGeraContrato" value="Gerar Contrato" onclick="CriarContrato()">
+                    </div>
+                </div>
+                <div class="table table-striped table-bordered table-sm" id="mytableContratos"  style = "width: 100%"></div>
+            </fieldset>
+            </form>
+        </div>
+        <div class="block_form" hidden >
+            <form><fieldset>
+                <p> Dados Internos</p>
+                <label for="address">Endereço de Origem:</label><input style = "width: 640px"  class="field" id="address" type="text" readonly><br>
+                <label style = "width: 120px" for="ct_ID">Cliente ID</label><input style = "width: 60px" class="field" id="ct_ID" type="text" readonly>
+                <label style = "width: 120px" for="cto_ID">Contrato ID</label><input style = "width: 60px" class="field" id="cto_ID" type="text" readonly>
+                <label style = "width: 120px" for="cba_ID">Link ID</label><input style = "width: 60px" class="field" id="cba_ID" type="text" readonly>
+                <!--   SEM USO -->
+                <label style = "width: 70px" for="pt_Velocidade">Velocidade</label><input style = "width: 60px" class="field" id="pt_Velocidade" type="number"><i>&nbsp;&nbsp;&nbsp;Mbps</i>
+                <label style = "width: 30px" for="ct_Provedor_OS">OS</label><input style = "width: 90px" class="field" id="ct_Provedor_OS" type="text">
+                    <br>
+                <label style = "width: 80px ; heigh: 120px " for="ct_Detalhes">Detalhes</label><input style = "width: 900px" class="field" id="ct_Detalhes" type="text">
+                    <br>
+                <label style = "width: 80px;  vertical-align:top " for="ct_notas">Notas</label><input style = "width: 900px" class="field" id="ct_notas" type="text" hidden>
+                    <br>
+                <label style = "width: 80px" for="ct_Provedor_Ct">Contrato</label><input style = "width: 160px" class="field" id="ct_Provedor_Ct" type="text">
+
+            <!--   SEM USO FIM -->
+                <label style = "width: 70px " for="cb_Velocidade">Velocidade</label>
+                        <input style = "width: 100px"  class="field" id="cb_Velocidade" type="number" readonly><i>&nbsp;&nbsp;Mbps</i>
+                    <hr>
+                    <br>
+                <input class="button button3" type="button" value="Cobertura" onclick="Open_Cobertura()">
+                <input class="button button3" type="button" value="Provedor" onclick="Open_Provedor()">
+                <!--<input class="button button3" type="button" value="Consulta Cliente" onclick="#">-->
+                </fieldset></form>
+        </div>
+
+
+	<div id="pagination"></div>
+        <!--    <h3>My Google Maps Demo</h3>  The div element for the map -->
+    <br><br>
+
+
+
+</div>
+
+<!--  ***********************  INICIO DOS SCRIPTS  *********************************************************  -->
+<script type="text/javascript">
+  var geocoder;
+  var map;
+  var ViabilidadeInicial;
+  var latitude;
+  var longitude;
+  var pontos;
+  var tkd_Empresa;
+  var tkd_Login;
+  var RespEquipeAnt;
+  var Agenda;
+  var coberturas;
+  var ModCont;
+
+document.getElementById("ctq_Cliente").addEventListener("change", function(){
+        var c_id = document.getElementById('ctq_Cliente').value;
+        if (c_id != null) { ct_ID.setAttribute("Value", c_id )}
+        var elemento = document.getElementById('ctq_Cliente');
+        var c_nome = elemento.options[elemento.selectedIndex].innerHTML;
+        if (c_nome != null) { pt_cliente.setAttribute("Value", c_nome )}
+        fnMenuMarcas(c_id);
+});
+document.getElementById("cb_ProvedorID").addEventListener("change", function(){
+    loadProvedor();
+});
+document.getElementById("sel_Viabilidade").addEventListener("change", function(){
+        var c_id = document.getElementById('sel_Viabilidade').value;
+        if (c_id != null) { pt_Viabilidade.setAttribute("Value", c_id )}
+});
+document.getElementById("sel_cba_Viabilidade").addEventListener("change", function(){
+        var val = document.getElementById('sel_cba_Viabilidade').value;
+        //if ( val != null ) { cba_Viabilidade.setAttribute("Value", val )};
+        document.getElementById('cba_Viabilidade').value = val ;
+});
+document.getElementById("sel_cba_Contrato").addEventListener("change", function(){
+        var val = document.getElementById('sel_cba_Contrato').value;
+        //if ( val != null ) { cba_Contrato.setAttribute("Value", val )};
+        //if ( val != null) { document.getElementById('cba_Contrato').value = val }
+        document.getElementById('cba_Contrato').value = val ;
+});
+document.getElementById("sel_Responsavel").addEventListener("change", function(){
+        var val = document.getElementById('sel_Responsavel').value;
+        if ( val != null ) { pt_ACResp.setAttribute("Value", val )}
+});
+document.getElementById("sel_Operadores").addEventListener("change", function(){
+        var val = document.getElementById('sel_Operadores').value;
+        document.getElementById('pt_Designado').value = val ;
+});
+ document.getElementById("sel_Oper_f1").addEventListener("change", function(){
+        var val = document.getElementById('sel_Oper_f1').value;
+        document.getElementById('pt_RespAnalisar').value = val ;
+});
+document.getElementById("sel_Oper_f3").addEventListener("change", function(){
+        var val = document.getElementById('sel_Oper_f3').value;
+        document.getElementById('pt_RespContratar').value = val ;
+});
+document.getElementById("sel_Oper_f4").addEventListener("change", function(){
+        var val = document.getElementById('sel_Oper_f4').value;
+        document.getElementById('pt_Resp4').value = val ;
+});
+document.getElementById("sel_Oper_f5").addEventListener("change", function(){
+        var val = document.getElementById('sel_Oper_f5').value;
+        document.getElementById('pt_Resp5').value = val ;
+});
+document.getElementById("sel_Oper_f6").addEventListener("change", function(){
+        var val = document.getElementById('sel_Oper_f6').value;
+        document.getElementById('pt_Resp6').value = val ;
+});
+
+document.getElementById("sel_Tecnologia").addEventListener("change", function(){
+        var elemento = document.getElementById('sel_Tecnologia');
+        var c_nome = elemento.options[elemento.selectedIndex].innerHTML;
+        console.log("|"+c_nome+"|");
+        document.getElementById('cb_Tecnologia').value = c_nome ;
+        //if ( c_nome = "Selecionar" ) { document.getElementById('cb_Tecnologia').value = "" ;}
+});
+
+document.getElementById("sel_Provedor").addEventListener("change", function(){
+        var c_id = document.getElementById('sel_Provedor').value;
+	    if (c_id != null) { document.getElementById('cb_ProvedorID').value = c_id ; loadProvedor(c_id)}
+        var elemento = document.getElementById('sel_Provedor');
+        var c_nome = elemento.options[elemento.selectedIndex].innerHTML;
+        //console.log(c_nome) ;
+        if ( c_nome != null) { document.getElementById('cb_Provedor_Nome').value = c_nome ; }
+});
+document.getElementById("sel_ct_Resp").addEventListener("change", function(){
+        var val = document.getElementById('sel_ct_Resp').value;
+        if ( val != null ) { document.getElementById('ct_Resp').value = val ;}
+});
+
+document.getElementById("sel_RespTalkd").addEventListener("change", function(){
+        var val = document.getElementById('sel_RespTalkd').value;
+        if ( val != null ) { document.getElementById('ct_RespTalkd').value = val ;}
+});
+ document.getElementById("ct_Ass_Resp").addEventListener("change", function(){
+     menu_Filiais();
+});
+ document.getElementById("pv_Prazo").addEventListener("change", function(){
+     var prazo = Number(document.getElementById('pv_Prazo').value);
+     var novadata = new Date(Agenda);
+     novadata.setDate(novadata.getDate() + prazo );
+     var dia = novadata.getDate() ;
+     if ( dia < 10) {dia = "0" + dia };
+     var mes = novadata.getMonth()+1;
+     if ( mes < 10) {mes = "0" + mes }
+     var ano = novadata.getFullYear();
+     novadata = ano + '-' + mes + '-' + dia
+     document.getElementById('cba_Data_Agenda').value = novadata ;
+});
+
+
+
+document.getElementById("mnMarca").addEventListener("change", function(){
+        var c_id = document.getElementById('mnMarca').value;
+        if ( c_id != null) { document.getElementById('MA_ID').value = c_id }
+        var elemento = document.getElementById('mnMarca');
+        var c_nome = elemento.options[elemento.selectedIndex].innerHTML;
+        if ( c_nome != null) { document.getElementById('Marca').value = c_nome }
+});
+
+document.getElementById("sel_RespTalkdEquipe").addEventListener("change", function(){
+        var RespEquipe = document.getElementById('sel_RespTalkdEquipe').value;
+        if ( RespEquipe != null ) { document.getElementById('ct_RespTalkdEquipe').value = RespEquipe ;
+							        menu_StatusLink(RespEquipe);
+                                  }
+        if ( RespEquipe == '2 Implantação e Ativação' && RespEquipe != RespEquipeAnt ) { 
+                                    var hoje = Date.now() ;
+                                    var Dt_Re =  EpochToDateBR( hoje, "DT" );
+                                    document.getElementById('Dtti_TalkdEquipe').value = Dt_Re ;
+                                  }
+});
+	
+document.getElementById("sel_ct_G1").addEventListener("change", function(){
+        var val = document.getElementById('sel_ct_G1').value;
+        if ( val != null ) { document.getElementById('ct_G1').value = val ;}
+});
+document.getElementById("ct_filial_Menu").addEventListener("change", function(){
+        var f_id = document.getElementById('ct_filial_Menu').value;
+	    if ( f_id  != null ) { document.getElementById('ct_filial_ID').value = f_id }
+	    var elemento = document.getElementById('ct_filial_Menu');
+        var f_nome = elemento.options[elemento.selectedIndex].innerHTML;
+        if ( f_nome != null) { document.getElementById('ct_filial_Nome').value = f_nome }
+});
+document.getElementById("whe_Estado").addEventListener("change", function(){
+        var c_id = document.getElementById("whe_Estado").value;
+        if ( c_id != null ) { pt_Estado.setAttribute("Value", c_id )
+        menu_CidadeGeral("whe_Cidade",c_id);
+        }
+});
+document.getElementById("whe_Cidade").addEventListener("change", function(){
+    var cidade = document.getElementById("whe_Cidade").value ;
+    document.getElementById('pt_Cidade').value = cidade ;
+});
+
+function loadWindow() {
+    var query_ID = getParameterByName('ID');
+    pt_ID.setAttribute("Value", query_ID);
+    loadSession();
+    //console.log(tkd_Empresa);
+    ModCont = 'S';
+    if ( tkd_Empresa === "SENCINET") {
+        ModCont = 'N';
+    }
+
+
+    if ( tkd_Empresa !== "DFH") {
+        // Bloqueia Campos
+        d3.selectAll("input").attr("readonly", "true");
+        //d3.selectAll("select").attr("hidden","true");
+        d3.selectAll("select").attr("disabled", "true");
+        //d3.selectAll("number").attr("readonly","true");
+        document.getElementById("btgeo").hidden = true;
+        // Botão Procurar Cobertura
+        if (tkd_Login != "Simone.arion") {
+            document.getElementById("btPC").hidden = true;
+        } else {
+            document.getElementById("btPC").hidden = false;
+        }
+        document.getElementById("btCobInsert").hidden = true;
+        document.getElementById("btCreateHist").hidden = true;
+        document.getElementById("btAtualizar").hidden = true;
+        document.getElementById("btExcluir").hidden = true;
+        document.getElementById("btNovoProv").hidden = true;
+        //document.getElementById("btProv").hidden = true;
+        document.getElementById("pt_Nota").hidden = true;
+        document.getElementById("btGeraContrato").hidden = true;
+        document.getElementById("btCobertura").hidden = true;
+        //document.getElementById("btNovaCobertura").hidden = true;
+        document.getElementById("btGeraContrato").hidden = true;
+        document.getElementById("btGeraContrato").hidden = true;
+        document.getElementById("btLimpar").hidden = true;
+        document.getElementById("btAtt").hidden = true;
+        document.getElementById("DivContratoFields").hidden = true;
+        document.getElementById("DivbtPC").hidden = true;
+        document.getElementById("DivBtnColuna").hidden = true;
+        document.getElementById("btClearProv").hidden = true;
+        document.getElementById("cb_CoberturaID").hidden = true;
+        document.getElementById("cb_nome").hidden = true;
+        document.getElementById("cb_Disponibilidade").hidden = true;
+        document.getElementById("cb_TecnologiaCob").hidden = true;
+        document.getElementById("cb_CoberturaIDlb").hidden = true;
+        document.getElementById("cb_nomelb").hidden = true;
+        document.getElementById("cb_Disponibilidadelb").hidden = true;
+        document.getElementById("cb_TecnologiaCoblb").hidden = true;
+        document.getElementById("Dtti_TalkdEquipe").hidden = true;
+        document.getElementById("DivBroker").hidden = true;
+        document.getElementById("DivNotas").hidden = true;
+    }
+
+    loadPontoID(query_ID);
+    //initialize();
+    load_Hist(query_ID);
+    CobAnaliseGet();
+    ContratoGetList(query_ID);
+    menu_Tecnologia();
+    menu_StatusLink("3");
+    menu_Operadores("sel_Operadores");
+    menu_Operadores("sel_Oper_f1");
+    menu_Operadores("sel_Oper_f3");
+    menu_Operadores("sel_Oper_f4");
+    menu_Operadores("sel_Oper_f5");
+    menu_Operadores("sel_Oper_f6");
+    menu_Operadores("sel_RespTalkd");
+    menu_Filiais();
+
+}
+
+// ----Listener Geolocalizaçã0 -------------------------------------------------------------------------------
+google.maps.event.addListener(marker, 'drag', function () {
+    console.log("Listener");
+    geocoder.geocode({'latLng': marker.getPosition()}, function (results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+            if (results[0]) {
+                results[0].address_components.forEach(getElementsType);
+                //$('#latitude').val(marker.getPosition().lat());
+                latitude = (marker.getPosition().lat());
+                longitude = (marker.getPosition().lng());
+                if (conteudo != null) {
+                    pt_Latitude.setAttribute("Value", latitude)
+                }
+                if (conteudo != null) {
+                    pt_Longitude.setAttribute("Value", longitude)
+                }
+            }
+        }
+    });
+})
+
+
+function initialize(ini_latitude, ini_longitude) {
+    var latlng = new google.maps.LatLng(latitude, longitude);
+    var mapOptions = { zoom: 14, center: latlng , mapTypeId: google.maps.MapTypeId.ROADMAP }
+    map = new google.maps.Map(document.getElementById('map'), mapOptions);
+    geocoder = new google.maps.Geocoder();
+    marker = new google.maps.Marker({ map: map, draggable: true, });
+    marker.setPosition(latlng);
+}
+
+
+function slaAtualisa(){
+	var dataInicio = new Date(document.getElementById("pt_data_SolAprova").value );
+		//console.log(dataInicio);
+	var dataFim = new Date(document.getElementById("pt_data_aprova").value);
+		//console.log(dataFim);
+    d = document.getElementById("pt_data_aprova").value;
+		//console.log(d);
+	var par =  Date.parse(document.getElementById("pt_data_aprova").value);
+		//console.log(par);
+	var diffMilissegundos = dataFim - dataInicio;
+	var diffSegundos = diffMilissegundos / 1000;
+	var diffMinutos = diffSegundos / 60;
+	var diffHoras = diffMinutos / 60;
+	var diffDias = diffHoras / 24;
+	var diffMeses = diffDias / 30;
+	//return !(diffMeses > 3);
+	SlaFase2.setAttribute("Value", diffDias);
+		//console.log(diffDias);
+
+}
+
+function slaAtualisaOld(d_final,d_inicial){
+    var Dt_final = new Date();
+    Dt_final = d_final
+    //var Dt_final = new Date(d_final);
+
+    if ( d_inicial != null && d_inicial != '' ) {  var  Dt_ini =  d_inicial }
+    else { var Dt_ini = new Date();}
+    //data!==undefined
+
+    console.log("DATA INICIAL : "+Dt_ini);
+    console.log("DATA FINAL : ", Dt_final);
+
+    var i_ano = Dt_ini.getFullYear();
+    var i_dia = Dt_ini.getDate();
+    var i_mes = Dt_ini.getMonth()+1;
+    console.log(i_dia , i_mes, i_ano );
+
+    var f_ano = Dt_final.getFullYear();
+    var f_dia = Dt_final.getDate();
+    var f_mes = Dt_final.getMonth()+1;
+    console.log(f_dia, f_mes, f_ano );
+
+    if ( Dt_final <  Dt_ini ){
+
+        }
+}
+
+// -----------------------------------------------------------------------------------------
+function GravaPonto(){
+        var jpt_id      = document.getElementById('pt_ID').value;
+        var jpt_nome    = document.getElementById('pt_nome').value;
+        var jpt_address = document.getElementById('address').value;
+        var jpt_empresa = document.getElementById('Empresa').value;
+        var jpt_vel  = document.getElementById('pt_Velocidade').value;
+        var jpt_tec  = document.getElementById('cb_Tecnologia').value;
+        var jpt_log  = document.getElementById('pt_Logradouro').value;
+        var jpt_num  = document.getElementById('pt_Numero').value;
+        var jpt_com  = document.getElementById('pt_Complemento').value;
+        var jpt_bar  = document.getElementById('pt_Bairro').value;
+        var jpt_cid  = document.getElementById('pt_Cidade').value;
+        var jpt_est  = document.getElementById('pt_Estado').value;
+        var jpt_pais = document.getElementById('pt_pais').value;
+        var jpt_cep  = document.getElementById('pt_CEP').value;
+        var jpt_ref  = document.getElementById('pt_Referencia').value;
+        var jpt_lat  = document.getElementById('pt_Latitude').value;
+        var jpt_long = document.getElementById('pt_Longitude').value;
+        var jpt_obs  = document.getElementById('pt_observacao').value;
+        var jpt_cli  = document.getElementById('pt_cliente').value;
+        var jpt_clc  = document.getElementById('pt_clienteContato').value;
+		var jpt_sts  = "10";
+        var jpt_viab = document.getElementById('pt_Viabilidade').value;
+        var jpt_vab  = document.getElementById('pt_Viabilidade').value;
+        var jpt_idlj = document.getElementById('pt_IDLoja').value;
+        var jpt_cnpj = document.getElementById('pt_CNPJ').value;
+        var jpt_regi = document.getElementById('pt_Regional').value;
+        var jpt_proj = document.getElementById('Projeto').value;
+        var jpt_ateo = document.getElementById('pt_resultado').value;
+        var jpt_dtso = document.getElementById('pt_Data_Inicio').value;
+        var jpt_desg = document.getElementById('ct_Designacao').value;
+        var jpt_dtin = document.getElementById('pt_Data_Inauguracao').value;
+        var jpt_dtit = document.getElementById('pt_Data_Instala').value;
+        var jpt_dtat = document.getElementById('ct_data_ativacao').value;
+        var jpt_hrin = document.getElementById('pt_HoraInstal').value;
+        var jpt_rapr = document.getElementById('pt_Aprovador').value;
+        var jpt_rana = document.getElementById('pt_RespAnalisar').value;
+        var jpt_rcon = document.getElementById('pt_RespContratar').value;
+        var jpt_dtap = document.getElementById('pt_data_aprova').value;
+        var jpt_rfs4 = document.getElementById('pt_Resp4').value;
+        var jpt_rfs5 = document.getElementById('pt_Resp5').value;
+        var jpt_rfs6 = document.getElementById('pt_Resp6').value;
+        var jpt_resp = document.getElementById('pt_ACResp').value;
+        var jpt_ref1 = document.getElementById('pt_resultado_F1').value;
+        var jpt_ref2 = document.getElementById('pt_resultado_F2').value;
+        var jpt_ref3 = document.getElementById('pt_resultado_F3').value;
+        var jpt_dtf1 = document.getElementById('pt_Data_F1').value;
+        var jpt_dtf2 = document.getElementById('pt_Data_F2').value;
+        var jpt_dtf3 = document.getElementById('pt_Data_F3').value;
+        var jpt_dtip = document.getElementById('pt_data_IniPesquisa').value;
+        var jpt_dtsa = document.getElementById('pt_data_SolAprova').value;
+        var jpt_dtct = document.getElementById('pt_data_Contrato').value;
+        var jpt_dtno = document.getElementById('pt_data_noc').value;
+        var jpt_dtvl = document.getElementById('pt_data_validacao').value;
+        var jpt_dtpg = document.getElementById('pt_data_pagamento').value;
+        var jpt_link = document.getElementById('pt_Links').value;
+        var jpt_desi = document.getElementById('pt_Designado').value;
+	    var jpt_pedi = document.getElementById('pt_Pedido').value;
+        var jpt_lcn     = document.getElementById('pt_LojaCtNome').value;
+        var jpt_lcn2    = document.getElementById('pt_LojaCtNome2').value;
+        var jpt_lct     = document.getElementById('pt_LojaCtTel').value;
+        var jpt_lct2    = document.getElementById('pt_LojaCtTel2').value;
+        var jpt_lce     = document.getElementById('pt_LojaCtEmail').value;
+        var jpt_lce2    = document.getElementById('pt_LojaCtEmail2').value;
+
+        var jpt_shop = document.getElementById('pt_shopping').checked;
+
+        var jpt_clid  = Number(document.getElementById('ct_ID').value);
+        var jpt_cobi  = Number(document.getElementById('cb_CoberturaID').value);
+        var jpt_MA_ID = Number(document.getElementById('MA_ID').value);
+
+        var jpt_dtvi;
+        if ( ViabilidadeInicial != jpt_viab ) {
+                var now = new Date();
+                var newDate = new Date(now.getTime() - now.getTimezoneOffset()*60*1000);
+                jpt_dtvi =  newDate ;
+        }
+        else { var jpt_dtvi= document.getElementById("pt_Data_Viab");  }
+
+        var jsdata = {"jpt_id":jpt_id,"jpt_nome":jpt_nome, "jpt_address":jpt_address, "jpt_vel":jpt_vel, "jpt_empresa":jpt_empresa, "jpt_tec":jpt_tec, "jpt_log":jpt_log, "jpt_num":jpt_num, "jpt_com":jpt_com, "jpt_bar":jpt_bar, "jpt_cid":jpt_cid, "jpt_est":jpt_est, "jpt_pais":jpt_pais, "jpt_cep":jpt_cep, "jpt_ref":jpt_ref, "jpt_lat":jpt_lat, "jpt_long":jpt_long, "jpt_obs":jpt_obs, "jpt_viab":jpt_viab, "jpt_sts":jpt_sts, "jpt_cli": jpt_cli, "jpt_clc":jpt_clc,"jpt_clid":jpt_clid,"jpt_cobi":jpt_cobi,"jpt_vab":jpt_vab,"jpt_idlj":jpt_idlj,"jpt_cnpj":jpt_cnpj,"jpt_regi":jpt_regi,"jpt_proj":jpt_proj,"jpt_ateo":jpt_ateo,"jpt_dtvi":jpt_dtvi,"jpt_dtso":jpt_dtso,"jpt_desg":jpt_desg,"jpt_dtin":jpt_dtin,"jpt_dtit":jpt_dtit,"jpt_dtat":jpt_dtat,"jpt_hrin":jpt_hrin,"jpt_rapr":jpt_rapr,"jpt_rana":jpt_rana,"jpt_rcon":jpt_rcon,"jpt_dtap":jpt_dtap,"jpt_resp":jpt_resp,"jpt_ref1":jpt_ref1,"jpt_ref2":jpt_ref2,"jpt_ref3":jpt_ref3,"jpt_dtf1":jpt_dtf1,"jpt_dtf2":jpt_dtf2,"jpt_dtf3":jpt_dtf3,"jpt_dtip":jpt_dtip,"jpt_dtsa":jpt_dtsa,"jpt_dtct":jpt_dtct,"jpt_dtno":jpt_dtno,"jpt_dtvl":jpt_dtvl,"jpt_dtpg":jpt_dtpg,"jpt_rfs4":jpt_rfs4,"jpt_rfs5":jpt_rfs5,"jpt_rfs6":jpt_rfs6,"jpt_link":jpt_link,"jpt_desi":jpt_desi,"jpt_pedi":jpt_pedi,"jpt_MA_ID":jpt_MA_ID,"jpt_shop":jpt_shop,"jpt_lcn":jpt_lcn,"jpt_lcn2":jpt_lcn2,"jpt_lct":jpt_lct,"jpt_lct2":jpt_lct2,"jpt_lce":jpt_lce,"jpt_lce2":jpt_lce2};
+
+        var JdataS= JSON.stringify(jsdata);
+        var jdata = JSON.parse(JdataS);
+        // console.log(jdata);
+        const header  = document.querySelector('header');
+        const section = document.querySelector('section');
+        //const csrftoken = Cookies.get('csrftoken');
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('Accept', 'application/json');
+        headers.append('Access-Control-Allow-Origin', host );
+        headers.append('Access-Control-Allow-Credentials', 'true');
+        headers.append('GET', 'POST','PUT', 'OPTIONS');
+        headers.append('Upgrade-Insecure-Requests', '1');
+
+        var requestURL = host + '/ponto/1';
+        var request = new XMLHttpRequest();
+        request.open('POST', requestURL, true);
+        request.responseType = 'json';
+        request.send(JSON.stringify(jdata));
+
+        request.onload = function() { var resp_post = request.response;
+                                     // console.log(resp_post) ;
+                                     pt_resultado.setAttribute("Value", resp_post );
+                                     var status = request.status;
+                                     if ( status != 200 ) { alert( "Erro  : " + status.toString()) }
+                                     else {alert("Atualizado");}
+                                    }
+}
+
+
+
+function loadPontoID(ID){
+        var p_id = ID;
+        //console.log(p_id);
+        const header  = document.querySelector('header');
+        const section = document.querySelector('section');
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('Accept', 'application/json');
+        headers.append('Access-Control-Allow-Origin', '*' );
+        headers.append('Access-Control-Allow-Credentials', 'true');
+        headers.append('GET', 'POST', 'OPTIONS');
+        headers.append('Upgrade-Insecure-Requests', '1');
+        headers.append('Content-Security-Policy', 'upgrade-insecure-requests');
+
+        var requestURL = host + '/ponto/' + p_id ;
+        //console.log(requestURL);
+
+        var request = new XMLHttpRequest();
+        request.open('GET', requestURL);
+        request.responseType = 'json';
+        request.send();
+
+        request.onload = function() {
+        var pontos = request.response;
+        // console.log(pontos);
+            var EndPesquisa = ""
+            conteudo =   pontos[0].ID;
+            if (conteudo != null) { pt_ID.setAttribute("Value", conteudo )}
+            conteudo =   pontos[0].viabilidade;
+            if (conteudo != null) { pt_Viabilidade.setAttribute("Value", conteudo.trim());
+                                    ViabilidadeInicial = conteudo ;
+                                    // console.log("Viabilidade Inicial :", ViabilidadeInicial);
+                                  }
+            conteudo =   pontos[0].NomePonto;
+            if (conteudo != null) { pt_nome.setAttribute("Value", conteudo.trim()) }
+            conteudo =   pontos[0].empresa;
+            if (conteudo != null) { Empresa.setAttribute("Value", conteudo.trim());
+                                  menu_Clientes();}
+            conteudo =   pontos[0].cli_nome;
+            if ( conteudo != null) { pt_cliente.setAttribute("Value", conteudo.trim()) }
+            conteudo =   pontos[0].cliente_id;
+            if (conteudo != null) {  ct_ID.setAttribute("Value", conteudo);
+                                     fnMenuMarcas(conteudo)
+                                  }
+            conteudo =   pontos[0].MA_ID;
+            if (conteudo != null) { MA_ID.setAttribute("Value", conteudo ) } else { MA_ID.setAttribute("Value", "") }
+            conteudo =   pontos[0].MA_Marca;
+            if (conteudo != null) { Marca.setAttribute("Value", conteudo.trim() ) } else { Marca.setAttribute("Value", "") }
+            bool =       pontos[0].Shopping;
+            document.getElementById("pt_shopping").checked = bool ;
+
+            conteudo =   pontos[0].cliente_contato;
+            if (conteudo != null) { pt_clienteContato.setAttribute("Value", conteudo.trim()) }
+            conteudo =   pontos[0].Logradouro;
+            if (conteudo != null) { pt_Logradouro.setAttribute("Value", conteudo.trim());
+                                  EndPesquisa = conteudo.trim();
+                                  }
+            conteudo =   pontos[0].Numero.trim();
+            if (conteudo != null) { pt_Numero.setAttribute("Value", conteudo);
+                                   EndPesquisa = EndPesquisa + ", " + conteudo.trim() ;
+                                  }
+            conteudo =   pontos[0].Complemento;
+            if (conteudo != null) { pt_Complemento.setAttribute("Value", conteudo.trim()) }
+            conteudo =   pontos[0].Bairro;
+            if (conteudo != null) { pt_Bairro.setAttribute("Value", conteudo.trim());
+                                    EndPesquisa = EndPesquisa + ", " + conteudo.trim();
+                                  }
+            conteudo =   pontos[0].Cidade.trim();
+            if (conteudo != null) { pt_Cidade.setAttribute("Value", conteudo );
+                                   EndPesquisa = EndPesquisa + ", " + conteudo ;
+                                  }
+            conteudo =   pontos[0].Estado;
+            if (conteudo != null) { pt_Estado.setAttribute("Value", conteudo.trim()) ;
+                                     EndPesquisa = EndPesquisa + ", " + conteudo.trim() ;
+                                  }
+            conteudo =   pontos[0].CEP;
+            if (conteudo != null) { pt_CEP.setAttribute("Value", conteudo.trim()) }
+            conteudo =   pontos[0].Pais;
+            if (conteudo != null) { pt_pais.setAttribute("Value", conteudo.trim()) }
+            latitude =   pontos[0].Latitude;
+            var ini_latitude = latitude;
+            if (latitude != null) { pt_Latitude.setAttribute("Value", latitude) }
+            longitude =   pontos[0].Longitude;
+            var ini_longitude = longitude;
+            if (longitude != null) { pt_Longitude.setAttribute("Value", longitude) }
+            conteudo =   pontos[0].Tecnologia;
+            if (conteudo != null) { pt_Tecnologia.setAttribute("Value", conteudo.trim()) }
+            conteudo =   pontos[0].velocidade;
+            if (conteudo != null) { pt_Velocidade.setAttribute("Value", conteudo.trim()) }
+            conteudo =   pontos[0].Observacoes;
+            if (conteudo != null) { pt_observacao.setAttribute("Value", conteudo.trim()) }
+            conteudo =   pontos[0].Referencia;
+            if (conteudo != null) { pt_Referencia.setAttribute("Value", conteudo.trim()) }
+            conteudo =   pontos[0].cobertura_id;
+            if (conteudo != null) {  cb_CoberturaID.setAttribute("Value", conteudo)
+                                  //loadCoberturaAnx(conteudo);
+                                  }
+            if (EndPesquisa != null) { address.setAttribute("Value", EndPesquisa ) }
+            
+            conteudo =   pontos[0].loja_id;
+            if (conteudo != null) { pt_IDLoja.setAttribute("Value", conteudo.trim()) }
+            conteudo =   pontos[0].cnpj;
+            if (conteudo != null) { pt_CNPJ.setAttribute("Value", conteudo.trim()) }
+            conteudo =   pontos[0].regional;
+            if (conteudo != null) { pt_Regional.setAttribute("Value", conteudo.trim()) }
+            conteudo =   pontos[0].projeto;
+            if (conteudo != null) { Projeto.setAttribute("Value", conteudo.trim()) }
+            conteudo =   pontos[0].analise_teo;
+            if (conteudo != null) { pt_resultado.setAttribute("Value", conteudo.trim()) }
+            conteudo =   pontos[0].Designacao;
+            if (conteudo != null) { ct_Designacao.setAttribute("Value", conteudo.trim()) }
+            conteudo =   pontos[0].Horario;
+            if (conteudo != null) { pt_HoraInstal.setAttribute("Value", conteudo.trim()) }
+            conteudo =   pontos[0].Resp_Aprovar;
+            if (conteudo != null) { pt_Aprovador.setAttribute("Value", conteudo.trim()) }
+            conteudo =   pontos[0].Resp_Contratar;
+            if (conteudo != null) { pt_RespContratar.setAttribute("Value", conteudo.trim()) }
+            conteudo =   pontos[0].Resp_Analisar;
+            if (conteudo != null) { pt_RespAnalisar.setAttribute("Value", conteudo.trim()) }
+             conteudo =   pontos[0].Resp_fase4;
+            if (conteudo != null) { pt_Resp4.setAttribute("Value", conteudo.trim()) }
+            conteudo =   pontos[0].Resp_fase5;
+            if (conteudo != null) { pt_Resp5.setAttribute("Value", conteudo.trim()) }
+            conteudo =   pontos[0].Resp_fase6;
+            if (conteudo != null) { pt_Resp6.setAttribute("Value", conteudo.trim()) }
+            conteudo =   pontos[0].Responsavel;
+            if (conteudo != null) { pt_ACResp.setAttribute("Value", conteudo.trim()) }
+            conteudo =   pontos[0].Result_Fase1;
+            if (conteudo != null) { pt_resultado_F1.setAttribute("Value", conteudo.trim()) }
+            conteudo =   pontos[0].Result_Fase2;
+            if (conteudo != null) { pt_resultado_F2.setAttribute("Value", conteudo.trim()) }
+            conteudo =   pontos[0].Result_Fase3;
+            if (conteudo != null) { pt_resultado_F3.setAttribute("Value", conteudo.trim()) }
+            conteudo =   pontos[0].Designado;
+            if (conteudo != null) { document.getElementById('pt_Designado').value = conteudo.trim() } else { document.getElementById('pt_Designado').value = "" }
+            conteudo =   pontos[0].Links;
+            pt_Links.setAttribute("Value", conteudo ) ;
+            conteudo =   pontos[0].Pedido;
+            if (conteudo != null) { document.getElementById('pt_Pedido').value = conteudo.trim() } else { document.getElementById('pt_Pedido').value = "" }
+            conteudo =   pontos[0].LojaCtNome;
+            if (conteudo != null) { document.getElementById('pt_LojaCtNome').value = conteudo.trim() } else { document.getElementById('pt_LojaCtNome').value = "" }
+            conteudo =   pontos[0].LojaCtNome2;
+            if (conteudo != null) { document.getElementById('pt_LojaCtNome2').value = conteudo.trim() } else { document.getElementById('pt_LojaCtNome2').value = "" }
+            conteudo =   pontos[0].LojaCtTel;
+            if (conteudo != null) { document.getElementById('pt_LojaCtTel').value = conteudo.trim() } else { document.getElementById('pt_LojaCtTel').value = "" }
+            conteudo =   pontos[0].LojaCtTel2;
+            if (conteudo != null) { document.getElementById('pt_LojaCtTel2').value = conteudo.trim() } else { document.getElementById('pt_LojaCtTel2').value = "" }
+            conteudo =   pontos[0].LojaCtEmail;
+            if (conteudo != null) { document.getElementById('pt_LojaCtEmail').value = conteudo.trim() } else { document.getElementById('pt_LojaCtEmail').value = "" }
+            conteudo =   pontos[0].LojaCtEmail2;
+            if (conteudo != null) { document.getElementById('pt_LojaCtEmail2').value = conteudo.trim() } else { document.getElementById('pt_LojaCtEmail2').value = "" }
+
+
+            // Data
+            var DataAt = new Date();
+            DataAt = EpochToDate(pontos[0].CreateDate);
+            if (DataAt != null) { pt_Data_Inicio.setAttribute("Value", DataAt )} else { pt_Data_Inicio.setAttribute("Value", "" )}
+            var DataAt = new Date();
+            DataAt = EpochToDate(pontos[0].Data_Pagamento);
+            if (DataAt != null) { pt_data_pagamento.setAttribute("Value", DataAt )} else { pt_data_pagamento.setAttribute("Value", "" )}
+            var DataAt = new Date();
+            DataAt = EpochToDate(pontos[0].ViabilidadeDate,"DT" );
+            if (DataAt != null) { pt_Data_Viab.setAttribute("Value", DataAt )} else { pt_Data_Viab.setAttribute("Value", "" )}
+            var DataAt = new Date();
+            DataAt = EpochToDate(pontos[0].Data_Inaugu);
+            if (DataAt != null) { pt_Data_Inauguracao.setAttribute("Value", DataAt )} else { pt_Data_Inauguracao.setAttribute("Value", "" )}
+            var DataAt = new Date();
+            DataAt = EpochToDate(pontos[0].Data_Prevista);
+            if (DataAt != null) { pt_Data_Instala.setAttribute("Value", DataAt )} else { pt_Data_Instala.setAttribute("Value", "" )}
+            var Data_Ativacao = new Date();
+            Data_Ativacao = EpochToDate(pontos[0].Data_Ativacao);
+            if (Data_Ativacao != null) { ct_data_ativacao.setAttribute("Value", Data_Ativacao )} else { ct_data_ativacao.setAttribute("Value", "" )}
+            var Data_Aprovar = new Date();
+            Data_Aprovar = EpochToDate(pontos[0].Data_Aprovar);
+            if (Data_Aprovar != null) { pt_data_aprova.setAttribute("Value", Data_Aprovar )} else { pt_data_aprova.setAttribute("Value", "" )} 
+            var Data_Rs_fase1 = new Date();
+            Data_Rs_fase1 = EpochToDate(pontos[0].Data_Rs_fase1, "DT" ) ;
+            if ( Data_Rs_fase1 != null) { pt_Data_F1.setAttribute("Value", Data_Rs_fase1 )} else { pt_Data_F1.setAttribute("Value", "" )}
+            var DataAt = new Date();
+            DataAt = EpochToDate(pontos[0].Data_Rs_fase2, "DT" );
+            if (DataAt != null) { pt_Data_F2.setAttribute("Value", DataAt )} else { pt_Data_F2.setAttribute("Value", "" )}
+            var DataAt = new Date();
+            DataAt = EpochToDate(pontos[0].Data_Rs_fase3, "DT" );
+            if (DataAt != null) { pt_Data_F3.setAttribute("Value", DataAt )} else { pt_Data_F3.setAttribute("Value", "" )}
+            var DataAt = new Date();
+            Data_Ini_pesquisa = EpochToDate(pontos[0].Data_Ini_pesquisa);
+            if (Data_Ini_pesquisa != null) { pt_data_IniPesquisa.setAttribute("Value", Data_Ini_pesquisa ) } else { pt_data_IniPesquisa.setAttribute("Value", "" )}
+            var Data_Contratado = new Date();
+            Data_Contratado = EpochToDate(pontos[0].Data_Contratado);
+            if (Data_Contratado != null) { pt_data_Contrato.setAttribute("Value", Data_Contratado )} else { pt_data_Contrato.setAttribute("Value", "" )}
+            var Data_Noc = new Date();
+            Data_Noc = EpochToDate(pontos[0].Data_Noc);
+            if (Data_Noc != null) { pt_data_noc.setAttribute("Value", Data_Noc )} else { pt_data_noc.setAttribute("Value", "" )}
+            var Data_ValidaEmpresa = new Date();
+            Data_ValidaEmpresa = EpochToDate(pontos[0].Data_ValidaEmpresa);
+            if (Data_ValidaEmpresa != null) { pt_data_validacao.setAttribute("Value", Data_ValidaEmpresa )} else { pt_data_validacao.setAttribute("Value", "" )}
+            var DataSolAprova = new Date();
+            DataSolAprova = EpochToDate(pontos[0].Data_Sol_Aprova);
+            if (DataSolAprova != null) { pt_data_SolAprova.setAttribute("Value", DataSolAprova )} else { pt_data_SolAprova.setAttribute("Value", "" )}
+
+
+          //  Calculo do SLA
+            var dataInicio = new Date(Data_Ini_pesquisa);
+            var dataFim = new Date(Data_Rs_fase1);
+            if ( dataInicio <= dataFim ) { var diffDias = (dataFim - dataInicio) /1000 /60 /60 /24;
+                                        SlaFase1.setAttribute("Value",  Math.trunc(diffDias)); }
+            else { var dataFim = new Date();
+                   var diffDias = (dataFim - dataInicio)/1000 /60 /60 /24;
+                   SlaFase1.setAttribute("Value", Math.trunc(diffDias));
+                 }
+
+
+            var dataInicio = new Date(DataSolAprova);
+            var dataFim = new Date(Data_Aprovar);
+             if ( dataInicio > 0    ) {
+                                     if ( dataInicio <= dataFim ) { var diffDias = (dataFim - dataInicio) /1000 /60 /60 /24;
+                                                                   SlaFase2.setAttribute("Value",  Math.trunc(diffDias)); }
+                                     else { var dataFim = new Date();
+                                            var diffDias = (dataFim - dataInicio)/1000 /60 /60 /24;
+                                            SlaFase2.setAttribute("Value",  Math.trunc(diffDias));
+                                             }
+            }
+
+
+
+            var dataInicio = new Date(Data_Aprovar);
+            var dataFim = new Date(Data_Contratado);
+            if ( dataInicio > 0    ) {
+                                     if ( dataInicio <= dataFim ) { var diffDias = (dataFim - dataInicio) /1000 /60 /60 /24;
+                                                                   SlaFase3.setAttribute("Value",  Math.trunc(diffDias)); }
+                                     else { var dataFim = new Date();
+                                            var diffDias = (dataFim - dataInicio)/1000 /60 /60 /24;
+                                            SlaFase3.setAttribute("Value", Math.trunc(diffDias));
+                                             }
+            }
+
+            var dataInicio = new Date(Data_Contratado);
+            var dataFim = new Date(Data_Ativacao);
+            if ( dataInicio > 0    ) {
+                                     if ( dataInicio <= dataFim ) { var diffDias = (dataFim - dataInicio) /1000 /60 /60 /24;
+                                                                   SlaFase4.setAttribute("Value",  Math.trunc(diffDias)); }
+                                     else { var dataFim = new Date();
+                                            var diffDias = (dataFim - dataInicio)/1000 /60 /60 /24;
+                                            SlaFase4.setAttribute("Value", Math.trunc(diffDias));
+                                             }
+            }
+            var dataInicio = new Date(Data_Ativacao);
+            var dataFim = new Date(Data_Noc);
+            if ( dataInicio > 0    ) {
+                                     if ( dataInicio <= dataFim ) { var diffDias = (dataFim - dataInicio) /1000 /60 /60 /24;
+                                                                   SlaFase5.setAttribute("Value",  Math.trunc(diffDias)); }
+                                     else { var dataFim = new Date();
+                                            var diffDias = (dataFim - dataInicio)/1000 /60 /60 /24;
+                                            SlaFase5.setAttribute("Value", Math.trunc(diffDias));
+                                             }
+            }
+
+            initialize(ini_latitude, ini_longitude);
+        }
+
+}
+
+
+
+function CobAnaliseGetDet(ID){
+    //var jpt_id = document.getElementById('pt_ID').value;
+    const header  = document.querySelector('header');
+    const section = document.querySelector('section');
+	let headers = new Headers();
+ 	headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json');
+    headers.append('Access-Control-Allow-Origin', '*' );
+    headers.append('Access-Control-Allow-Credentials', 'true');
+	headers.append('GET', 'POST', 'OPTIONS');
+    headers.append('Upgrade-Insecure-Requests', '1');
+	headers.append('Content-Security-Policy', 'upgrade-insecure-requests');
+
+    // ---  Chause Where
+	var requestURL = host + '/CobAnalise/'+ID;
+    //console.log(requestURL);
+
+	var request = new XMLHttpRequest();
+	request.open('GET', requestURL);
+    request.responseType = 'json';
+	request.send();
+
+	request.onload = function() {
+        var CobAnalise = request.response;
+        // console.log(CobAnalise);
+
+        var conteudo = CobAnalise[0].Notas;
+        if (conteudo != null) {
+            document.getElementById('cba_Notas').value = conteudo.trim();
+        } else {
+            document.getElementById('cba_Notas').value = "";
+        }
+        conteudo = CobAnalise[0].Status_Contrato;
+        if (conteudo != null) {
+            conteudo = conteudo.trim()
+        }
+        document.getElementById('cba_Contrato').value = conteudo;
+        conteudo = CobAnalise[0].Status_Viab;
+        if (conteudo != null) {
+            conteudo = conteudo.trim()
+        }
+        document.getElementById('cba_Viabilidade').value = conteudo;
+        conteudo = CobAnalise[0].ID_Cobertura;
+        document.getElementById('cb_CoberturaID').value = conteudo;
+
+        conteudo = CobAnalise[0].Provedor_ID;
+        if (conteudo == null) {
+            document.getElementById('cb_ProvedorID').value = '';
+            menu_Provedores();
+        } else {
+            document.getElementById('cb_ProvedorID').value = conteudo;
+        }
+
+        ProvedorNome = CobAnalise[0].Provedor;
+        if (ProvedorNome != null) {
+            ProvedorNome = ProvedorNome.trim()
+        }
+        document.getElementById('cb_Provedor_Nome').value = ProvedorNome;
+
+        conteudo = CobAnalise[0].site_indexado;
+        if (conteudo != null) {
+            conteudo = conteudo.trim()
+        }
+        document.getElementById('cb_nome').value = conteudo;
+
+        var conteudo = CobAnalise[0].Tecnologia;
+        if (conteudo != null) {
+            conteudo = conteudo.trim()
+        }
+        document.getElementById('cb_Tecnologia').value = conteudo;
+        document.getElementById('sel_Tecnologia').selectedIndex = 0;
+
+        conteudo = CobAnalise[0].ID;
+        document.getElementById('cba_ID').value = conteudo;
+
+        if ( tkd_Empresa == 'SENCINET' ) {
+            document.getElementById('ct_taxa').value = '';
+            document.getElementById('ct_taxa_instal').value = '';
+
+        } else {
+            conteudo = CobAnalise[0].Taxa;
+            document.getElementById('ct_taxa').value = conteudo;
+            conteudo = CobAnalise[0].Taxa_Instal;
+            document.getElementById('ct_taxa_instal').value = conteudo;
+        }
+
+
+        conteudo =   CobAnalise[0].Vel_Down;
+        document.getElementById('ct_Vel_Dow').value = conteudo;
+        conteudo =   CobAnalise[0].Vel_Up;
+        document.getElementById('ct_Vel_Up').value = conteudo;
+        conteudo =   CobAnalise[0].RespTalkd ;
+        document.getElementById('ct_RespTalkd').value = conteudo ;
+        document.getElementById('sel_RespTalkd').selectedIndex = 0 ;
+        conteudo =   CobAnalise[0].RespTalkdEquipe ;
+        RespEquipeAnt =  conteudo ;
+        //console.log("RespEquipeAnt :" , RespEquipeAnt );
+        document.getElementById('ct_RespTalkdEquipe').value = conteudo ;
+        document.getElementById('sel_RespTalkdEquipe').selectedIndex = 0 ;
+        conteudo =   CobAnalise[0].CPD ;
+        if ( conteudo != null ) { conteudo = conteudo.trim() } else { conteudo = "" }
+        document.getElementById('ct_cpd').value = conteudo ;
+
+		if (conteudo != null) { conteudo = conteudo.trim(); menu_StatusLink(conteudo);}
+		
+        conteudo =   CobAnalise[0].StatusG1 ;
+        document.getElementById('ct_G1').value = conteudo ;
+        document.getElementById('sel_ct_G1').selectedIndex = 0 ;        
+
+        conteudo =   CobAnalise[0].Designacao;
+		if ( conteudo != null) { conteudo = conteudo.trim() }
+        document.getElementById('cb_Designacao').value = conteudo ;
+        conteudo =   CobAnalise[0].Responsavel;
+		if ( conteudo != null) { conteudo = conteudo.trim();
+							    document.getElementById('ct_Resp').value = conteudo ;
+							    if ( conteudo != "DFH") {document.getElementById("sel_ct_Resp").selectedIndex = 1 }
+							    if ( conteudo != "HUGHES") {document.getElementById("sel_ct_Resp").selectedIndex = 2 }
+                                if ( conteudo != "CLIENTE") {document.getElementById("sel_ct_Resp").selectedIndex = 3 }
+								if ( conteudo != "DFH+HUGHES") {document.getElementById("sel_ct_Resp").selectedIndex = 4 }
+								if ( conteudo != "CONCLUÍDO") {document.getElementById("sel_ct_Resp").selectedIndex = 5 }
+							   }
+		                  else { document.getElementById('ct_Resp').value = "" ; }
+        document.getElementById("sel_ct_Resp").selectedIndex = 0 ;
+        
+        conteudo =   CobAnalise[0].Ticket_id;
+        if ( conteudo != null) { conteudo = conteudo.trim() }
+        document.getElementById('cba_Tkt_OTRS').value = conteudo ;
+        conteudo =   CobAnalise[0].ProvedorLink;
+        if ( conteudo != null) { conteudo = conteudo.trim() }
+        document.getElementById('cb_ProvDesig').value = conteudo ;
+        
+        var DataAt = new Date();
+        DataAt = EpochToDate(CobAnalise[0].Dt_Viabilidade);
+        if (DataAt != null) { document.getElementById('cba_Data_Analise').value = DataAt ;} else { document.getElementById('cba_Data_Analise').value ="" ;}
+        var DataAt = new Date();
+        DataAt = EpochToDate(CobAnalise[0].DT_Agendada);
+		if ( DataAt != null) { document.getElementById('cba_Data_Agenda').value = DataAt ;} else { document.getElementById('cba_Data_Agenda').value = "" ;}
+        Agenda = DataAt;
+
+        var DataAt = new Date();
+        DataAt = EpochToDate(CobAnalise[0].Dtti_TalkdEquipe , "DT" );
+        if ( DataAt != null) { document.getElementById('Dtti_TalkdEquipe').value = DataAt ;} else { document.getElementById('Dtti_TalkdEquipe').value = "" ;}
+
+        var DT_AssCt = new Date();
+        DataAt = EpochToDate(CobAnalise[0].DT_AssCt);
+        if ( DT_AssCt != null) { document.getElementById('ct_data_Contrato').value = DataAt } else { document.getElementById('ct_data_Contrato').value = "" }
+        conteudo =  CobAnalise[0].ProvedorPrazo;
+        if (conteudo != null) { document.getElementById('pv_Prazo').value = conteudo  } else { document.getElementById('pv_Prazo').value =  "" }
+
+
+
+        conteudo =  CobAnalise[0].fin_vencimento;
+        document.getElementById('fin_vencimento').value = conteudo ;           
+        conteudo =  CobAnalise[0].fin_CNPJ;
+        if (conteudo != null) { conteudo = conteudo.trim() } else { conteudo = "" }
+        document.getElementById('fin_CNPJ').value = conteudo ;           
+        conteudo =  CobAnalise[0].fin_razao;
+        if (conteudo != null) { conteudo = conteudo.trim() } else { conteudo = "" }
+        document.getElementById('fin_razao').value = conteudo ;     
+        conteudo =  CobAnalise[0].fin_ctnome;
+        if (conteudo != null) { conteudo = conteudo.trim() } else { conteudo = "" }
+        document.getElementById('fin_ctnome').value = conteudo ;            
+        conteudo =  CobAnalise[0].fin_cttel;
+        if (conteudo != null) { conteudo = conteudo.trim() } else { conteudo = "" }
+        document.getElementById('fin_cttel').value = conteudo ; 
+        conteudo =  CobAnalise[0].fin_ctemail;
+        if (conteudo != null) { conteudo = conteudo.trim() } else { conteudo = "" }
+        document.getElementById('fin_ctemail').value = conteudo ;             
+        conteudo =  CobAnalise[0].portal_end;
+        if (conteudo != null) { conteudo = conteudo.trim() } else { conteudo = "" }
+        document.getElementById('portal_end').value = conteudo ;             
+        conteudo =  CobAnalise[0].portal_user;
+        if (conteudo != null) { conteudo = conteudo.trim() } else { conteudo = "" }
+        document.getElementById('portal_user').value = conteudo ; 
+        conteudo =  CobAnalise[0].portal_senha;
+        if (conteudo != null) { conteudo = conteudo.trim() } else { conteudo = "" }
+        document.getElementById('portal_senha').value = conteudo ; 
+        conteudo =  CobAnalise[0].fin_pag;
+        if (conteudo != null) { conteudo = conteudo.trim() } else { conteudo = "" }
+        document.getElementById('fin_pag').value = conteudo ;
+        Modalidade =  CobAnalise[0].link_modalidade;
+        if ( Modalidade != null) { Modalidade = Modalidade.trim() ;
+                                    if ( Modalidade == "Pré-pago" ) { document.getElementById("link_modalidade_PRE").checked = true } 
+                                        else {  document.getElementById("link_modalidade_PRE").checked = false } 
+                                    if ( Modalidade == "Pós-pago" ) { document.getElementById("link_modalidade_POS").checked = true } 
+                                        else {  document.getElementById("link_modalidade_POS").checked = false }                                     
+                                  } else { document.getElementById("link_modalidade_PRE").checked = false ;
+                                          document.getElementById("link_modalidade_POS").checked = false ;
+                                        }
+
+        conteudo = CobAnalise[0].Brk_Mensalidade;
+        document.getElementById('Brk_Mensalidade').value = conteudo ;
+        conteudo = CobAnalise[0].Brk_Instal;
+        document.getElementById('Brk_Instal').value = conteudo ;
+		conteudo = CobAnalise[0].ProvedorContrato;
+        document.getElementById('ct_ContratoProvedor').value = conteudo ;
+		conteudo = CobAnalise[0].fin_prazo;
+        document.getElementById('fin_prazo').value = conteudo ;
+		conteudo = CobAnalise[0].Assinatura_Resp;
+		if (conteudo != null) { conteudo = conteudo.trim() } else { conteudo = "" }
+        document.getElementById('ct_Ass_Resp').value = conteudo ;
+		Broker =  CobAnalise[0].Broker;
+        if ( Broker ) { document.getElementById("Brk_Flag").checked = true } 
+            else {  document.getElementById("Brk_Flag").checked = false } 
+		console.log("Broker :"+ Broker);
+		if ( Broker ) { document.getElementById('ct_Ass_Resp').value = 'DFH' ;
+                        document.getElementById('ct_filial_ID').value = 47 ;
+                        filial_id = 47 }
+			else {  filial_id = CobAnalise[0].filial_id;
+				    if ( filial_id == undefined ) { filial_id = 47  }
+			     }
+		document.getElementById('ct_filial_ID').value = filial_id;
+		loadFilial(filial_id);
+        menu_Filiais();
+
+            }
+}
+
+
+
+
+
+
+</script>
+</body>
+</html>

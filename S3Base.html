@@ -1,0 +1,527 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="cache-control" content="no-cache" />
+
+<title>Carga</title>
+
+    <link rel="shortcut icon" href="Public/Imagens/favicon.png" />
+	<link rel="stylesheet"    href="Public/css/style.css">
+    <link rel="stylesheet"    href="Public/css/main.css">
+    <link rel="stylesheet"    href="Public/css/style_a.css">
+    <link rel="stylesheet"    href="Public/css/table.css">
+    <script src="Public/js/geral.js" type="text/javascript"></script>
+
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+    <!--  JQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <!--  Cookies-->
+    <script type="text/javascript" src="Public/js/jquery.cookie.min.js" ></script>
+
+
+    <script type="text/javascript">
+        if(typeof jQuery === 'undefined'){
+              console.log('no jQuery');
+                var head = document.getElementsByTagName('head')[0];
+                var script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.src = 'Public/js/jquery-3.6.0.min.js';
+                script.onload = handler;
+                head.appendChild(script);
+            }else{console.log('jQuery is embedded!');}
+    function handler(){ console.log('jquery added :)'); }
+    </script>
+
+    <script type="text/javascript" src="./local/conf.json"></script>
+
+    <script type="text/javascript">
+        var host = 'http://127.0.0.1:8000';
+        var sdw_ambiente = "DEV";
+        if (conf) { var config = JSON.parse(conf); }
+        if (config) {
+            host = config[0].server;
+            sdw_ambiente = config[0].ambiente ;
+           }
+        console.log("Ambiente : " + sdw_ambiente + " | Server : "+ host);
+    </script>
+
+    <!-- Planilha XLS -->
+    <script type="text/javascript" src="Public/js/xlsx.full.min.js"></script>
+</head>
+
+<body onload="loadWindow()">
+
+<div>
+	<nav class="nav_top" hidden >
+		   <div>
+		  	    <a class="logo" href="http://talkd.com.br/">
+	  				<img src="/Public/Imagens/logo_original_final_branco.png" alt="logo"  /></a>
+			 </div>
+			 <div class="topo_center">
+			      <p style="text-align: center; font-size: 36px; color: ghostwhite"> Portal SD WAN </p>
+			 </div>
+
+	</nav>
+	<!-- Menu Principal -->
+	<div>
+
+    <div class="block_line">
+        <div>&nbsp;&nbsp;</div>
+        <div><h4 style="color: #9926b0">Talkd |</h4></div>
+        <div></div>
+        <div><h4 style="color: #9926b0">Portal SDWAN </h4></div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+        <div><label style = "width: 40px" for="user_Login">Login</label></div>
+        <div><input style = "width: 80px"  class="field" id="user_Login" type="text" readonly></div>
+        <div><label style = "width: 40px" for="user_Nome" >Nome</label></div>
+        <div><input style = "width: 220px" class="field" id="user_Nome" type="text" readonly> </div>
+        <div><label style = "width: 60px" for="user_Empresa">Empresa</label></div>
+        <div><input style = "width: 120px" class="field" id="user_Empresa" type="text" readonly></div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+        <div>&nbsp;&nbsp;</div>
+        <div><a onclick="fnConsole()" >Console</a></div>
+        <div>&nbsp;&nbsp;</div>
+        <div><a href="close.html">Sair</a></div>
+
+    </div>
+	</div>
+	<div class="block_form">
+		<form>
+            <fieldset>
+                <br>
+
+                <i>Selecionar Arquivos</i><br>
+                <input class="button button4"  type="file" id="file">
+                <br><br><br>
+                <input class="button button1" type="button"  value="Upload" onclick="Upload()">
+                <br><br><br>
+
+
+                <div>
+                  <div>
+                    <label for="filePicker">Choose or drag a file:</label><br/>
+                    <input type="file" id="filePicker">
+                  </div>
+                  </br>
+                  <div>
+                    <h1>Base64 encoded version</h1>
+                    <textarea id="base64textarea"
+                        placeholder="Base64 will appear here"
+                        cols="80" rows="14">
+                    </textarea>
+                  </div>
+                </div>
+
+
+                <br>
+                <p>Carregar planilha para inclusão em lote de novos pontos</p>
+                <br>
+                <i>Passo 1 - Baixar planilha modelo</i><br>
+                <a id="LinkPlanilha" href="#" onclick="ExcelDow()" style="padding-left: 80px; font-size: 14px;">Click aqui para baixar planilha referência </a>
+                <!-- <a id="LinkPlanilha" href="#" onclick="ExcelDow()" style="padding-left: 80px; font-size: 14px;">Baixar Planilha </a> -->
+                <br><br>
+                <i>Passo 2 -  Selecionar Arquivos xlsx </i><br>
+                <input class="button button2"  type="file" id="fileAmtigo">
+
+                <label style = "width: 100px; font-size: 12px; color: cornflowerblue; border-left: 40px" for="ca_Registros">Registros Carregado</label><input style = "width: 80px; font-size: 12px; color: cornflowerblue; border-width: 0 " class="field" id="ca_Registros" type="number" readonly>
+
+
+                <br><br>
+                <i>Passo 3 -  Identifique cliente </i><br>
+                <label style = "width: 80px" for="Empresa">Empresa</label>
+                  <input style = "width: 130px" class="field" id="Empresa" type="text" value="HUGHES" readonly required>
+                      <select name = "sel_Empresa" id = "sel_Empresa" style = "width: 20px" ></select>
+                <label style = "width: 44px" for="pt_cliente">Cliente</label>
+                        <input style = "width: 320px" class="field" id="pt_cliente" type="text" readonly required>
+                             <select style = "width: 20px" name = "ctq_Cliente" id = "ctq_Cliente"></select> <!-- Function Cria Maneu -->
+                <br>
+                <label style = "width: 80px" for="Projeto">Projeto</label>
+                    <input style = "width: 160px" class="field" id="Projeto" type="text">
+                <br><br>
+                <i>Passo 4 -  Importar </i><br>
+                <input class="button button1" type="button"  value="Incluir Ponto para Analise" onclick="insert()">
+                <br>
+                <!-- <h6>Importar</h6> -->
+                <ul id="ul_importado" style="text-decoration:none  ; font-size: 12px "></ul>
+                <br>
+            </fieldset>
+		</form>
+		<br>
+	</div>
+
+	<div class="block_form" hidden>
+	<form><fieldset>
+		<label style = "width: 120px" for="ct_ID">Cliente ID</label><input style = "width: 60px" class="field" id="ct_ID" type="text" readonly>
+
+
+		</fieldset></form>
+
+	</div>
+
+</div>
+	<br>
+</body>
+  <footer>
+    <div class="footer" style = "width: 100%; height: 26px ; border: 0; padding: 1px">
+        <pre style="font-size:14px; padding: 2px" ><b style="font-size:16px" >&nbsp;&nbsp;&nbsp;Talkd</b> | Rua Salvador Simões, 801 sl. 1302 - São Paulo-SP  | TEL.: +55 11 3738-6128 | <b style="font-size:16px" >Evolua</b> de forma positiva a jornada de relacionamento com seus clientes.
+        </pre>
+    </div>
+</footer>
+
+</html>
+
+
+
+
+
+
+
+
+<!--  **************************************** -->
+
+<script type="text/javascript">
+
+function loadWindow(){
+    loadSession();
+
+
+	menu_Clientes();
+    menuEmpresas("sel_Empresa");
+
+}
+
+function Upload() {
+    console.log("UPLOAD FILE");
+    var pagina = 'Contrato'
+    var ID = 1200 // ID da pagina
+    var file = document.querySelector("#file").files[0];
+    var name = file.name.split('.');
+
+    var type = file.type.split('.');
+    console.log(type[0]);
+    const reader = new FileReader();
+
+    reader.onload = function(readerEvt) {
+      var binaryString = readerEvt.target.result;
+      document.getElementById("base64textarea").value = btoa(binaryString);
+      var jsdata = {"File":binaryString};
+      var JdataS= JSON.stringify(jsdata);
+      var jdata = JSON.parse(JdataS);
+	  //console.log(jdata);
+
+        var requestURL = host + '/uploadfile/1?&Name='+name[0]+'&type='+name[1]+'&pagina='+pagina+'&ID='+ID ;
+        var request = new XMLHttpRequest();
+        request.open('POST', requestURL, true);
+        request.setRequestHeader("Content-Type", type );
+        request.responseType = 'json';
+        request.send(JSON.stringify(jdata));
+            request.onload = function() { var resp = request.response;
+                                          var status = request.status;
+                                          if ( status != 200 ) { alert( "Erro  : " + status.toString()) ; }
+                                          else { console.log("Resposta");
+                                                 var Jres= JSON.stringify(resp);
+                                                 var Jresp = JSON.parse(Jres);
+                                                 console.log(Jresp);
+                                                // alert( "Arquivo Adicionado");
+                                               }
+                                         }
+
+    };
+    reader.readAsBinaryString(file);
+    console.log(reader);
+}
+
+
+
+
+
+
+
+
+
+
+var Carga ;
+
+//First monitor the input box changes, select a new file will trigger the change event
+document.querySelector("#file").addEventListener("change", function () {
+    //Get the selected file
+    console.log("FileUpload")
+    var file = document.querySelector("#file").files[0];
+    var type = file.name.split('.');
+
+
+  });
+
+document.getElementById("ctq_Cliente").addEventListener("change", function(){
+        var c_id = document.getElementById('ctq_Cliente').value;
+        if (c_id != null) { ct_ID.setAttribute("Value", c_id )}
+        var elemento = document.getElementById('ctq_Cliente');
+        var c_nome = elemento.options[elemento.selectedIndex].innerHTML;
+        if (c_nome != null) { pt_cliente.setAttribute("Value", c_nome )}
+});
+document.getElementById("sel_Empresa").addEventListener("change", function(){
+        var elemento = document.getElementById('sel_Empresa');
+        var c_nome = elemento.options[elemento.selectedIndex].innerHTML;
+        document.getElementById('Empresa').value = c_nome ;
+        menu_Clientes();
+});
+
+function loadWindow(){
+    loadSession();
+	menu_Clientes();
+    menuEmpresas("sel_Empresa");
+
+}
+
+
+
+
+
+function fnConsole(){
+    if ( tkd_Empresa === "TALKD" ) { window.open('../portal.html', "_self");
+    } else { window.open('../ConsoleCliente.html', "_self" ); }
+}
+
+
+
+
+
+
+function insert() {
+	console.log("Insert")
+	console.log(Carga);
+
+    while (ul_importado.hasChildNodes()) { ul_importado.removeChild(ul_importado.lastChild) ;}
+    var myUl = document.getElementsByTagName("ul_importado")[0];
+    mycurrent_lu = document.createElement("lu");
+
+	var jpt_empresa = document.getElementById('Empresa').value;
+	var jpt_clid = Number(document.getElementById('ct_ID').value);
+	var jpt_cli = document.getElementById('pt_cliente').value;
+	var jpt_proj = document.getElementById('Projeto').value;
+
+	if ( jpt_empresa == "" ) { alert("Precisa Selecionar Uma Empresa"); return }
+	if ( jpt_clid == "" ) { alert("Selecione o cliente"); return }
+
+	var jpt_nome = new Array() ;
+	var jpt_log = new Array() ;
+	var jpt_num = new Array() ;
+	var jpt_com = new Array() ;
+	var jpt_bar = new Array() ;
+	var jpt_cid = new Array() ;
+	var jpt_cep = new Array() ;
+	var jpt_est = new Array() ;
+	var jpt_ref = new Array() ;
+    var jpt_obs = new Array() ;
+    var jpt_clc = new Array() ;
+    var jpt_idlj = new Array() ;
+    var jpt_cnpj = new Array() ;
+    var jpt_regi = new Array() ;
+	var jpt_lat  = new Array() ;
+	var jpt_long = new Array() ;
+    var jpt_link1 = new Array() ;
+	var jpt_link2 = new Array() ;
+	var jpt_link3 = new Array() ;
+    var jpt_link  = new Array() ;
+	var jpt_shop = new Array() ;
+    var status = new Array() ;
+
+    var milliseconds = 500 ;
+
+	var g = 0 ;
+	for( g = 0; g < Carga.length ; g++) {
+
+	console.log(g);
+        //var btn_ID = Carga[g].ID;
+		conteudo = Carga[g].Nome;
+        if (conteudo != null) { jpt_nome[g] = conteudo } else { jpt_nome[g] = "" }
+	    var jpt_vel =  "" ; //document.getElementById('pt_Velocidade').value;
+        var jpt_tec =  "" ; //document.getElementById('pt_Tecnologia').value;
+	    var jpt_address = "";
+		conteudo = Carga[g].End;
+        if (conteudo != null) { jpt_log[g] = conteudo } else { jpt_log[g] = "" }
+		conteudo = Carga[g].Numero;
+        if (conteudo != null) { jpt_num[g] = conteudo.toString() } else { jpt_num[g] = "" }
+		conteudo = Carga[g].Complemento;
+        if (conteudo != null) { jpt_com[g] = conteudo } else { jpt_com[g] = "" }
+		conteudo = Carga[g].Bairro;
+        if (conteudo != null) { jpt_bar[g] = conteudo } else { jpt_bar[g] = "" }
+		conteudo = Carga[g].Cidade;
+        if (conteudo != null) { jpt_cid[g] = conteudo } else { jpt_cid[g] = "" }
+		conteudo = Carga[g].UF;
+        if (conteudo != null) { jpt_est[g] = conteudo } else { jpt_est[g] = "" }
+        var jpt_pais = "Brasil" ;
+		conteudo = Carga[g].CEP;
+        if (conteudo != null) { jpt_cep[g] = conteudo } else { jpt_cep[g] = "" }
+		conteudo = Carga[g].Referencia;
+        if (conteudo != null) { jpt_ref[g] = conteudo } else { jpt_ref[g] = "" }
+        jpt_lat[g] =  "0" ;
+        jpt_long[g] = "0" ;
+	    //conteudo = Carga[g].Obs;
+	    conteudo = "Tipo de de Estabelecimento : " + Carga[g].TIPODELOJA + " , " + Carga[g].Estabelecimento;
+        if (conteudo != null) { jpt_obs[g] = conteudo } else { jpt_obs[g] = "" }
+		conteudo = Carga[g].Contato;
+        if (conteudo != null) { jpt_clc[g] = conteudo } else { jpt_clc[g] = "" }
+		conteudo = Carga[g].ID;
+        if (conteudo != null) { jpt_idlj[g] = conteudo.toString() } else { jpt_idlj[g] = "" }
+		conteudo = Carga[g].CNPJ;
+        if (conteudo != null) { jpt_cnpj[g] = conteudo } else { jpt_cnpj[g] = "" }
+		conteudo = Carga[g].Regional;
+        if (conteudo != null) { jpt_regi[g] = conteudo } else { jpt_regi[g] = "" }
+        var jpt_ateo = "" ; //var jpt_ateo = document.getElementById('pt_resultado').value;
+
+
+	    jpt_link1[g] = Carga[g].DESIGL1;
+	    jpt_link2[g] = Carga[g].DESIGL2;
+	    jpt_link3[g] = Carga[g].DESIGL3;
+
+	    var nlink = 0 ;
+	    if ( jpt_link1[g] ){ nlink = nlink + 1}
+	    if ( jpt_link2[g] ){ nlink = nlink + 1}
+	    if ( jpt_link3[g] ){ nlink = nlink + 1}
+
+        jpt_link[g] = nlink ; //document.getElementById('pt_Links').value;
+
+
+        //if ( document.getElementById('pt_shopping').checked == true ) { jpt_shop = 1 ; } else { jpt_shop = 0 }
+	    if ( Carga[g].Estabelecimento === "Shopping" ) { jpt_shop[g] = 1 ; } else { jpt_shop[g] = 0 }
+	    //var jpt_shop = 0 ;
+
+
+		var jpt_sts = "Pendente" ;
+        var jpt_viab = "Pendente";
+
+        var jsdata = {"jpt_nome":jpt_nome[g],"jpt_vel":jpt_vel,"jpt_empresa":jpt_empresa, "jpt_tec":jpt_tec,"jpt_address":jpt_address,"jpt_log":jpt_log[g],"jpt_num":jpt_num[g], "jpt_com":jpt_com[g], "jpt_bar":jpt_bar[g],"jpt_cid":jpt_cid[g],"jpt_est":jpt_est[g],"jpt_pais":jpt_pais, "jpt_cep":jpt_cep[g], "jpt_ref":jpt_ref[g], "jpt_lat":jpt_lat[g],"jpt_long":jpt_long[g],"jpt_obs":jpt_obs[g],"jpt_viab":jpt_viab, "jpt_sts":jpt_sts,"jpt_cli":jpt_cli,"jpt_clc":jpt_clc[g],"jpt_idlj":jpt_idlj[g],"jpt_cnpj":jpt_cnpj[g],"jpt_regi":jpt_regi[g],"jpt_proj":jpt_proj,"jpt_ateo":jpt_ateo,"jpt_shop":jpt_shop[g],"jpt_clid":jpt_clid,"jpt_link":jpt_link[g],"jpt_link1":jpt_link1[g],"jpt_link2":jpt_link2[g],"jpt_link3":jpt_link3[g],"resp_post":resp_post,"status":status};
+
+        var JdataS= JSON.stringify(jsdata);
+        var jdata = JSON.parse(JdataS);
+	    console.log(jdata);
+
+        const header  = document.querySelector('header');
+        const section = document.querySelector('section');
+        //const csrftoken = Cookies.get('csrftoken');
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('Accept', 'application/json');
+        headers.append('Access-Control-Allow-Origin', host);
+        headers.append('Access-Control-Allow-Credentials', 'true');
+        headers.append('GET', 'POST', 'OPTIONS');
+        headers.append('Upgrade-Insecure-Requests', '1');
+        //headers.append('X-CSRFToken', csrftoken);
+
+        var requestURL = host + '/pontos?1';
+        var request = new XMLHttpRequest();
+        request.open('POST', requestURL, true);
+        request.responseType = 'json';
+        request.send(JSON.stringify(jdata));
+
+        request.onload = function(jdata) { var resp_post = request.response;
+										                         //console.log(resp_post);
+                                             var status = request.status;
+                                             if ( status === 200 ) { console.log( g +" Ponto Criado: "+ resp_post +" | " + jdata.jpt_nome );
+                                                                    //mycurrent_li = document.createElement("li");
+                                                                    //conteudo = "OK : "+ jdata.jpt_nome ;
+                                                                    //mycurrent_li.innerHTML = conteudo ;
+                                                                    //ul_importado.appendChild(mycurrent_li);
+
+											 }
+                                             else { console.log("Erro aos criar o ponto: " +  jdata.jpt_nome + " | " + status.toString() ) }
+										   }
+
+	}
+
+}
+
+function ExcelDow(){
+        var createXLSLFormatObj = [];
+        var xlsHeader = ["ID","Nome","Cidade","UF","End","Numero","Complemento","Bairro","CEP","Obs","CNPJ","DESIGL1","DESIGL2","DESIGL3"];
+        var xlsRows = ["","","","","","","","","","","","","",""];
+        var filename = "BaseCarga.xlsx";
+
+        createXLSLFormatObj.push(xlsHeader);
+        $.each(xlsRows, function(index, value) {
+            var innerRowData = [];
+            $.each(value, function(ind, val) {
+                innerRowData.push(val);
+            });
+            createXLSLFormatObj.push(innerRowData);
+        });
+        /* File Name */
+        //var filename = "FreakyJSON_To_XLS.xlsx";
+
+        /* Sheet Name */
+        var ws_name = "Plan1";
+
+        if (typeof console !== 'undefined') console.log(new Date());
+        var wb = XLSX.utils.book_new(),
+            ws = XLSX.utils.aoa_to_sheet(createXLSLFormatObj);
+
+        /* Add worksheet to workbook */
+        XLSX.utils.book_append_sheet(wb, ws, ws_name);
+
+        /* Write workbook and Download */
+        if (typeof console !== 'undefined') console.log(new Date());
+        XLSX.writeFile(wb, filename);
+        if (typeof console !== 'undefined') console.log(new Date());
+}
+
+function sleep(milliseconds) {
+  const date = Date.now();
+  let currentDate = null;
+  do {
+     currentDate = Date.now();
+     } while (currentDate - date < milliseconds);
+}
+
+
+
+
+
+
+
+
+/*
+document.querySelector("#file").addEventListener("change", function () {
+    //Get the selected file
+    console.log("FileUpload")
+    var file = document.querySelector("#file").files[0];
+    var type = file.name.split('.');
+    if (type[type.length - 1] !== 'xlsx' && type[type.length - 1] !== 'xls') {
+             alert('Only select excel file to import');
+      return false;
+    }
+    const reader = new FileReader();
+    reader.readAsBinaryString(file);
+    reader.onload = (e) => {
+      const data = e.target.result;
+      const zzexcel = window.XLS.read(data, {
+        type: 'binary'
+      });
+      const result = [];
+      for (let i = 0; i < zzexcel.SheetNames.length; i++) {
+        const newData = window.XLS.utils.sheet_to_json(zzexcel.Sheets[zzexcel.SheetNames[i]]);
+        result.push(...newData)
+      }
+      console.log('Arquivo', result);
+	  Carga = result ;
+
+    var registros = Carga.length;
+    document.getElementById('ca_Registros').value = registros ;
+
+    }
+  });
+
+*/
+
+</script>
+
+
+
+

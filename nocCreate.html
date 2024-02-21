@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+	<meta charset="utf-8">
+        <!-- <meta http-equiv="cache-control" content="no-cache" /> -->
+    <meta http-equiv="cache-control" content="max-age=86400, must-revalidate" />
+ 	<title>Criar Incidente</title>
+
+    <link rel="stylesheet" href="Public/css/main.css">
+
+    <script type="text/javascript" src="Public/js/geral.js"></script>
+
+
+	<link rel="shortcut icon" href="Public/Imagens/favicon.png" />
+    <script src="https://kit.fontawesome.com/ddc0eccd46.js" crossorigin="anonymous"></script>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+
+    <!--  JQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+
+
+    <script type="text/javascript">
+        if(typeof jQuery === 'undefined'){
+              console.log('no jQuery');
+                var head = document.getElementsByTagName('head')[0];
+                var script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.src = 'Public/js/jquery-3.6.0.min.js';
+                script.onload = handler;
+                head.appendChild(script);
+            }else{console.log('jQuery is embedded!');}
+    function handler(){ console.log('jquery added :)'); }
+    </script>
+
+    <style>
+       /* Set the size of the div element that contains the map */
+      #map {
+        height: 400px;  /* The height is 400 pixels */
+        width: 100%;  /* The width is the width of the web page */
+       }
+    </style>
+
+    <script type="text/javascript" src="local/conf.json"></script>
+    <script type="text/javascript">
+        var host = 'http://127.0.0.1:8000';
+        var sdw_ambiente = "DEV";
+        var sdw_owner = "DFH";
+        if (conf) { var config = JSON.parse(conf); }
+        if (config) {
+            host = config[0].server;
+            sdw_ambiente = config[0].ambiente ;
+            sdw_owner = config[0].HEAD;
+           }
+        console.log("Ambiente : " + sdw_ambiente + " | Owner : " + sdw_owner +  " | Server : "+ host);
+    </script>
+
+    <!-- Bootstrap -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.min.js"
+            integrity="sha512-WW8/jxkELe2CAiE4LvQfwm1rajOS8PHasCCx+knHG0gBHt8EXxS6T6tJRTGuDQVnluuAvMxWF4j8SNFDKceLFg=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css"
+          integrity="sha512-b2QcS5SsA8tZodcDtGRELiGv5SaKSk1vDHDaQRda0htPYWZ6046lr3kJ5bAAQdpV2mmA/4v0wQF9MyU6/pDIAg=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer"/>
+
+    <!--  Cookies
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js" integrity="sha512-3j3VU6WC5rPQB4Ld1jnLV7Kd5xr+cq9avvhwqzbH/taCRNURoeEpoPBK9pDyeukwSxwRPJ8fDgvYXd6SkaZ2TA==" crossorigin="anonymous"></script>  -->
+    <script type="text/javascript" src="Public/js/jquery.cookie.min.js" ></script>
+
+
+
+
+
+
+<style> img { max-width: 100%; max-height: 100%;} </style>
+
+</head>
+<body onload="loadWindow()">
+<div style="align-content: center; background-color: aliceblue">
+    <br>
+            <div class="block_col" style=" margin: 0 auto ; padding: 2px 2px 2px 2px; background: black; vertical-align: top; height: 40px; width: 400px ">
+                <img style=" margin: 0 auto " src="Public/Imagens/DHF_logo.png" alt="logo"  >
+            </div>
+            <div class="block_col" style=" margin: 0 auto ; padding: 8px 2px 2px 8px; background: black; vertical-align: top; height: 44px; width: 400px ">
+
+                <p style="text-align: center; font-size: 20px; color: lightskyblue"> Portal SD WAN </p>
+            </div>
+    <br>
+</div>
+<div style="align-content: center; background-color: aliceblue">
+<div class="block_col" style=" margin: 0 auto ; background-color: white; width: 400px ">
+    <p> Abertura de Indicente</p>
+        <label style="width: 100px" for="ctq_ID">Link ID</label>
+            <input style="width: 100px" class="field" id="Link_ID" type="number" readonly required>
+        <br>
+
+        <label style="width: 100px" for="Empresa">Empresa</label>
+            <input style="width: 240px" class="field" id="Empresa" type="text" readonly>
+                <select name="sel_Empresa" id="sel_Empresa" style="width: 20px"></select>
+    <br>
+        <label style="width: 100px" for="ctq_Cliente">Cliente</label>
+            <input style="width: 240px" class="field" id="Cliente" type="text" readonly>
+                <select style="width: 20px" name="ctq_Cliente" id="ctq_Cliente"></select>
+   <label style = "width: 100px" for="pt_nome">Nome do Ponto</label><input style = "width: 240px" class="field" id="pt_nome" type="text" maxlength="255">
+
+   <label style = "width: 100px" for="INC_Designacao" >Link</label><input style = "width: 240px" class="field" id="INC_Designacao" type="text" required maxlength="20"><br>
+
+   <hr>
+   <label style = "width: 100px" for="INC_DataAbertura" >Data Abertura</label><input style = "width: 240px" class="field" id="INC_DataAbertura" type="datetime-local" ><br>
+
+   <label style = "width: 100px" for="INC_Ticket" >Ticket</label><input style = "width: 200px" class="field" id="INC_Ticket" type="text" maxlength="15" ><br>
+   <label style = "width: 100px" for="INC_Alarme" >Alarme</label><input style = "width: 240px" class="field" id="INC_Alarme" type="datetime-local" ><br>
+   <label style = "width: 100px" for="INC_Motivo" >Motivo</label><input style = "width: 240px" class="field" id="INC_Motivo" type="text" maxlength="60">
+                    <select style = "width: 20px" name="sel_Motivo" id="sel_Motivo">
+                        <option value="">Selecione</option>
+                        <option value="LINK INDISPONÍVEL">LINK INDISPONÍVEL</option>
+                        <option value="PERDA DE PACOTES">PERDA DE PACOTES</option>
+                        <option value="CCTO INTERMITENTE">CCTO INTERMITENTE</option>
+                        <option value="TROCA DE RANGER">TROCA DE RANGER</option>
+                        <option value="MUDANÇA DE LOCAL">MUDANÇA DE LOCAL</option>
+                        <option value="OUTROS">OUTROS</option>
+                    </select>
+   <label style = "width: 100px" for="INC_Origem" >Origem</label><input style = "width: 240px" class="field" id="INC_Origem" type="text" maxlength="20">
+                     <select style = "width: 20px" name="sel_Origem" id="sel_Origem">
+                        <option value="">Selecione</option>
+                        <option value="Telefone">Telefone</option>
+                        <option value="Email">Email</option>
+                        <option value="Sistema">Sistema</option>
+                    </select>
+    <br>
+   <label style = "width: 100px" for="INC_SolFuncionario" >Solicitante</label><input style = "width: 240px" class="field" id="INC_SolFuncionario" type="text" maxlength="60"><br>
+   <label style = "width: 100px" for="INC_SolContato" >Contato</label><input style = "width: 240px" class="field" id="INC_SolContato" type="text" maxlength="40"><br>
+   <!--
+   <label style = "width: 100px" for="INC_Obs" >Problema Relatado</label><input style = "width: 200px" class="field" id="INC_Obs" type="text" maxlength="255" rows="4"><br>
+    -->
+   <label style = "width: 240px; align-self: stretch; " for="INC_Obs" >Problema Relatado</label><br>
+      <textarea style = "width: 380px; margin-left: 10px ; border-width: 1px" class="field" id="INC_Obs" type="text" maxlength="255" rows="6"></textarea><br>
+
+<hr>
+   <label style = "width: 100px" for="pt_ProvedorNome">Provedor</label><input style = "width: 240px" class="field" id="pt_ProvedorNome" type="text" maxlength="255">
+   <label style = "width: 100px" for="pt_ProvDesig">Designação Prov </label><input style = "width: 240px; " class="field" id="pt_ProvDesig" type="text" required maxlength="30">
+
+
+   <label style = "width: 100px" for="INC_ProvTicket" >Prov Ticket</label><input style = "width: 200px" class="field" id="INC_ProvTicket" type="text" maxlength="60"><br>
+   <label style = "width: 100px" for="INC_ProvDtabertua" >Prov Abertua</label><input style = "width: 200px" class="field" id="INC_ProvDtabertua" type="datetime-local" ><br>
+   <label style = "width: 100px" for="INC_ProvVia" >Prov Via</label><input style = "width: 200px" class="field" id="INC_ProvVia" type="text" maxlength="20"><br>
+
+
+
+   <label style = "width: 100px" for="INC_ProvContato" >Prov Contato</label><input style = "width: 200px" class="field" id="INC_ProvContato" type="text" maxlength="60"><br>
+   <label style = "width: 100px" for="INC_ProvTelefone" >Prov Telefone</label><input style = "width: 200px" class="field" id="INC_ProvTelefone" type="text" maxlength="32"><br>
+   <label style = "width: 100px" for="INC_ProvEmail" >Prov Email</label><input style = "width: 200px" class="field" id="INC_ProvEmail" type="text" maxlength="60"><br>
+
+
+    <hr>
+    <div style = "margin-left: 22px">
+        <input class="button button3" style="float: right; color: white; background-color: #4CAF50" type="button" value="Registrar Incidente" onclick="fnIncCreate('CREATE')">
+        <br>
+    </div>
+
+    <br>
+
+        <div hidden >
+               <label style = "width: 100px" for="INC_Status" >Status</label><input style = "width: 200px" class="field" id="INC_Status" type="text" maxlength="16"><br>
+
+
+           <label style="width: 120px" for="ctq_ID">Cliente ID</label><input style="width: 60px" class="field" id="ctq_ID" type="text"><br>
+           <label style = "width: 100px" for="INC_PontoId" >Ponto Id</label><input style = "width: 240px" class="field" id="INC_PontoId" type="number" ><br>
+           <label style = "width: 100px" for="INC_ProvID" >Prov ID</label><input style = "width: 200px" class="field" id="INC_ProvID" type="number" ><br>
+        </div>
+
+    </div>
+
+    <div hidden>
+            <div><label style = "width: 40px" for="user_Login">Login</label></div>
+            <div><input style = "width: 80px"  class="field" id="user_Login" type="text" readonly></div>
+            <div><label style = "width: 40px" for="user_Nome" >Nome</label></div>
+            <div><input style = "width: 220px" class="field" id="user_Nome" type="text" readonly> </div>
+            <div><label style = "width: 60px" for="user_Empresa">Empresa</label></div>
+            <div><input style = "width: 120px" class="field" id="user_Empresa" type="text" readonly></div>
+    </div>
+<br>
+</div>
+
+
+</body>
+</html>
+
+<script type="text/javascript">
+    var tkd_Empresa ;
+    var tkd_Login ;
+    var tkd_TKN ;
+    var Link_ID ;
+    var INC_ID ;
+
+document.getElementById("sel_Empresa").addEventListener("change", function () {
+        var elemento = document.getElementById('sel_Empresa');
+        var c_nome = elemento.options[elemento.selectedIndex].innerHTML;
+        document.getElementById('Empresa').value = c_nome;
+        menu_Clientes();
+        //menu_Provedores();
+});
+document.getElementById("ctq_Cliente").addEventListener("change", function () {
+        var c_id = document.getElementById('ctq_Cliente').value;
+        if ( c_id != null) { document.getElementById('ctq_ID').value = c_id}
+});
+document.getElementById("sel_Motivo").addEventListener("change", function () {
+        var c_id = document.getElementById('sel_Motivo').value;
+        if ( c_id != null) { document.getElementById('INC_Motivo').value = c_id}
+});
+document.getElementById("sel_Origem").addEventListener("change", function () {
+        var c_id = document.getElementById('sel_Origem').value;
+        if ( c_id != null) { document.getElementById('INC_Origem').value = c_id}
+});
+
+
+
+function loadWindow() {
+     loadSession(tkd_Empresa);
+     Link_ID = getParameterByName('ID');
+     console.log(Link_ID);
+
+
+     var hoje = new Date();
+     let today = new Date(hoje.getTime() - (hoje.getTimezoneOffset() * 60000)).toISOString().replace(/T/, ' ').replace(/\..+/, '');
+     document.getElementById('INC_DataAbertura').value = today;
+     console.log(today);
+
+
+     if ( Link_ID ){
+         document.getElementById("Link_ID").value = Link_ID;
+         document.getElementById("sel_Empresa").hidden = true;
+         document.getElementById("ctq_Cliente").hidden = true;
+         fnIncGet(Link_ID);
+     }
+     else {
+         document.getElementById("Link_ID").value = "";
+         menuEmpresas("sel_Empresa");
+     }
+
+
+}
+function fnIncGet(Link_ID){
+    console.log("Consultando Link");
+    const header  = document.querySelector('header');
+    const section = document.querySelector('section');
+	let headers = new Headers();
+ 	headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json');
+    headers.append('Access-Control-Allow-Origin', '*' );
+    headers.append('Access-Control-Allow-Credentials', 'true');
+	headers.append('GET', 'POST', 'OPTIONS');
+    headers.append('Upgrade-Insecure-Requests', '1');
+	headers.append('Content-Security-Policy', 'upgrade-insecure-requests');
+
+    // ---  Chause Where
+	var requestURL = host + '/IncCreate/'+ Link_ID;
+	var request = new XMLHttpRequest();
+	request.open('GET', requestURL);
+    request.responseType = 'json';
+	request.send();
+        request.onload = function() {
+	        var LinkData = request.response;
+	        fnIncLink(LinkData);
+            }
+}
+
+function fnIncLink(Link){
+    console.log(Link);
+
+	conteudo = Link[0].Empresa;
+    if ( conteudo != null) { conteudo = conteudo.trim() } else { conteudo = "" }
+    document.getElementById('Empresa').value = conteudo ;
+	conteudo = Link[0].Designacao;
+    if ( conteudo != null) { conteudo = conteudo.trim() } else { conteudo = "" }
+    document.getElementById('INC_Designacao').value = conteudo ;
+	conteudo = Link[0].CLIENTE;
+    if ( conteudo != null) { conteudo = conteudo.trim() } else { conteudo = "" }
+    document.getElementById('Cliente').value = conteudo ;
+	conteudo = Link[0].NomePonto;
+    if ( conteudo != null) { conteudo = conteudo.trim() } else { conteudo = "" }
+    document.getElementById('pt_nome').value = conteudo ;
+	conteudo = Link[0].Provedor_Nome;
+    if ( conteudo != null) { conteudo = conteudo.trim() } else { conteudo = "" }
+    document.getElementById('pt_ProvedorNome').value = conteudo ;
+	conteudo = Link[0].ProvDesig;
+    if ( conteudo != null) { conteudo = conteudo.trim() } else { conteudo = "" }
+    document.getElementById('pt_ProvDesig').value = conteudo ;
+
+    //Numeros
+	conteudo = Link[0].ClienteID;
+    document.getElementById('ctq_ID').value = conteudo ;
+	conteudo = Link[0].Provedor_ID;
+    document.getElementById('INC_ProvID').value = conteudo ;
+	conteudo = Link[0].ID;
+    document.getElementById('INC_PontoId').value = conteudo ;
+
+
+
+    document.getElementById('INC_Motivo').value = '' ;
+
+
+}
+function fnIncCreate(OP){
+    // var tkd_Empresa ;
+    // var tkd_Login ;
+    let INC_Link_ID        = Number(Link_ID);
+    let INC_Ticket         = document.getElementById('INC_Ticket').value;
+    let INC_DataAbertura   = document.getElementById('INC_DataAbertura').value;
+    let INC_Designacao     = document.getElementById('INC_Designacao').value;
+    let INC_Origem         = document.getElementById('INC_Origem').value;
+    let INC_SolEmpresa     = document.getElementById('Empresa').value;
+    let INC_SolFuncionario = document.getElementById('INC_SolFuncionario').value;
+    let INC_SolContato     = document.getElementById('INC_SolContato').value;
+    let INC_PontoId        = Number(document.getElementById('INC_PontoId').value);
+    let INC_ClienteID      = Number(document.getElementById('ctq_ID').value);
+    let INC_ProvID         = Number(document.getElementById('INC_ProvID').value);
+    let INC_ProvTicket     = document.getElementById('INC_ProvTicket').value;
+    let INC_ProvDtabertua  = document.getElementById('INC_ProvDtabertua').value;
+    let INC_ProvVia        = document.getElementById('INC_ProvVia').value;
+    let INC_ProvContato    = document.getElementById('INC_ProvContato').value;
+    let INC_ProvTelefone   = document.getElementById('INC_ProvTelefone').value;
+    let INC_ProvEmail      = document.getElementById('INC_ProvEmail').value;
+    let INC_Status         = document.getElementById('INC_Status').value;
+    let INC_Motivo         = document.getElementById('INC_Motivo').value;
+    let INC_Obs            = document.getElementById('INC_Obs').value;
+    let INC_PontoNome      = document.getElementById('pt_nome').value;
+    let INC_Alarme         = document.getElementById('INC_Alarme').value;
+
+    var jsdata = {"tkd_Empresa":tkd_Empresa,"tkd_Login":tkd_Login,"INC_Link_ID":INC_Link_ID,"INC_Ticket":INC_Ticket,"INC_DataAbertura":INC_DataAbertura,"INC_Designacao":INC_Designacao,"INC_PontoId":INC_PontoId,"INC_Origem":INC_Origem,"INC_SolEmpresa":INC_SolEmpresa,"INC_SolFuncionario":INC_SolFuncionario,"INC_SolContato":INC_SolContato,"INC_ClienteID":INC_ClienteID,"INC_ProvID":INC_ProvID,"INC_ProvTicket":INC_ProvTicket,"INC_ProvDtabertua":INC_ProvDtabertua,"INC_ProvVia":INC_ProvVia,"INC_ProvContato":INC_ProvContato,"INC_ProvTelefone":INC_ProvTelefone,"INC_ProvEmail":INC_ProvEmail,"INC_Status":INC_Status,"INC_Motivo":INC_Motivo,"INC_Obs":INC_Obs,"INC_PontoNome":INC_PontoNome,"INC_Alarme":INC_Alarme}
+    var JdataS= JSON.stringify(jsdata)
+    var jdata = JSON.parse(JdataS);
+    console.log(jdata);
+
+    const header  = document.querySelector('header');
+    const section = document.querySelector('section');
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json');
+    headers.append('Access-Control-Allow-Origin', host );
+    headers.append('Access-Control-Allow-Credentials', 'true');
+    headers.append('GET', 'POST','PUT', 'OPTIONS');
+    headers.append('Upgrade-Insecure-Requests', '1');
+        //headers.append('X-CSRFToken', csrftoken);
+    var requestURL = host + '/IncCreate/CREATE';
+    var request = new XMLHttpRequest();
+    request.open('POST', requestURL, true);
+    request.responseType = 'json';
+    request.send(JSON.stringify(jdata));
+
+   request.onload = function() {
+       var resp_post = request.response;
+       // Trata Resposta
+       var status = request.status;
+       if (status == 200) {
+           alert("Incidente  Criado");
+           console.log(resp_post);
+           conteudo = resp_post;
+           if (conteudo != null) {
+               INC_ID = conteudo;
+               console.log(INC_ID);
+               fnOpen_Incidente(INC_ID)
+           }
+           // ContratoGetList(jsd_id);
+       }
+       if (status != 200) { alert("Erro  : " + status.toString()) }
+   }
+
+
+
+}
+
+function fnOpen_Incidente(w_id){
+    //console.log(w_id);
+    var URL = 'NocIncidente.html?INC_ID='+w_id;
+    window.open( URL , "_blank");
+}
+
+
+</script>

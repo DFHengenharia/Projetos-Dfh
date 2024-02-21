@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+	<meta charset="utf-8">
+    <!--<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">-->
+    <!-- plugins:css -->
+
+	<link rel="shortcut icon" href="Public/Imagens/favicon.png" />
+    <link rel="stylesheet" href="Public/css/style.css">	
+	<link rel="stylesheet" href="Public/css/main.css">
+	<link rel="stylesheet" href="Public/css/style_a.css">
+    <link rel="stylesheet" href="Public/css/table.css">
+    <script src="Public/js/geral.js" type="text/javascript"></script>
+	<script src="https://kit.fontawesome.com/ddc0eccd46.js" crossorigin="anonymous"></script>
+    
+	    <!-- Bootstrap -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+    <!-- JQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <!--    Cookies 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js" integrity="sha512-3j3VU6WC5rPQB4Ld1jnLV7Kd5xr+cq9avvhwqzbH/taCRNURoeEpoPBK9pDyeukwSxwRPJ8fDgvYXd6SkaZ2TA==" crossorigin="anonymous"></script>  -->
+    <script type="text/javascript" src="Public/js/jquery.cookie.min.js" ></script>
+    
+
+    <script type="text/javascript"> 
+        if(typeof jQuery === 'undefined'){
+              console.log('no jQuery');
+                var head = document.getElementsByTagName('head')[0];
+                var script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.src = 'Public/js/jquery-3.6.0.min.js';
+                script.onload = handler;
+                head.appendChild(script);
+            }else{console.log('jQuery is embedded!');}
+    function handler(){ console.log('jquery added :)'); }
+    </script>
+
+    <script type="text/javascript" src="../local/conf.json"></script>
+    <script type="text/javascript">
+        var host = 'http://127.0.0.1:8000';
+        var sdw_ambiente = "DEV";
+        var sdw_owner = "DFH";
+        if (conf) { var config = JSON.parse(conf); }
+        if (config) {
+            host = config[0].server;
+            sdw_ambiente = config[0].ambiente ;
+            sdw_owner = config[0].HEAD;
+           }
+        console.log("Ambiente : " + sdw_ambiente + " | Owner : " + sdw_owner +  " | Server : "+ host);
+    </script>
+
+</head>
+
+<body onload="loadWindow()">
+<div>
+    <!--    HEADER DO FORM  -->
+    <nav class="nav_dfh" id="nav_dfh">
+        <div>
+            <a class="logo_dfh" href="http://dfhnegocios.com.br/"> <img src="Public/Imagens/DHF_logo.png" alt="logo"  /></a>
+        </div>
+        <div class="topo_center">
+            <p style="text-align: center; font-size: 32px; color: lightskyblue"> Portal SD WAN - Adm</p>
+            <!-- <p style="text-align: center; font-size: 32px; color: Silver"> Portal SD WAN - Adm</p> -->
+        </div>
+	</nav>
+    <nav class="nav_top" id="nav_top" hidden>
+        <div>
+            <a class="logo" href="http://talkd.com.br/"> <img src="Public/Imagens/logo_original_final_branco.png" alt="logo"  /></a>
+        </div>
+        <div class="topo_center">
+            <p style="text-align: center; font-size: 36px; color: ghostwhite"> Portal SD WAN - Adm</p>
+        </div>
+	</nav>
+	<!-- Menu Principal -->
+	<div class="menu_top">
+		<ul>
+			<li><a href="close.html">Sair</a></li>
+			<li><a onclick="fnConsoleR()" >Console</a></li>
+		</ul>
+	</div><br>   
+    
+        <!--    FORMULARIO  -->    
+    <div style = "width: 100%;  display: flex; flex-direction: row; flex-wrap: wrap">
+    <div>
+    <div class="block_form">
+        <form>
+            <p>Cadastro de Clientes e Marcas</p>
+        <fieldset>
+            <label style = "width: 80px" for="sel_Empresa" id = "lab_Empresa">Empresa</label>
+            <select style = "width: 200px"  name = "sel_Empresa" id = "sel_Empresa" ></select>
+            <br>
+
+            <div id="mytableClientes" class="table table-striped table-bordered table-sm" style = "overflow-y:scroll; height:238px; width: 100%"></div>
+            
+            <div style=" display: inline-block; padding: 2px; width: 100% ; background-color: floralwhite">
+                <label style = "width: 80px" for="emp_nome">Nome</label>
+                    <input style = "width: 460px" class="field" id="emp_nome" type="text" maxlength="80">
+                <label style = "width: 50px" for="emp_cnpj">CNPJ</label>
+                    <input style = "width: 140px" class="field" id="emp_cnpj" type="text" maxlength="18">
+                <label style = "width: 46px" for="emp_status">Status</label>
+                        <select style = "width: 170px"  name = "emp_status" id = "emp_status" required>
+                            <option value="">Status</option>
+                            <option value="0">INATIVO</option>
+                            <option value="1">ATIVO</option>
+                        </select>
+            <br>
+            </div>
+
+            <div style=" display: inline-block; padding: 2px; width: 100% ; background-color: ghostwhite">
+                <div style="padding: 4px; display: inline-block; vertical-align: top; width: 75%; background-color: white">
+                    <label style = "width: 76px" for="emp_razao_social">Razão Social</label>
+                        <input style = "width: 660px" class="field" id="emp_razao_social" type="text" maxlength="180">
+                    <br>
+                    <label style = "width: 76px" for="emp_endereco">Endereço</label>
+                        <input style = "width: 660px" class="field" id="emp_endereco" type="text" maxlength="200"><br>
+                    <label style = "width: 76px" for="emp_estado">Estado</label>
+                        <input style = "width: 40px" class="field" id="emp_estado" type="text" readonly>
+                            <select style = "width: 20px" name = "sel_estado" id="sel_estado">
+                                <option value=""> Selecione</option>
+                                <option value="AC"> Acre </option>
+                                <option value="AL"> Alagoas </option>
+                                <option value="AM"> Amazonas </option>
+                                <option value="AP"> Amapa </option>
+                                <option value="BA"> Bahia </option>
+                                <option value="CE"> Ceara </option>
+                                <option value="DF"> Distrito Federal </option>
+                                <option value="ES"> Espirito Santo </option>
+                                <option value="GO"> Goiania </option>
+                                <option value="AP"> Amapa </option>
+                                <option value="MA"> Maranhão </option>
+                                <option value="MG"> MInas Gerais </option>
+                                <option value="MS"> Mato Grosso Sul </option>
+                                <option value="MT"> Mato Grosso </option>
+                                <option value="PA"> Para </option>
+                                <option value="PB"> Paraiba </option>
+                                <option value="PE"> Pernambuco </option>
+                                <option value="PI"> Piaui </option>
+                                <option value="PR"> Parana </option>
+                                <option value="RJ"> Rio de Janeiro </option>
+                                <option value="RN"> Rio Grande do Norte </option>
+                                <option value="RO"> Rondonia </option>
+                                <option value="RR"> Roraima </option>
+                                <option value="RS"> Rio Grande do Sul </option>
+                                <option value="SC"> Santa Catarina </option>
+                                <option value="SE"> Sergipe </option>
+                                <option value="SP"> São Paulo </option>
+                                <option value="TO"> Tocantis </option>
+                            </select>
+                    <label style = "width: 50px" for="emp_cidade">Cidade</label>
+                        <input style = "width: 212px" class="field" id="emp_cidade" type="text" maxlength="60">
+                    <label style = "width: 38px" for="emp_pais">Pais</label>
+                        <input style = "width: 80px" class="field" id="emp_pais" type="text" maxlength="30">
+                    <label style = "width: 40px" for="emp_cep">CEP</label>
+                        <input style = "width: 110px" class="field" id="emp_cep" type="text" maxlength="10">
+                    <br>
+                    <label style = "width: 76px" for="emp_site">Site</label>
+                        <input style = "width: 660px" class="field" id="emp_site" type="text" maxlength="200">
+                    <br>
+                    <label style = "width: 76px" for="emp_comentarios">Comentários</label>
+                        <input style = "width: 660px" class="field" id="emp_comentarios" type="text" maxlength="200">
+                    <br>
+                    <label style = "width: 80px" for="emp_ID">ID</label><input style = "width: 60px" class="field" id="emp_ID" type="text" readonly>
+                    <label style = "width: 78px; border: 0px" for="emp_data_atua">Atualizado em </label>
+                           <input style = "width: 140px" class="field" id="emp_data_atua" type="date" readonly>
+                    <label style = "width: 25px" for="emp_login">Por</label>
+                           <input style = "width: 120px" class="field" id="emp_login" type="text" readonly>
+                    <br>
+                    <div style = "padding-left: 80px">
+                        <input class="button buttonS3" type="button" value="Inserir Novo" onclick="CriarCliente()">
+                        <input class="button buttonS3" type="button" value="Limpar" onclick="Clear()">
+                        <input class="button buttonS1" type="button" value="Atualizar" onclick="AtualizarCliente()">
+                    </div>
+
+
+                </div>
+                <div style="padding: 4px; display: inline-block; vertical-align: top; width: 24%; background-color: white">
+                    <!-- ********************************** MARCAS **************************************************** -->
+                    <!-- ********************************** MARCAS **************************************************** -->
+                    <div id="mytabMarcas" class="table table-striped table-bordered table-sm" style = "height:190px;width: 100%"></div>
+                    <input style = "width: 152px" class="field" id="Marca" type="text" maxlength="30">
+
+                    <a id="btMarcaInsert" href="#" onclick="fnMarcas('INSERT',0)" style="padding-left: 6px; font-size: 14px"><i class="fas fa-plus"><span>&nbsp;</span></i></a>
+                    <a id="btMarcaDelete" href="#" onclick="fnMarcas('DELETE',0)" style="padding-left: 6px; font-size: 14px; color: darkred"><i class="fas fa-minus"><span>&nbsp;</span></i></a>
+                    <a id="btMarcaSave"   href="#" onclick="fnMarcas('UPDATE',0)" style="padding-left: 6px; font-size: 14px; color: green"><i class="fas fa-save"><span>&nbsp;</span></i></a>
+
+
+               </div>
+          </div>
+                <p>Contatos</p>
+
+                    <div id="mytableContatos" class="table table-striped table-bordered table-sm" style = "overflow-y:scroll; height:136px; width: 100%"></div>
+
+                    <label style = "width: 80px" for="emp_c_nome">Nome</label><input style = "width: 120px" class="field" id="emp_c_nome" type="text">
+                    <label style = "width: 70px" for="emp_c_sobrenome">Sobrenome</label><input style = "width: 180px" class="field" id="emp_c_sobrenome" type="text">
+                    <label style = "width: 90px" for="emp_c_nome_completo">Nome Completo</label><input style = "width: 270px" class="field" id="emp_c_nome_completo" type="text">
+                    <label style = "width: 40px" for="emp_valid_id">Status</label>
+                            <select style = "width: 90px"  name = "emp_c_valid_id" id = "emp_c_valid_id">
+                                <option value="">Status</option>
+                                <option value="0">INATIVO</option>
+                                <option value="1">ATIVO</option>
+                            </select>
+                        <br>
+                    <label style = "width: 80px" for="emp_c_telefone">Telefone</label><input style = "width: 140px" class="field" id="emp_c_telefone" type="text">
+                    <label style = "width: 50px" for="emp_c_celular">Celular</label><input style = "width: 140px" class="field" id="emp_c_celular" type="text">
+                    <label style = "width: 40px" for="emp_c_email">Email</label><input style = "width: 512px" class="field" id="emp_c_email" type="text">
+                    <br>
+                    <label style = "width: 80px" for="emp_c_endereco">Endereço</label><input style = "width: 920px" class="field" id="emp_c_endereco" type="text">
+                    <label style = "width: 80px" for="emp_c_estado">Estado</label><input style = "width: 40px" class="field" id="emp_c_estado" type="text" readonly>
+                        <select style = "width: 20px" name = "sel_estado" id="sel_c_estado">
+                            <option value=""> Selecione</option>
+                            <option value="AC"> Acre </option>
+                            <option value="AL"> Alagoas </option>
+                            <option value="AM"> Amazonas </option>
+                            <option value="AP"> Amapa </option>
+                            <option value="BA"> Bahia </option>
+                            <option value="CE"> Ceara </option>
+                            <option value="DF"> Distrito Federal </option>
+                            <option value="ES"> Espirito Santo </option>
+                            <option value="GO"> Goiania </option>
+                            <option value="AP"> Amapa </option>
+                            <option value="MA"> Maranhão </option>
+                            <option value="MG"> MInas Gerais </option>
+                            <option value="MS"> Mato Grosso Sul </option>
+                            <option value="MT"> Mato Grosso </option>
+                            <option value="PA"> Para </option>
+                            <option value="PB"> Paraiba </option>
+                            <option value="PE"> Pernambuco </option>
+                            <option value="PI"> Piaui </option>
+                            <option value="PR"> Parana </option>
+                            <option value="RJ"> Rio de Janeiro </option>
+                            <option value="RN"> Rio Grande do Norte </option>
+                            <option value="RO"> Rondonia </option>
+                            <option value="RR"> Roraima </option>
+                            <option value="RS"> Rio Grande do Sul </option>
+                            <option value="SC"> Santa Catarina </option>
+                            <option value="SE"> Sergipe </option>
+                            <option value="SP"> São Paulo </option>
+                            <option value="TO"> Tocantis </option>
+                        </select>
+
+                    <label style = "width: 60px" for="emp_c_cidade">Cidade</label><input style = "width: 200px" class="field" id="emp_c_cidade" type="text">
+                    <label style = "width: 40px" for="emp_c_pais">Pais</label><input style = "width: 100px" class="field" id="emp_c_pais" type="text">
+                    <label style = "width: 40px" for="emp_c_cep">CEP</label><input style = "width: 110px" class="field" id="emp_c_cep" type="text">
+                        <br>
+                    <label style = "width: 80px" for="emp_c_comentarios">Comentários</label><input style = "width: 920px" class="field" id="emp_c_comentarios" type="text">
+                        <br>
+                    <label style = "width: 80px" for="emp_login">Login</label><input style = "width: 140px" class="field" id="emp_c_login" type="text">
+
+                    <input class="button buttonS4" type="button" value="Excluir" onclick="Contato('DELETE')">
+                    <input class="button buttonS3" type="button" value="Inserir Novo" onclick="Contato('INSERT')">
+                    <input class="button buttonS3" type="button" value="Limpar" onclick="ClearContatos()">
+                    <input class="button buttonS1" type="button" value="Atualizar" onclick="Contato('UPDATE')">
+
+
+        </fieldset>
+        </form>    
+        </div>
+    <div class="block_form"   hidden >
+            <form>
+            <fieldset>
+
+                <p> Dados Internos</p>
+                <label style = "width: 80px" for="MA_ID">ID MARCA</label><input style = "width: 80px" class="field" id="MA_ID" type="number">
+                      <select style = "width: 20px" name = "mnMarca" id="mnMarca"></select>
+
+                <label style = "width: 80px" for="Empresa">Empresa</label><input style = "width: 120px" class="field" id="Empresa" type="text">
+                <label style = "width: 80px" for="emp_c_ID">IC Contatos</label><input style = "width: 60px" class="field" id="emp_c_ID" type="text" readonly>
+                
+                <label style = "width: 80px" for="emp_valid_id">Valid</label><input style = "width: 80px" class="field" id="emp_valid_id" type="text">
+                <label style = "width: 80px" for="emb_resultado">Resposta</label><input style = "width: 80px" class="field" id="emb_resultado" type="text">
+                    <br>
+                
+            </fieldset>
+            </form>
+    </div>
+    </div>
+            <div class="block_col">
+               <h1>Talkd </h1><hr>
+               <p>Usuário</p>
+               <label>Login</label><br> <input class="field" id="user_Login" type="email" readonly>
+               <label>Nome</label><br> <input class="field" id="user_Nome" type="email" readonly>  
+               <label>Empresa</label><br> <input class="field" id="user_Empresa" type="textbox" value="Empresa...." readonly>  
+               <hr><br> 
+            </div>           
+    </div>
+        
+        
+</div>
+<br>
+</body>
+<footer>
+    <div class="footer" style = "width: 100%; height: 26px ; border: 0px; padding: 1px">
+        <pre style="font-size:14px; padding: 2px" ><b style="font-size:16px" >&nbsp;&nbsp;&nbsp;Talkd</b> | Rua Salvador Simões, 801 sl. 1302 - São Paulo-SP  | TEL.: +55 11 3738-6128 | <b style="font-size:16px" >Evolua</b> de forma positiva a jornada de relacionamento com seus clientes. 
+        </pre>
+    </div>
+</footer>
+    
+    
+<!--  ------------------ JAVA SCRIPT --------------  -->
+<script type="text/javascript">
+  var tkd_Empresa ;
+  var tkd_Login ;
+  var tkd_TKN ;
+
+
+
+function loadWindow(){
+    loadSession(tkd_Empresa);
+    if ( tkd_Empresa == undefined ) { window.open( '404.html' , "_blank"); };
+    if ( tkd_Empresa != 'TALKD' &&  tkd_Empresa != 'DFH') { sel_Empresa.setAttribute("hidden","true");
+                                   // lab_Empresa.setAttribute("hidden","true");
+                                   document.getElementById('Empresa').value = tkd_Empresa ;
+                                   Clientes();
+    }
+    menuEmpresas("sel_Empresa");
+}
+
+document.getElementById("sel_estado").addEventListener("change", function(){ 
+        var c_id = document.getElementById('sel_estado').value;
+        if (c_id != null) { document.getElementById('emp_estado').value = c_id };
+});
+document.getElementById("sel_c_estado").addEventListener("change", function(){ 
+        var c_id = document.getElementById('sel_c_estado').value;
+        if (c_id != null) { document.getElementById('emp_c_estado').value = c_id };
+});
+
+document.getElementById("sel_Empresa").addEventListener("change", function(){ 
+        var c_emp = document.getElementById('sel_Empresa').value;
+        if ( c_emp != null) { document.getElementById('Empresa').value = c_emp };
+        Clientes();
+});
+document.getElementById("mnMarca").addEventListener("change", function(){
+        var c_id = document.getElementById('mnMarca').value;
+        if ( c_id != null) { document.getElementById('MA_ID').value = c_id }
+        var elemento = document.getElementById('mnMarca');
+        var c_nome = elemento.options[elemento.selectedIndex].innerHTML;
+        if ( c_nome != null) { document.getElementById('Marca').value = c_nome }
+});
+ 
+    
+function Clientes(){
+    var fc_empresa = document.getElementById('Empresa').value;
+    //var fc_empresa = "HUGHES";
+
+        const header  = document.querySelector('header');
+        const section = document.querySelector('section');
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('Accept', 'application/json');
+        headers.append('Access-Control-Allow-Origin', '*' );
+        headers.append('Access-Control-Allow-Credentials', 'true');
+        headers.append('GET', 'POST', 'OPTIONS');
+        headers.append('Upgrade-Insecure-Requests', '1');
+        headers.append('Content-Security-Policy', 'upgrade-insecure-requests');
+
+        var requestURL = host + '/clientes/'+fc_empresa+'/0/';
+        //console.log(requestURL);
+        var request = new XMLHttpRequest();
+        request.open('GET', requestURL, true);
+        request.responseType = 'json';
+        request.send();	
+
+            request.onload = function() { 
+                var resp_post = request.response;
+                //console.log(resp_post) ;
+                c_table(resp_post);
+            }
+}
+    
+function c_table(jsonObj) {
+    var lugares = jsonObj;
+	console.log(lugares);
+    while ( mytableClientes.hasChildNodes()) { mytableClientes.removeChild( mytableClientes.lastChild); };
+    var mybody = document.getElementsByTagName("mytableClientes")[0];
+    mytablebody = document.createElement("tbody");    
+	   
+	// --- Cabeçalho da tabela 
+    t_colunas = ["ID","Nome", "Razão Social","Status","" ];
+	myheader=document.createElement("tr");
+        
+	var zcol_count = t_colunas.length;		
+	for(var zcol = 0; zcol < zcol_count ; zcol++) {
+		mycurrent_header=document.createElement("th");
+		currentheader = document.createTextNode(t_colunas[zcol]);
+		mycurrent_header.appendChild(currentheader);
+		myheader.appendChild(mycurrent_header);		
+	}
+		
+	   // --- Corpo  da tabela         
+        mytablebody.appendChild(myheader);
+		    for(var g_i = 0; g_i < lugares.length ; g_i++) {
+			   mycurrent_row = document.createElement("tr"); 
+
+               	   mycurrent_cell = document.createElement("td");
+                   mycurrent_cell.setAttribute("style", "word-wrap: break-word; font-size: 10px; width: 8%");
+                   conteudo = lugares[g_i].ID;
+				   currenttext = document.createTextNode(conteudo);
+				   mycurrent_cell.appendChild(currenttext);
+				   mycurrent_row.appendChild(mycurrent_cell);
+
+				   mycurrent_cell = document.createElement("td");
+                   mycurrent_cell.setAttribute("style", "word-wrap: break-word; font-size: 12px; width: 30%");
+                   conteudo = lugares[g_i].nome;
+				   currenttext = document.createTextNode(conteudo);
+				   mycurrent_cell.appendChild(currenttext);
+				   mycurrent_row.appendChild(mycurrent_cell);
+
+				   mycurrent_cell = document.createElement("td");
+                   mycurrent_cell.setAttribute("style", "word-wrap: break-word; font-size: 12px; width: 54%");
+                   conteudo = lugares[g_i].razao_social;
+				   currenttext = document.createTextNode(conteudo);
+				   mycurrent_cell.appendChild(currenttext);
+				   mycurrent_row.appendChild(mycurrent_cell);
+				
+				   mycurrent_cell = document.createElement("td");
+                   mycurrent_cell.setAttribute("style", "word-wrap: break-word; font-size: 14px; width: 18%");
+                   status = lugares[g_i].valid_id;
+				   if ( status == 1 ) { conteudo = 'Ativo'} else { conteudo = 'Inativo'}
+				   currenttext = document.createTextNode(conteudo);
+				   mycurrent_cell.appendChild(currenttext);
+				   mycurrent_row.appendChild(mycurrent_cell);
+
+                   mycurrent_cell = document.createElement("td");
+                   mycurrent_cell.setAttribute("style", "word-wrap: break-word; font-size: 12px; width: 10%");
+                   conteudo = lugares[g_i].ID;
+			   	   currenttext = document.createTextNode('');
+                   mycurrent_cell.setAttribute("ID",'btn_'+(conteudo));
+                   var click = 'ClientesDet('+(conteudo)+')';
+                   mycurrent_cell.setAttribute("ID",'btn_'+(g_i+1));
+                   var btn_ID = lugares[g_i].ID;
+                   click = 'ClientesDet('+btn_ID+')';
+                   mycurrent_cell.setAttribute("onclick", click);
+                   mycurrent_cell.setAttribute("class", "fas fa-edit"); 
+				   mycurrent_cell.appendChild(currenttext);
+				   mycurrent_row.appendChild(mycurrent_cell);
+
+			 mytablebody.appendChild(mycurrent_row);
+		   }
+       mytableClientes.appendChild(mytablebody);
+
+}	
+    
+    
+ function ClientesDet(ID){
+    var fc_empresa = document.getElementById('Empresa').value;
+
+        const header  = document.querySelector('header');
+        const section = document.querySelector('section');
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('Accept', 'application/json');
+        headers.append('Access-Control-Allow-Origin', '*' );
+        headers.append('Access-Control-Allow-Credentials', 'true');
+        headers.append('GET', 'POST', 'OPTIONS');
+        headers.append('Upgrade-Insecure-Requests', '1');
+
+        var requestURL = host + '/clientes/'+fc_empresa+'/'+ID+'/';
+        //console.log(requestURL);
+        var request = new XMLHttpRequest();
+        request.open('GET', requestURL, true);
+        request.responseType = 'json';
+        request.send();	
+
+            request.onload = function() { 
+                var resp_post = request.response;
+                //console.log(resp_post) ;
+                
+                emp_ID =  resp_post[0].ID;
+                document.getElementById('emp_ID').value = emp_ID ;
+
+                conteudo =  resp_post[0].cep;
+                if (conteudo != null) { conteudo = conteudo.trim() };
+                document.getElementById('emp_cep').value = conteudo ;
+                
+                conteudo =  resp_post[0].cidade;
+                if (conteudo != null) { conteudo = conteudo.trim() };
+                document.getElementById('emp_cidade').value = conteudo ;                
+
+                conteudo =  resp_post[0].cnpj;
+                if (conteudo != null) { conteudo = conteudo.trim() };
+                document.getElementById('emp_cnpj').value = conteudo ;                  
+                
+                conteudo =  resp_post[0].comentarios;
+                  if (conteudo != null) { conteudo = conteudo.trim() };
+                document.getElementById('emp_comentarios').value = conteudo ;                  
+
+                conteudo =  resp_post[0].endereco;
+                if (conteudo != null) { conteudo = conteudo.trim() };
+                document.getElementById('emp_endereco').value = conteudo ; 
+                
+                conteudo =  resp_post[0].estado;
+                if (conteudo != null) { conteudo = conteudo.trim() };
+                document.getElementById('emp_estado').value = conteudo ;                 
+                
+                conteudo =  resp_post[0].nome;
+                if (conteudo != null) { conteudo = conteudo.trim() };
+                document.getElementById('emp_nome').value = conteudo ;                  
+
+                conteudo =  resp_post[0].pais;
+                if (conteudo != null) { conteudo = conteudo.trim() };
+                document.getElementById('emp_pais').value = conteudo ;                  
+
+                conteudo =  resp_post[0].razao_social;
+                if (conteudo != null) { conteudo = conteudo.trim() };
+                document.getElementById('emp_razao_social').value = conteudo ;                  
+
+                conteudo =  resp_post[0].site;
+                 if (conteudo != null) { conteudo = conteudo.trim() };
+                document.getElementById('emp_site').value = conteudo ;                  
+                
+                conteudo =  resp_post[0].valid_id;
+                if (conteudo != null) { document.getElementById('emp_status').value = conteudo 
+                                        document.getElementById("emp_status").selectedIndex =  conteudo + 1 ;
+                                      };
+                
+                conteudo =  resp_post[0].updated_by;
+                if (conteudo != null) { conteudo = conteudo.trim() };
+                document.getElementById('emp_login').value = conteudo ;                  
+                          
+                // Data       
+                var DataAt = new Date();
+                DataAt = EpochToDate(resp_post[0].updated_date);
+                if (DataAt != null) { document.getElementById('emp_data_atua').value = DataAt } else { document.getElementById('emp_data_atua').value = "" } ;
+                
+                Contatos();
+                ClearContatos();
+                fnMarcas('LISTAR');
+                fnMenuMarcas(emp_ID);
+            }        
+}   
+    
+
+    
+ function AtualizarCliente(){   
+    var js_id   = document.getElementById('emp_ID').value;
+    if ( js_id == "" ) { alert( "Selecione um Cliente para atualizar" );}
+    else { 
+        var js_nome = document.getElementById('emp_nome').value;
+        var js_stat = document.getElementById('emp_status').value;
+        var js_raso = document.getElementById('emp_razao_social').value;
+        var js_cnpj = document.getElementById('emp_cnpj').value;
+        var js_ende = document.getElementById('emp_endereco').value;
+        var js_esta = document.getElementById('emp_estado').value;
+        var js_cida = document.getElementById('emp_cidade').value;
+		var js_pais = document.getElementById('emp_pais').value;
+		var js_cep  = document.getElementById('emp_cep').value;
+		var js_site = document.getElementById('emp_site').value;
+		var js_come = document.getElementById('emp_comentarios').value;
+        var js_uplo = tkd_Login ;
+
+        var jsdata ={"js_id":js_id,"js_nome":js_nome,"js_stat":js_stat,"js_raso":js_raso,"js_cnpj":js_cnpj,"js_ende":js_ende,"js_esta":js_esta,"js_cida":js_cida,"js_pais":js_pais,"js_cep":js_cep,"js_site":js_site,"js_come":js_come,"js_uplo":js_uplo};
+
+        var JdataS= JSON.stringify(jsdata)
+        var jdata = JSON.parse(JdataS);
+        console.log(jdata);
+        const header  = document.querySelector('header');
+        const section = document.querySelector('section');
+        //const csrftoken = Cookies.get('csrftoken');
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('Accept', 'application/json');
+        headers.append('Access-Control-Allow-Origin', '*' );
+        headers.append('Access-Control-Allow-Credentials', 'true');
+        headers.append('Upgrade-Insecure-Requests', '1');
+        headers.append('Access-Control-Allow-Methods','PUT');
+        //headers.append('X-CSRFToken', csrftoken);
+
+        var requestURL = host + '/cliente/1' ;
+        var request = new XMLHttpRequest();
+        request.open('POST', requestURL, true);
+        request.responseType = 'json';
+        request.send(JSON.stringify(jdata));		
+
+        request.onload = function() { var resp_post = request.response;
+                                      var status = request.status;
+                                      console.log(resp_post);
+                                     if ( status == 200 ) { Clear();
+                                                            alert( " Atualizado" );
+                                                            emb_resultado.setAttribute("Value", resp_post );}
+                                         else { alert( "Erro  : " + status.toString() ) };
+                                    }
+    }
+}
+    
+function CriarCliente(){
+    var js_id   = document.getElementById('emp_ID').value;
+
+    var js_nome = document.getElementById('emp_nome').value;
+    var js_stat = document.getElementById('emp_status').value;
+    var js_raso = document.getElementById('emp_razao_social').value;
+    var js_cnpj = document.getElementById('emp_cnpj').value;
+    var js_ende = document.getElementById('emp_endereco').value;
+    var js_esta = document.getElementById('emp_estado').value;
+    var js_cida = document.getElementById('emp_cidade').value;
+    var js_pais = document.getElementById('emp_pais').value;
+    var js_cep  = document.getElementById('emp_cep').value;
+    var js_site = document.getElementById('emp_site').value;
+    var js_come = document.getElementById('emp_comentarios').value;
+    var js_uplo = sessionStorage.getItem('tkd_Login');
+    var js_empr = document.getElementById('Empresa').value;
+    if (js_stat == '') {js_stat = '1'}
+
+    var jsdata ={"js_id":js_id,"js_nome":js_nome,"js_stat":js_stat,"js_raso":js_raso,"js_cnpj":js_cnpj,"js_ende":js_ende,"js_esta":js_esta,"js_cida":js_cida,"js_pais":js_pais,"js_cep":js_cep,"js_site":js_site,"js_come":js_come,"js_uplo":js_uplo,"js_empr":js_empr};
+
+    var JdataS= JSON.stringify(jsdata)
+    var jdata = JSON.parse(JdataS);
+    // console.log(jdata);
+    const header  = document.querySelector('header');
+    const section = document.querySelector('section');
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json');
+    headers.append('Access-Control-Allow-Origin', '*' );
+    headers.append('Access-Control-Allow-Credentials', 'true');
+    headers.append('Upgrade-Insecure-Requests', '1');
+    headers.append('Access-Control-Allow-Methods','PUT');
+
+    var requestURL = host + '/cliente/0' ;
+    var request = new XMLHttpRequest();
+    request.open('POST', requestURL, true);
+    request.responseType = 'json';
+    request.send(JSON.stringify(jdata));		
+
+    request.onload = function() { var resp_post = request.response;
+                                  var status = request.status;
+                                  //console.log(resp_post);
+                                 if ( status == 200 ) { Clear();
+                                                        alert( "Cliente Inserido na base " );
+                                                        Clientes();
+                                                        emb_resultado.setAttribute("Value", resp_post );}
+                                     else { alert( "Erro  : " + status.toString() ) };
+                                }
+
+}      
+    
+function Clear(){
+    document.getElementById("emp_status").selectedIndex = 0 ;
+    document.getElementById('emp_ID').value = "";
+    document.getElementById('emp_cep').value = "";
+    document.getElementById('emp_cidade').value = "";
+    document.getElementById('emp_cnpj').value = "";
+    document.getElementById('emp_comentarios').value = "";
+    document.getElementById('emp_endereco').value = "";
+    document.getElementById('emp_estado').value = "";
+    document.getElementById('emp_nome').value = "";
+    document.getElementById('emp_pais').value = "";
+    document.getElementById('emp_razao_social').value = "";
+    document.getElementById('emp_site').value = "";
+    document.getElementById('emp_valid_id').value = "";
+    document.getElementById('emp_login').value = "";
+}
+    
+    
+   
+    
+    
+ function Contatos(){
+    //var fc_empresa = document.getElementById('Empresa').value;
+    var emp_id = document.getElementById('emp_ID').value;
+        const header  = document.querySelector('header');
+        const section = document.querySelector('section');
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('Accept', 'application/json');
+        headers.append('Access-Control-Allow-Origin', '*' );
+        headers.append('Access-Control-Allow-Credentials', 'true');
+        headers.append('GET', 'POST', 'OPTIONS');
+        headers.append('Upgrade-Insecure-Requests', '1');
+
+        var requestURL = host + '/clientePeoples/'+emp_id;
+        //console.log(requestURL);
+        var request = new XMLHttpRequest();
+        request.open('GET', requestURL, true);
+        request.responseType = 'json';
+        request.send();	
+
+            request.onload = function() { 
+                var resp_post = request.response;
+                //console.log(resp_post) ; 
+                contatos_table(resp_post);
+            }
+}   
+   
+function contatos_table(jsonObj) {
+    var lugares = jsonObj;
+    while ( mytableContatos.hasChildNodes()) { mytableContatos.removeChild( mytableContatos.lastChild); };
+    var mybody = document.getElementsByTagName("mytableClientes")[0];
+    mytablebody = document.createElement("tbody");    
+	   
+	// --- Cabeçalho da tabela 
+    t_colunas = ["Nome","Sobrenome","Telefone","Celular","Email","Detalhes" ];
+	myheader=document.createElement("tr");
+        
+	var zcol_count = t_colunas.length;		
+	for(var zcol = 0; zcol < zcol_count ; zcol++) {
+		mycurrent_header=document.createElement("th");
+		currentheader = document.createTextNode(t_colunas[zcol]);
+		mycurrent_header.appendChild(currentheader);
+		myheader.appendChild(mycurrent_header);		
+	}
+	   // --- Corpo  da tabela         
+        mytablebody.appendChild(myheader);
+		    for(var g_i = 0; g_i < lugares.length ; g_i++) {
+			   mycurrent_row = document.createElement("tr"); 
+ 
+            
+				mycurrent_cell = document.createElement("td");
+                mycurrent_cell.setAttribute("style", "word-wrap: break-word; font-size: 12px; width: 6%");
+                conteudo = lugares[g_i].nome;
+				currenttext = document.createTextNode(conteudo);
+				mycurrent_cell.appendChild(currenttext);
+				mycurrent_row.appendChild(mycurrent_cell);
+                
+ 				mycurrent_cell = document.createElement("td");
+                mycurrent_cell.setAttribute("style", "word-wrap: break-word; font-size: 12px; width: 6%");
+                conteudo = lugares[g_i].sobrenome;
+				currenttext = document.createTextNode(conteudo);
+				mycurrent_cell.appendChild(currenttext);
+				mycurrent_row.appendChild(mycurrent_cell);         
+                
+                mycurrent_cell = document.createElement("td");
+                mycurrent_cell.setAttribute("style", "word-wrap: break-word; font-size: 12px; width: 6%");
+                conteudo = lugares[g_i].telefone;
+				currenttext = document.createTextNode(conteudo);
+				mycurrent_cell.appendChild(currenttext);
+				mycurrent_row.appendChild(mycurrent_cell);   
+                
+                mycurrent_cell = document.createElement("td");
+                mycurrent_cell.setAttribute("style", "word-wrap: break-word; font-size: 12px; width: 6%");
+                conteudo = lugares[g_i].celular;
+				currenttext = document.createTextNode(conteudo);
+				mycurrent_cell.appendChild(currenttext);
+				mycurrent_row.appendChild(mycurrent_cell);  
+                
+                
+                mycurrent_cell = document.createElement("td");
+                mycurrent_cell.setAttribute("style", "word-wrap: break-word; font-size: 12px; width: 6%");
+                conteudo = lugares[g_i].email;
+				currenttext = document.createTextNode(conteudo);
+				mycurrent_cell.appendChild(currenttext);
+				mycurrent_row.appendChild(mycurrent_cell);               
+
+                mycurrent_cell = document.createElement("td");
+                mycurrent_cell.setAttribute("style", "word-wrap: break-word; font-size: 12px; width: 6%");
+                conteudo = lugares[g_i].ID;
+			   	currenttext = document.createTextNode('Detalhe');
+                mycurrent_cell.setAttribute("ID",'btn_'+(conteudo));
+                var click = 'ContatoDet('+(conteudo)+')';
+                   //var click = (g_i+1);
+                   //console.log(click);
+                mycurrent_cell.setAttribute("ID",'btn_'+(g_i+1));
+                var btn_ID = lugares[g_i].ID;
+                var click = 'ContatoDet('+btn_ID+')';               
+
+                mycurrent_cell.setAttribute("onclick", click);
+                //console.log(mycurrent_cell);
+				mycurrent_cell.appendChild(currenttext);
+				mycurrent_row.appendChild(mycurrent_cell);
+   
+			 mytablebody.appendChild(mycurrent_row);
+		   }
+       mytableContatos.appendChild(mytablebody);
+
+    ClearContatos();
+}	
+ function ContatoDet(ID){
+        const header  = document.querySelector('header');
+        const section = document.querySelector('section');
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('Accept', 'application/json');
+        headers.append('Access-Control-Allow-Origin', '*' );
+        headers.append('Access-Control-Allow-Credentials', 'true');
+        headers.append('GET', 'POST', 'OPTIONS');
+        headers.append('Upgrade-Insecure-Requests', '1');
+
+        var requestURL = host + '/clientePeople/'+ID;
+        //console.log(requestURL);
+        var request = new XMLHttpRequest();
+        request.open('GET', requestURL, true);
+        request.responseType = 'json';
+        request.send();	
+
+            request.onload = function() { 
+                var resp_post = request.response;
+                //console.log(resp_post);
+                conteudo =  resp_post[0].ID;
+                document.getElementById('emp_c_ID').value = conteudo ;
+                
+                conteudo =  resp_post[0].nome;
+                if (conteudo != null) { conteudo = conteudo.trim() };
+                document.getElementById('emp_c_nome').value = conteudo ;   
+                                
+                conteudo =  resp_post[0].sobrenome;
+                if (conteudo != null) { conteudo = conteudo.trim() };
+                document.getElementById('emp_c_sobrenome').value = conteudo ;                 
+
+                conteudo =  resp_post[0].nome_completo; 
+                if (conteudo != null) { conteudo = conteudo.trim() };
+                document.getElementById('emp_c_nome_completo').value = conteudo ;                   
+                
+                conteudo =  resp_post[0].telefone;
+                if (conteudo != null) { conteudo = conteudo.trim() };
+                document.getElementById('emp_c_telefone').value = conteudo ;                
+                
+                conteudo =  resp_post[0].celular;
+                if (conteudo != null) { conteudo = conteudo.trim() };
+                document.getElementById('emp_c_celular').value = conteudo ;                
+                
+                conteudo =  resp_post[0].email;
+                if (conteudo != null) { conteudo = conteudo.trim() };
+                document.getElementById('emp_c_email').value = conteudo ;    
+                
+                conteudo =  resp_post[0].endereco;
+                if (conteudo != null) { conteudo = conteudo.trim() };
+                document.getElementById('emp_c_endereco').value = conteudo ;                
+                
+                conteudo =  resp_post[0].cidade;
+                if (conteudo != null) { conteudo = conteudo.trim() };
+                document.getElementById('emp_c_cidade').value = conteudo ;                  
+                
+                conteudo =  resp_post[0].estado;
+                if (conteudo != null) { conteudo = conteudo.trim() };
+                document.getElementById('emp_c_estado').value = conteudo ;                 
+                
+                conteudo =  resp_post[0].pais;
+                if (conteudo != null) { conteudo = conteudo.trim() };
+                document.getElementById('emp_c_pais').value = conteudo ;                 
+                
+                conteudo =  resp_post[0].cep;
+                if (conteudo != null) { conteudo = conteudo.trim() };
+                document.getElementById('emp_c_cep').value = conteudo ;                
+                
+                conteudo =  resp_post[0].comentarios;
+                if (conteudo != null) { conteudo = conteudo.trim() };
+                document.getElementById('emp_c_comentarios').value = conteudo ;                 
+                
+                conteudo =  resp_post[0].login;
+                if (conteudo != null) { conteudo = conteudo.trim() };
+                document.getElementById('emp_c_login').value = conteudo ;  
+                            
+                conteudo =  resp_post[0].valid_id;
+                if (conteudo != null) { emp_c_valid_id.setAttribute("Value", conteudo );
+                                       document.getElementById("emp_c_valid_id").selectedIndex =  conteudo + 1 ;
+                                      };
+            }        
+}   
+        
+function ClearContatos(){
+    document.getElementById("emp_c_valid_id").selectedIndex = 0 ;
+    document.getElementById("sel_c_estado").selectedIndex = 0 ;
+    document.getElementById('emp_c_ID').value = "";
+    document.getElementById('emp_c_nome').value = "";
+    document.getElementById('emp_c_sobrenome').value = "";
+    document.getElementById('emp_c_nome_completo').value = "";
+    document.getElementById('emp_c_telefone').value = "";
+    document.getElementById('emp_c_celular').value = "";
+    document.getElementById('emp_c_email').value = "";
+    document.getElementById('emp_c_endereco').value = "";
+    document.getElementById('emp_c_estado').value = "";
+    document.getElementById('emp_c_cidade').value = "";
+    document.getElementById('emp_c_pais').value = "";
+    document.getElementById('emp_c_cep').value = "";
+    document.getElementById('emp_c_comentarios').value = "";
+    document.getElementById('emp_c_login').value = "";
+}
+    
+ function Contato(OP){
+        var js_id   = document.getElementById('emp_c_ID').value;
+        var js_nome = document.getElementById('emp_c_nome').value;
+        var js_sbno = document.getElementById('emp_c_sobrenome').value;
+        var js_cocp = document.getElementById('emp_c_nome_completo').value;
+        var js_ende = document.getElementById('emp_c_endereco').value;
+        var js_esta = document.getElementById('emp_c_estado').value;
+        var js_cida = document.getElementById('emp_c_cidade').value;
+		var js_pais = document.getElementById('emp_c_pais').value;
+		var js_cep  = document.getElementById('emp_c_cep').value;
+		var js_emai = document.getElementById('emp_c_email').value;
+		var js_come = document.getElementById('emp_c_comentarios').value;
+		var js_tele = document.getElementById('emp_c_telefone').value;			
+		var js_celu = document.getElementById('emp_c_celular').value;
+        var js_logi = document.getElementById('emp_c_login').value;
+		var js_vali = document.getElementById('emp_c_valid_id').value;
+        var js_clid = document.getElementById('emp_ID').value;
+		var js_uplo = sessionStorage.getItem('tkd_Login');
+		var js_empr = document.getElementById('Empresa').value;
+
+        var jsdata ={"js_id":js_id,"js_nome":js_nome,"js_sbno":js_sbno,"js_cocp":js_cocp,"js_ende":js_ende,"js_esta":js_esta,"js_cida":js_cida,"js_pais":js_pais,"js_cep":js_cep,"js_emai":js_emai,"js_come":js_come,"js_tele":js_tele,"js_celu":js_celu,"js_logi":js_logi,"js_vali":js_vali,"js_uplo":js_uplo,"js_empr":js_empr,"js_clid":js_clid};
+
+        var JdataS= JSON.stringify(jsdata)
+        var jdata = JSON.parse(JdataS);
+        console.log(jdata);
+        const header  = document.querySelector('header');
+        const section = document.querySelector('section');
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('Accept', 'application/json');
+        headers.append('Access-Control-Allow-Origin', '*' );
+        headers.append('Access-Control-Allow-Credentials', 'true');
+        headers.append('Upgrade-Insecure-Requests', '1');
+        headers.append('Access-Control-Allow-Methods','PUT');
+        
+        var requestURL = host
+        if( OP == 'INSERT'){ requestURL = host + '/clientePeople/0' ;};  
+        if( OP == 'UPDATE'){ requestURL = host + '/clientePeople/1' ;};
+        if( OP == 'DELETE'){ requestURL = host + '/clientePeople/9' ;};
+        console.log(requestURL);   
+        //var requestURL = host + '/contato/0' ;
+        var request = new XMLHttpRequest();
+        request.open('POST', requestURL, true);
+        request.responseType = 'json';
+        request.send(JSON.stringify(jdata));		
+
+        request.onload = function() { var resp_post = request.response;
+                                      var status = request.status;
+                                      console.log(resp_post);
+                                     if ( status == 200 ) { //ClearContatos();
+                                                            alert( "Contato Atualizado " );
+                                                            Contatos();
+                                                            emb_resultado.setAttribute("Value", resp_post );}
+                                         else { alert( "Erro  : " + status.toString() ) };
+                                    }
+
+}     
+
+
+function fnMarcas(OP,ID) {
+    var MA_ID_Cliente = document.getElementById('emp_ID').value;
+    var MA_ID = Number(document.getElementById('MA_ID').value);
+    var Marca = document.getElementById('Marca').value;
+    // console.log("Marcas");
+    // console.log(OP);
+    // console.log(ID);
+    // console.log("MA_ID :" + MA_ID);
+    var jsdata = {"MA_ID": MA_ID, "MA_ID_Cliente": MA_ID_Cliente, "Marca": Marca};
+    var JdataS = JSON.stringify(jsdata)
+    var jdata = JSON.parse(JdataS);
+
+    if (OP == 'INSERT'  && MA_ID_Cliente =='' ) { alert( "selecione um cliente ntes de incluir  Marca") ; return ;}
+    if (OP == 'INSERT'  && Marca =='' ) { alert( "o campo Marca esta em vazio") ; return ;}
+    if ((OP == 'DELETE' || OP == 'UPDATE') && MA_ID =='' ) { alert( "Nenhuma Marca foi selecionada" ); return ;}
+    if (OP == 'UPDATE'  && Marca =='' ) { alert( "o campo Marca esta em vazio") ; return ;}
+
+    var requestURL = host + '/clientesMarca/' + MA_ID_Cliente + '/0/';
+    if (OP == 'SELECT') {
+        var requestURL = host + '/clientesMarca/' + OP + '/' + ID + '/'
+    }
+
+    if (OP == 'INSERT') {
+        var requestURL = host + '/clientesMarca/' + OP + '/' + ID + '/'
+    }
+
+    if (OP == 'DELETE') {
+        var requestURL = host + '/clientesMarca/' + OP + '/' + MA_ID + '/'
+    }
+
+    if (OP == 'UPDATE') {
+        var requestURL = host + '/clientesMarca/' + OP + '/' + MA_ID + '/'
+    }
+
+
+    const header = document.querySelector('header');
+    const section = document.querySelector('section');
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json');
+    headers.append('Access-Control-Allow-Origin', '*');
+    headers.append('Access-Control-Allow-Credentials', 'true');
+    headers.append('GET', 'POST', 'OPTIONS');
+    headers.append('Upgrade-Insecure-Requests', '1');
+    headers.append('Content-Security-Policy', 'upgrade-insecure-requests');
+    //if ( OP == 'LISTAR'){ var requestURL = host + '/clientesMarca/'+MA_ID_Cliente+'/0/'}
+    //var requestURL = host + '/clientesMarca/'+MA_ID_Cliente+'/0/';
+    //var requestURL = host + '/clientesMarca/'+fc_empresa+'/'+ID+'/';
+    //console.log(requestURL);
+    var request = new XMLHttpRequest();
+    if ( OP == 'INSERT' || OP == 'UPDATE' ) {
+        request.open('POST', requestURL, true);
+        request.responseType = 'json';
+        request.send(JSON.stringify(jdata));
+    } else {
+        request.open('GET', requestURL, true);
+        request.responseType = 'json';
+        request.send();
+    }
+        request.onload = function() { var resp_post = request.response;
+                                      var status = request.status;
+                                      //console.log(resp_post);
+                                      if ( status == 200 ) { if ( OP == 'LISTAR'){ fnMarcasTable(resp_post) }
+                                                             if ( OP == 'SELECT'){ fnMarcasSet(resp_post) }
+                                                             if ( OP == 'INSERT'){ fnMarcasClear() ;
+                                                                                   fnMarcas('LISTAR',0); }
+                                                             if ( OP == 'DELETE'){ fnMarcasClear() ;
+                                                                                   fnMarcas('LISTAR',0); }
+                                                             if ( OP == 'UPDATE'){ fnMarcasClear() ;
+                                                                                   fnMarcas('LISTAR',0); }
+                                                            }
+                                      else { alert( "Erro  : " + status.toString() ) }
+                                      }
+
+
+
+}
+
+function fnMarcasTable(jsonObj){
+    var lugares = jsonObj;
+    while ( mytabMarcas.hasChildNodes()) { mytabMarcas.removeChild( mytabMarcas.lastChild); };
+    var mybody = document.getElementsByTagName("mytableClientes")[0];
+    mytablebody = document.createElement("tbody");
+
+	// --- Cabeçalho da tabela
+    t_colunas = ["Marcas","" ];
+	myheader=document.createElement("tr");
+	var zcol_count = t_colunas.length;
+	for(var zcol = 0; zcol < zcol_count ; zcol++) {
+		mycurrent_header=document.createElement("th");
+		currentheader = document.createTextNode(t_colunas[zcol]);
+		mycurrent_header.appendChild(currentheader);
+        mycurrent_header.setAttribute("style", "background-color: white; text-align:center; color: darksalmon; font-size: 14px;");
+
+		myheader.appendChild(mycurrent_header);
+	}
+	   // --- Corpo  da tabela
+        mytablebody.appendChild(myheader);
+		    for(var g_i = 0; g_i < lugares.length ; g_i++) {
+			    mycurrent_row = document.createElement("tr");
+
+                    mycurrent_cell = document.createElement("td");
+                    mycurrent_cell.setAttribute("style", "word-wrap: break-word;font-size: 12px; width: 92%");
+                    conteudo = lugares[g_i].MA_Marca;
+                    currenttext = document.createTextNode(conteudo);
+                    mycurrent_cell.appendChild(currenttext);
+                    mycurrent_row.appendChild(mycurrent_cell);
+
+                    mycurrent_cell = document.createElement("td");
+                    mycurrent_cell.setAttribute("style", "word-wrap: break-word; font-size: 12px; width: 10%");
+                    conteudo = lugares[g_i].MA_ID;
+                    currenttext = document.createTextNode('');
+                    mycurrent_cell.setAttribute("ID",'btn_'+(conteudo));
+                    var click = 'fnMarcas('+(conteudo)+')';
+                    mycurrent_cell.setAttribute("ID",'btn_'+(g_i+1));
+                    var btn_ID = lugares[g_i].MA_ID;
+                    click = 'fnMarcas("SELECT",'+btn_ID+')';
+                    mycurrent_cell.setAttribute("onclick", click);
+                    mycurrent_cell.setAttribute("class", "fas fa-edit");
+                    mycurrent_cell.appendChild(currenttext);
+                    mycurrent_row.appendChild(mycurrent_cell);
+                mytablebody.appendChild(mycurrent_row);
+		   }
+       mytabMarcas.appendChild(mytablebody);
+
+    fnMarcasClear();
+}
+function fnMarcasSet(jsonObj) {
+    var resp_post = jsonObj ;
+    conteudo =  resp_post[0].MA_ID;
+    document.getElementById('MA_ID').value = conteudo ;
+
+    conteudo =  resp_post[0].MA_Marca;
+    if ( conteudo != null ) { document.getElementById('Marca').value = conteudo.trim() } else { document.getElementById('Marca').value = "" }
+}
+function fnMarcasClear(){
+    document.getElementById('MA_ID').value = "" ;
+    document.getElementById('Marca').value = "" ;
+}
+
+function incluirCobertura(){
+    var ic_id = document.getElementById('pv_ProvedorID').value;
+    var ic_nome = document.getElementById('pv_nome').value;
+    console.log(ic_nome);
+    var URL = '../provedores/cobertura_nova.html?ID='+ic_id+'&Nome='+ic_nome;
+    console.log(URL);
+    window.open( URL , "_blank");
+}
+
+</script>
+</html>
